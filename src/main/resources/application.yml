@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://192.168.1.84:3306/a_ljy_db
+    username: a_ljy_user
+    password: '!adnstyleDB'
+mybatis:
+  mapper-locations: mapper/*.xml
+

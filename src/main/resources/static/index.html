@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p>게시판</p>
+<p>조회용</p>
+<form action="/selectContent" method="get">
+    <input type="text" name="number">
+    <input type="submit">
+</form>
+
+<p>삭제용</p>
+<form action="/deleteContent" method="get">
+    <input type="text" name="number">
+    <input type="submit">
+</form>
+
+<p>게시글 등록</p>
+<form action="/insertContent" method="post">
+    <input type="text" name="title">
+    <input type="text" name="content">
+    <input type="text" name="createdBy">
+    <input type="submit">
+</form>
+
+<p>게시글 수정</p>
+<form action="/updateContent" method="post">
+    <input type="text" name="title">
+    <input type="text" name="content">
+    <input type="text" name="modifiedBy">
+    <input type="submit">
+</form>
+
+
+</body>
+
+
+
+
+
+
+</html>
