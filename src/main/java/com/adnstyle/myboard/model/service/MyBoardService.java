@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 @Service
 public class MyBoardService {
-    @Autowired
-    public MyBoardRepository myBoardRepository;
+  @Autowired
+  MyBoardRepository myBoardRepository;
 
     public ArrayList<MyBoard> selectList() {
     return myBoardRepository.selectList();
@@ -30,7 +30,12 @@ public class MyBoardService {
         myBoardRepository.insertContent(board);
     }
 
+    //게시글 수정하기
+    /*
     public void updateContent(MyBoard board) {
         myBoardRepository.updateContent(board);
-    }
+
+    }*/
+
+
 }

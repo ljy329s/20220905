@@ -1,45 +1,15 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
 </head>
 <body>
-<p>게시판</p>
-<p>조회용</p>
-<form action="/selectContent" method="get">
-    <input type="text" name="number">
-    <input type="submit">
-</form>
-
-<p>삭제용</p>
-<form action="/deleteContent" method="get">
-    <input type="text" name="number">
-    <input type="submit">
-</form>
-
-<p>게시글 등록</p>
-<form action="/insertContent" method="post">
-    <input type="text" name="title">
-    <input type="text" name="content">
-    <input type="text" name="createdBy">
-    <input type="submit">
-</form>
-
-<p>게시글 수정</p>
-<form action="/updateContent" method="post">
-    <input type="text" name="title">
-    <input type="text" name="content">
-    <input type="text" name="modifiedBy">
-    <input type="submit">
-</form>
-
-
+<script>
+    window.location="/main";//index.html이 시작하자마자 main으로 매핑된 화면으로 이동
+</script>
 </body>
-
-
-
-
-
-
 </html>

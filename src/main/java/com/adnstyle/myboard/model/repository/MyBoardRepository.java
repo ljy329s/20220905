@@ -2,7 +2,6 @@ package com.adnstyle.myboard.model.repository;
 
 import com.adnstyle.myboard.model.domain.MyBoard;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 @Mapper
@@ -17,5 +16,8 @@ public interface MyBoardRepository {
 
     void insertContent(MyBoard board);
 
-    void updateContent(MyBoard board);
+    //게시글 수정하기
+    //void updateContent(MyBoard board);
+
 }
+  

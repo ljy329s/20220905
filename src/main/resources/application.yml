@@ -4,6 +4,14 @@ spring:
     url: jdbc:mariadb://192.168.1.84:3306/a_ljy_db
     username: a_ljy_user
     password: '!adnstyleDB'
+  thymeleaf:
+    cache: false
+    prefix: classpath:templates/
+    suffix: .html
+
+
 mybatis:
   mapper-locations: mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
 
