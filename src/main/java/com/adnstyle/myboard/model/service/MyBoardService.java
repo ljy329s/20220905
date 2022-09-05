@@ -1,6 +1,7 @@
 package com.adnstyle.myboard.model.service;
 
 import com.adnstyle.myboard.model.domain.MyBoard;
+import com.adnstyle.myboard.model.domain.PageHandle;
 import com.adnstyle.myboard.model.repository.MyBoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,13 +13,20 @@ public class MyBoardService {
   @Autowired
   MyBoardRepository myBoardRepository;
 
-    public ArrayList<MyBoard> selectList() {
-    return myBoardRepository.selectList();
+    public ArrayList<MyBoard> selectList(int page) {
+    return myBoardRepository.selectList(page);
 
     }
+    /*public ArrayList<MyBoard> pageList(int page,int start,int end) {
+        return myBoardRepository.pageList(page,start,end);
 
+    }*/
+    public int countAll(){
+        return myBoardRepository.countAll();
+    }
     public ArrayList<MyBoard> selectContent(Long id) {
         myBoardRepository.updateCount(id);
+        System.out.println("id는"+id);
         return myBoardRepository.selectContent(id);
     }
 

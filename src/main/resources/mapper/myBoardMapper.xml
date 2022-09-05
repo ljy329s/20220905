@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.adnstyle.myboard.model.repository.MyBoardRepository">
+
+    <select id="countAll" resultType="int">
+        select count(*)
+        from my_board;
+    </select>
+
     <select id="selectList"  resultType="com.adnstyle.myboard.model.domain.MyBoard">
         select id, title, view_count, created_date, created_by
         from my_board
         where del_yn = 'N'
+        order by id desc
+        <!--limit 0, #{pageSize}-->
     </select>
+
+    <!--<select id = "pageList" parameterType="com.adnstyle.myboard.model.domain.PageHandle" resultType="com.adnstyle.myboard.model.domain.MyBoard">
+        select title, created_by,content, created_date
+        from my_board
+        order by id desc
+            limit#{page*pageSize-9},#{page*pageSize};
+    </select>-->
 
     <select id="selectContent" parameterType="long" resultType="com.adnstyle.myboard.model.domain.MyBoard">
         select title, created_by,content, created_date
@@ -28,8 +43,8 @@
         VALUES ( #{title},#{content},0,#{createdBy},NOW());
     </insert>
 
-   <!--<update id="updateContent" parameterType="parameterType=com.adnstyle.myboard.model.domain.MyBoard">
-        update my_board set title = #{title}, content=#{content},modified_by=#{modifiedBy},modified_date=NOW()
-        where id=#{id};
-    </update>-->
+    <!--<update id="updateContent" parameterType="parameterType=com.adnstyle.myboard.model.domain.MyBoard">
+         update my_board set title = #{title}, content=#{content},modified_by=#{modifiedBy},modified_date=NOW()
+         where id=#{id};
+     </update>-->
 </mapper>

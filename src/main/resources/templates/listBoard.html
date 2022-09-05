@@ -36,7 +36,7 @@
 
             <tr th:each="board : ${myBoardList}">
 
-                <td th:text="${board.id}"></a></td>
+                <td th:text="${board.id}"></td>
                 <td><a th:href="@{/selectContent(id=${board.id})}" th:text="${board.title}"></a></td>
                 <td th:text="${board.createdBy}"></td>
                 <td th:text="${board.createdDate}"></td>
@@ -50,6 +50,13 @@
         </table>
         <div id="btnBox">
             <button type="button" onclick="location.href='writeForm'">글 작성</button>
+        </div>
+        <div>
+            <p>페이지네이션 위치</p>
+        <table>
+
+
+        </table>
         </div>
     </div>
 </div>

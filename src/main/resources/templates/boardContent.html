@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>게시글</title>
+</head>
+<style>
+    #main{
+        margin: auto 0;
+        text-align: center;
+    }
+    button{
+
+        width: 50px;
+        height: 30px;
+    }
+    #content{
+        width: 500px;
+        height: 700px;
+        background-color: rgb(198, 228, 255);
+        left: 50%;
+        text-align: center;
+    }
+    form{
+        padding: 20px;
+        background-color: white;
+        width: 400px;
+        height: 550px;
+        text-align: center;
+    }
+    textarea{
+        resize: none;
+    }
+</style>
+<body>
+<script src="${ pageContext.servletContext.contextPath }/resources/library/jquery-3.6.0.min.js"></script>
+<div id="main">
+    <div id="content">
+        <h1>게시글쓰기</h1>
+        <form action="" method="" id="contentForm" th:each="myContent : ${myContent}">
+            <div><p>제목</p><input type="text" readonly="readonly" name="title" th:value="${myContent.title}"/></div>
+            <div><p>작성자</p><input type="text" name="createdBy" readonly="readonly" th:value="${myContent.createdBy}"/></div>
+            <div><p>내용</p>
+                <textarea cols="50" rows="20" name="content" th:text="${myContent.content}" readonly="readonly"/></textarea></div>
+
+
+            <button type="button" id="sub_btn" hidden="hidden">등록</button>
+            <button type="button" id="upd_btn">수정</button>
+            <button type="button" onclick="location.href='main'">목록</button>
+        </form>
+    </div>
+</div>
+<script>
+   $(function(){
+       let upd_btn =$("#upd_btn");
+
+       upd_btn.onclick(function(){
+       console.log("수정버튼 클릭");
+       const contentForm = $("#contentForm");
+       contentForm.attr("action","/updateContent");
+       contentForm.attr("method","post");
+       contentForm.attr("h1","게시글");
+       contentForm.submit();
+   })
+});
+
+   $(function(){
+       let sub_btn =$("#sub_btn");
+
+       sub_btn.onclick(function(){
+           console.log("등록버튼 클릭");
+           const contentForm = $("#contentForm");
+           contentForm.attr("action","/insertContent");
+           contentForm.attr("method","post");
+           $('h1').attr('title','게시글등록');
+           contentForm.submit();
+       })
+   });
+</script>
+</body>
+</html>
