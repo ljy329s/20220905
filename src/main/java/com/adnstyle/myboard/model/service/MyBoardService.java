@@ -30,8 +30,8 @@ public class MyBoardService {
         return myBoardRepository.selectContent(id);
     }
 
-    public void deleteContent(Long id) {
-        myBoardRepository.deleteContent(id);
+    public void deleteContent(MyBoard board) {
+        myBoardRepository.deleteContent(board);
     }
 
     public void insertContent(MyBoard board) {
@@ -39,11 +39,11 @@ public class MyBoardService {
     }
 
     //게시글 수정하기
-    /*
+
     public void updateContent(MyBoard board) {
         myBoardRepository.updateContent(board);
 
-    }*/
+    }
 
 
 }

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <title>게시글 쓰기</title>
+</head>
+<style>
+  #main{
+    margin: auto 0;
+    text-align: center;
+  }
+  button{
+
+    width: 50px;
+    height: 30px;
+  }
+  #content{
+    width: 500px;
+    height: 700px;
+    background-color: rgb(198, 228, 255);
+    left: 50%;
+    text-align: center;
+  }
+  form{
+    padding: 20px;
+    background-color: white;
+    width: 400px;
+    height: 550px;
+    text-align: center;
+  }
+  textarea{
+    resize: none;
+  }
+</style>
+<body>
+<script src="webjars/jquery/dist/jquery.min.js"></script>
+<div id="main">
+  <div id="content">
+    <h1>게시글쓰기</h1>
+    <form action="insertContent" method="post">
+      <div><p>제목</p><input type="text" name="title"/></div>
+      <div><p>작성자</p><input type="text" name="createdBy"/></div>
+      <div><p>내용</p>
+        <textarea cols="50" rows="20" name="content"/></textarea></div>
+
+
+      <button type="submit" id="sub_btn">등록</button>
+      <button type="button" onclick="location.href='main'">목록</button>
+    </form>
+  </div>
+</div>
+
+
+</body>
+</html>

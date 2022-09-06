@@ -18,12 +18,12 @@ public interface MyBoardRepository {
 
     void updateCount(Long id);
 
-    void deleteContent(Long id);
+    void deleteContent(MyBoard board);
 
     void insertContent(MyBoard board);
 
     //게시글 수정하기
-    //void updateContent(MyBoard board);
+    void updateContent(MyBoard board);
 
 }
   

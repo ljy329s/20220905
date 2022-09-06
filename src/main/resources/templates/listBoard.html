@@ -6,9 +6,17 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>게시판 접속시 리스트</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 </head>
 <style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
     #list{
+        height: 100vh;
+        display: flex;
+        align-items: center;
         background-color:skyblue;
         height: 800px;
         width: 80%;
@@ -19,6 +27,10 @@
     tr{
       background-color: white;
   }
+    th,td{
+        width: 100px;
+    }
+
 
 </style>
 <body>
@@ -37,9 +49,9 @@
             <tr th:each="board : ${myBoardList}">
 
                 <td th:text="${board.id}"></td>
-                <td><a th:href="@{/selectContent(id=${board.id})}" th:text="${board.title}"></a></td>
-                <td th:text="${board.createdBy}"></td>
-                <td th:text="${board.createdDate}"></td>
+                <td><a th:href="@{/boardContent(id=${board.id})}"th:text="${board.title}"></a></td>
+                <td th:text="${board.modifiedBy}"></td>
+                <td th:text="${board.modifiedDate}"></td>
                 <td th:text="${board.viewCount}"></td>
 
             </tr>
@@ -55,7 +67,11 @@
             <p>페이지네이션 위치</p>
         <table>
 
+<!--            // 기존 페이징 처리 쿼리-->
+<!--            SELECT * FROM 테이블명 LIMIT 숫자(A), 숫자(B)-->
 
+<!--            // 인덱스를 태우는 페이징 처리 쿼리-->
+<!--            SELECT * FROM 테이블명 WHERE 숫자(A) < key LIMIT 숫자(B)-->
         </table>
         </div>
     </div>

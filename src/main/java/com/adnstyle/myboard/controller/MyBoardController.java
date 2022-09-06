@@ -26,58 +26,17 @@ public class MyBoardController {
 
 */   @GetMapping("/main")
     public String myBoardList(Model model ,@RequestParam(defaultValue = "1") int page){
-
-       System.out.println("page"+page);//페이지는 1이 들어옴
-       int totalCnt = myBoardService.countAll();//총 게시글 수
-
-       PageHandle ph = new PageHandle(totalCnt,page,10);
-       int totalPage = ph.getTotalPage();
-       int beginPage = ph.getBeginPage();
-       System.out.println("totalPage"+totalPage);
-       System.out.println("beginPage"+beginPage);
-       int endPage=ph.getEndPage();
-       System.out.println("endPage"+endPage);
-
-       ArrayList<Integer> pageNavi = new ArrayList();
-       for(int i = beginPage; i<=endPage; i++){
-           pageNavi.add(i);
-       }
-       int pageSize=ph.getPageSize();
        ArrayList<MyBoard> myBoardList = myBoardService.selectList(page);
        model.addAttribute("myBoardList",myBoardList);
-       model.addAttribute("pageNavi",pageNavi);
-       System.out.println("myBoardList"+myBoardList);
-       System.out.println("pageNavi"+pageNavi);
-       model.addAttribute("pageSize",pageSize);
-       model.addAttribute("page",page);
        return "listBoard";
    }
 
- /*   //페이지네이션 적용
-   @GetMapping("/main")//페이지번호 받아서 시작페이지랑 끝페이지 나오게 기본값은1
-   public String myBoardList(@RequestParam(defaultValue ="1") int page, Model model){
 
-       int totalCnt = myBoardService.countAll();//총 게시글 수
-
-       PageHandle ph = new PageHandle(totalCnt,page,10);
-       int start = ph.getBeginPage();
-       int end = ph.getEndPage();
-
-       model.addAttribute("start",start);
-       model.addAttribute("end",end);
-    System.out.println("st"+start);
-       System.out.println("ed"+end);
-       ArrayList<MyBoard> myBoardList = myBoardService.pageList(page,start,end);
-       model.addAttribute("myBoardList",myBoardList);
-       return "listBoard";
-   }
-*/
    /*
    해당번호의 게시글 리스트 조회
    */
-    @GetMapping("/selectContent")
+    @GetMapping("/boardContent")
     public String myBoardContent(Model model, long id){
-        //Long id = Long.parseLong(number);
         ArrayList<MyBoard> myContent = myBoardService.selectContent(id);
         model.addAttribute("myContent",myContent);
         return "boardContent";
@@ -87,9 +46,9 @@ public class MyBoardController {
     게시글 삭제 상태값 Y로 변경
     */
     @GetMapping("/deleteContent")
-    public void myBoardContentDelete(String number){
-        Long id = Long.parseLong(number);
-        myBoardService.deleteContent(id);
+    public String myBoardContentDelete(MyBoard board){
+        myBoardService.deleteContent(board);
+        return "redirect:/main";
     }
 
     /*
@@ -98,7 +57,7 @@ public class MyBoardController {
 
     @GetMapping("/writeForm")
     public String Write(){
-        return "boardContent";//작성화면
+        return "writeForm";//작성화면
     }
     @PostMapping("/insertContent")
     public String myBoardInsertContent(MyBoard board){
@@ -110,17 +69,18 @@ public class MyBoardController {
     /*
     게시글 수정하기
     */
-   /* @PostMapping("/updateContent")
-    public void myBoardUpdateContent(MyBoard board){
+   @GetMapping("/updateContent")
+   public String myBoardUpdateForm(Long id,Model model){
+       ArrayList<MyBoard> myContent = myBoardService.selectContent(id);//글조회해서 띄우기
+       model.addAttribute("myContent",myContent);
+       return "updateBoardForm";
 
-
+   }
+   @PostMapping("/updateContent")
+    public String myBoardUpdateContent(MyBoard board){
         myBoardService.updateContent(board);
+        return "redirect:/main";
 
-    }*/
-
-    //타임리프 연습
-    @GetMapping("/hello")
-    public void hello(Model model){
-        model.addAttribute("a","hello 타임리프");
     }
+
 }
