@@ -13,13 +13,22 @@
         margin: 0;
         padding: 0;
     }
-    #list{
-        height: 100vh;
+    #main{
+        height: 120vh;
         display: flex;
         align-items: center;
+        text-align: center;
+
+    }
+    #list{
+        text-align: center;
         background-color:skyblue;
-        height: 800px;
-        width: 80%;
+        width: 1500px;
+        margin: 0 auto;
+        text-align: center;
+        border-radius: 20px;
+        border-color: skyblue;
+        border-style: solid;
     }
     #btnBox{
         float: right;
@@ -28,8 +37,12 @@
       background-color: white;
   }
     th,td{
-        width: 100px;
+        width: 300px;
     }
+    #pageNavi{
+        height: 100px;
+    }
+
 
 
 </style>
@@ -63,7 +76,7 @@
         <div id="btnBox">
             <button type="button" onclick="location.href='writeForm'">글 작성</button>
         </div>
-        <div>
+        <div id="pageNavi">
             <p>페이지네이션 위치</p>
         <table>
 
@@ -76,6 +89,9 @@
         </div>
     </div>
 </div>
+<script>
+
+</script>
 <script th:inline="javascript">
     let myBoardList =[[${myBoardList}]]
     console.log(myBoardList)
