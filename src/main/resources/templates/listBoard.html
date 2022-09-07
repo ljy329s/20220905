@@ -76,22 +76,29 @@
         <div id="btnBox">
             <button type="button" onclick="location.href='writeForm'">글 작성</button>
         </div>
+
         <div id="pageNavi">
-            <p>페이지네이션 위치</p>
-        <table>
+            <!--prev -->
+            <th:block th:if ="${ph.showPrev}">
+                <a th:href ="@{/main(page=(page-1))}"></a>
+            </th:block>
 
-<!--            // 기존 페이징 처리 쿼리-->
-<!--            SELECT * FROM 테이블명 LIMIT 숫자(A), 숫자(B)-->
+            <!--         페이징        -->
 
-<!--            // 인덱스를 태우는 페이징 처리 쿼리-->
-<!--            SELECT * FROM 테이블명 WHERE 숫자(A) < key LIMIT 숫자(B)-->
-        </table>
+            <th:block th:with="ph = ${ph}">
+                <th:block th:each="num : ${#numbers.sequence(ph.beginPage,ph.endPage)}">
+                    <a th:href="@{/main(page=${num})}"th:text="${num}"></a>
+                </th:block>
+            </th:block>
+            <!--next-->
+            <th:block th:if ="${ph.showNext}">
+                <a th:href ="@{/main(page=(page+1))}"></a>
+            </th:block>
+
         </div>
     </div>
 </div>
-<script>
 
-</script>
 <script th:inline="javascript">
     let myBoardList =[[${myBoardList}]]
     console.log(myBoardList)

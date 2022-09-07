@@ -7,23 +7,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 @Service
 public class MyBoardService {
   @Autowired
   MyBoardRepository myBoardRepository;
 
-    public ArrayList<MyBoard> selectList(int page) {
-    return myBoardRepository.selectList(page);
+    public ArrayList<MyBoard> selectList(Map pageMap) {
+    return myBoardRepository.selectList(pageMap);
 
     }
-    /*public ArrayList<MyBoard> pageList(int page,int start,int end) {
-        return myBoardRepository.pageList(page,start,end);
+    public ArrayList<MyBoard> myBoardPage(Map pageMap) {
+        return myBoardRepository.myBoardPage(pageMap);
+    }
 
-    }*/
     public int countAll(){
         return myBoardRepository.countAll();
     }
+
     public ArrayList<MyBoard> selectContent(Long id) {
         myBoardRepository.updateCount(id);
         System.out.println("id는"+id);

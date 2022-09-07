@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 //@RestController restapi
 @Controller//타임리프를위해
@@ -21,13 +23,28 @@ public class MyBoardController {
    /*
    전체 게시글 리스트 조회
    */
-    /*
-    페이지네이션 적용전
 
-*/   @GetMapping("/main")
+
+   @GetMapping("/main")
     public String myBoardList(Model model ,@RequestParam(defaultValue = "1") int page){
-       ArrayList<MyBoard> myBoardList = myBoardService.selectList(page);
+       int totalCnt=myBoardService.countAll();//총게시물의 수
+       int pageSize = 10;
+       int naviSize = 10;
+       PageHandle ph = new PageHandle(totalCnt,page,pageSize,naviSize);//총게시물의 수,페이지사이즈, 네비사이즈
+
+       //페이징처리
+       Map pageMap = new HashMap();
+       pageMap.put("offset",((page-1)*pageSize));//몇번부터 시작할건지
+       pageMap.put("pageSize",pageSize);//화면에 몇개씩 보여줄건지
+       ArrayList<MyBoard> myBoardList = myBoardService.selectList(pageMap);//게시글리스트 조회용
+//       ArrayList<MyBoard> myBoardPage = myBoardService.myBoardPage(pageMap);//페이징처리 리스트 출력용
        model.addAttribute("myBoardList",myBoardList);
+       model.addAttribute("ph",ph);
+
+//
+//       model.addAttribute("myBoardList",myBoardList);
+
+
        return "listBoard";
    }
 

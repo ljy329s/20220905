@@ -7,12 +7,20 @@
         from my_board;
     </select>
 
-    <select id="selectList"  resultType="com.adnstyle.myboard.model.domain.MyBoard">
+<!--    <select id="myBoardPage"  parameterType="map" resultType="com.adnstyle.myboard.model.domain.MyBoard">-->
+<!--        select id, title, view_count, modified_date, modified_by-->
+<!--        from my_board-->
+<!--        where del_yn = 'N'-->
+<!--        order by id desc-->
+<!--        limit #{offset}, #{pageSize}-->
+<!--    </select>-->
+
+    <select id="selectList"  parameterType="map" resultType="com.adnstyle.myboard.model.domain.MyBoard">
         select id, title, view_count, modified_date, modified_by
         from my_board
         where del_yn = 'N'
         order by id desc
-        <!--limit 0, #{pageSize}-->
+        limit #{offset}, #{pageSize}
     </select>
 
   <select id = "pageList" parameterType="com.adnstyle.myboard.model.domain.PageHandle" resultType="com.adnstyle.myboard.model.domain.MyBoard">
