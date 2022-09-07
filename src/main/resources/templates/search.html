@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    #sBtn{
+        background-color: aqua;
+        border-radius: 5px;
+    }
+</style>
+<body>
+<div id="main">
+    <div id="content">
+        <form action="/search" method="post">
+            <select>
+                <option name="type" value="T" >제목</option>
+                <option name="type" value="W" >작성자</option>
+                <option name="type" value="C">내용</option>
+                <option name="type" value="A">제목+내용</option>
+            </select>
+            <input type="text" name="search">
+            <input type="submit" value="검색" id="sBtn">
+        </form>
+    </div>
+</div>
+</body>
+</html>

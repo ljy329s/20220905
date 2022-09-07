@@ -16,18 +16,10 @@
 <!--    </select>-->
 
     <select id="selectList"  parameterType="map" resultType="com.adnstyle.myboard.model.domain.MyBoard">
-        select id, title, view_count, modified_date, modified_by
+        select id, title, view_count, modified_date, modified_by,del_yn
         from my_board
-        where del_yn = 'N'
         order by id desc
         limit #{offset}, #{pageSize}
-    </select>
-
-  <select id = "pageList" parameterType="com.adnstyle.myboard.model.domain.PageHandle" resultType="com.adnstyle.myboard.model.domain.MyBoard">
-      select id, title, view_count, modified_date, modified_by
-        from my_board
-        order by id desc
-        where limit 10 offset 0;
     </select>
 
     <select id="selectContent" parameterType="long" resultType="com.adnstyle.myboard.model.domain.MyBoard">
@@ -55,4 +47,17 @@
          update my_board set title = #{title}, content=#{content},modified_by=#{modifiedBy},modified_date=NOW()
          where id=#{id};
      </update>
+<!--검색 + 페이징처리-->
+    <select id="SearchCondition"  parameterType="hashmap" resultType="com.adnstyle.myboard.model.domain.MyBoard">
+        select id, title, view_count, modified_date, modified_by,del_yn
+        from my_board
+        where
+        order by id desc
+            limit #{offset}, #{pageSize}
+    </select>
+
+    <!--검색결과 관련 쿼리-->
+    <sql id ="search">
+
+    </sql>
 </mapper>

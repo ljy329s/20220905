@@ -26,6 +26,7 @@ public interface MyBoardRepository {
     //게시글 수정하기
     void updateContent(MyBoard board);
 
-
+    //검색
+    ArrayList SearchCondition(Map searchMap);
 }
   

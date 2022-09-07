@@ -1,0 +1,110 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>게시판 접속시 리스트</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  #main{
+    height: 120vh;
+    display: flex;
+    align-items: center;
+    text-align: center;
+
+  }
+  #list{
+    text-align: center;
+    background-color:skyblue;
+    width: 1500px;
+    margin: 0 auto;
+    text-align: center;
+    border-radius: 20px;
+    border-color: skyblue;
+    border-style: solid;
+  }
+  #btnBox{
+    float: right;
+  }
+  tr{
+    background-color: white;
+  }
+  th,td{
+    width: 300px;
+  }
+  #pageNavi{
+    height: 100px;
+  }
+
+
+
+</style>
+<body>
+<div id="main">
+  <div th:insert="search.html"/>
+  <div id="list">
+    <table class="tableLine">
+      <tr>
+        <th>번호</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>작성일</th>
+        <th>조회 수</th>
+        <th>삭제 여부</th>
+
+      </tr>
+
+      <tr th:each="board : ${myBoardList}">
+
+        <td th:text="${board.id}"></td>
+        <td><a th:href="@{/boardContent(id=${board.id})}"th:text="${board.title}"></a></td>
+        <td th:text="${board.modifiedBy}"></td>
+        <td th:text="${board.modifiedDate}"></td>
+        <td th:text="${board.viewCount}"></td>
+        <td th:text="${board.delYn}"></td>
+
+      </tr>
+
+
+
+      <!--	<tr class="trSt" onclick="location.href='comDetailView.do?compNo=${com.compNo}'">-->
+    </table>
+    <div id="btnBox">
+      <button type="button" onclick="location.href='writeForm'">글 작성</button>
+    </div>
+
+    <div id="pageNavi">
+      <!--prev -->
+      <th:block th:if ="${ph.showPrev}">
+        <a th:href ="@{/main(page=${ph.beginPage}-1)}"><</a>
+      </th:block>
+
+      <!--         페이징        -->
+      <th:block th:with="ph = ${ph}">
+        <th:block th:each="num : ${#numbers.sequence(ph.beginPage,ph.endPage)}">
+          <a th:href="@{/main(page=${num})}"th:text="${num}"></a>
+        </th:block>
+      </th:block>
+
+      <!--next-->
+      <th:block th:if ="${ph.showNext}">
+        <a th:href ="@{/main(page=${ph.endPage}+1)}">></a>
+      </th:block>
+
+    </div>
+  </div>
+</div>
+
+<script th:inline="javascript">
+  let myBoardList =[[${myBoardList}]]
+  console.log(myBoardList)
+</script>
+</body>
+</html>

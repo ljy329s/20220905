@@ -45,17 +45,29 @@ public class PageHandle {
         }
 
 //        현재 네비의 시작페이지
-        this.beginPage=this.endPage-(this.naviSize)+1;
-        if(this.endPage>this.totalPage){//마지막페이지가 총 페이지보다 크다면(잘못된거니까)
-           this.beginPage=this.totalPage-((this.totalPage%this.naviSize-1));//total%네비사이즈의 나머지를 뺀다.
+        /*
+            시작 페이지 구하기
+			공식 : 현재페이지 / 페이징의 개수 * 페이징의 개수 + 1;
+			startPage = currentPage / pagingCount * pagingCount + 1;
+			보정 해줘야함 ??? 현재페이지가 5일 때는 5 / 5 = 1 으로 문제가 생김  currentPage는 5인데 startPage가 6이 되어버림
+			if(currentPage % pagingCount == 0) {
+			     startPage = startPage - 5(페이징의 개수);
+				 startPage -= pagingCount;
+			}
+
+			//아직도 시작페이지 구하기가 너무 어렵다ㅜㅜㅜㅜㅜ 구글링했는데 좀더 연구해보자
+        */
+
+       this.beginPage =this.page/this.naviSize * this.naviSize + 1;
+        if(this.page % this.naviSize == 0){
+            this.beginPage -= this.naviSize;
         }
 
-
         //이전 버튼이 보이려면 시작페이지가 1이랑 같지 않을때
-        this.showPrev= beginPage!=1;
+        this.showPrev= this.beginPage>1;
 
         //다음 버튼이 보이려면 끝페이지가 총페이지랑 같지 않을때
-        this.showNext = totalPage!=endPage;
+        this.showNext = this.endPage<this.totalPage;
 
 
     }

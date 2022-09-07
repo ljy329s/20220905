@@ -48,4 +48,7 @@ public class MyBoardService {
     }
 
 
+    public ArrayList SearchCondition(Map searchMap) {
+        return myBoardRepository.SearchCondition(searchMap);//다른쿼리들을 인클루드하는 대장쿼리?
+    }
 }

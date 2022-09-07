@@ -28,8 +28,8 @@ public class MyBoardController {
    @GetMapping("/main")
     public String myBoardList(Model model ,@RequestParam(defaultValue = "1") int page){
        int totalCnt=myBoardService.countAll();//총게시물의 수
-       int pageSize = 10;
-       int naviSize = 10;
+       int pageSize = 8;
+       int naviSize = 5;
        PageHandle ph = new PageHandle(totalCnt,page,pageSize,naviSize);//총게시물의 수,페이지사이즈, 네비사이즈
 
        //페이징처리
@@ -98,6 +98,22 @@ public class MyBoardController {
         myBoardService.updateContent(board);
         return "redirect:/main";
 
+    }
+
+    /*
+    검색기능
+    */
+    @PostMapping("/search")
+    public String myBoardSearch(Model model,@RequestParam(defaultValue="1") int page, String type,String search){
+
+        HashMap<String,String> searchMap = new HashMap();
+
+        searchMap.put("type",type);
+        searchMap.put("search",search);
+        ArrayList searchList = myBoardService.SearchCondition(searchMap);//검색결과 반환
+
+        model.addAttribute("searchList", searchList);
+        return "searchList";
     }
 
 }
