@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.adnstyle.myboard.model.repository.JyAttachRepository">
+
+    <insert id="insertFile">
+        insert into jy_attach (uuid, uploadPath, originName, fileType, bno)
+        values (#{uuid},#{uploadPath},#{originName},#{fileType},#{bno})
+    </insert>
+
+    <delete id="deleteFile">
+        delete from jy_attach
+        where uuid = #{uuid}
+    </delete>
+
+    <select id="findBybno" parameterType="long" resultType="com.adnstyle.myboard.model.domain.JyAttach">
+        select *
+        from jy_attach
+        where bno=#{id};
+    </select>
+</mapper>

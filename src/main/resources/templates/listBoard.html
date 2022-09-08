@@ -47,8 +47,21 @@
 
 </style>
 <body>
-<div id="main">
-    <div th:insert="search.html"/>
+    <div id="main">
+        <div id="content">
+            <form action="/main" method="get">
+                <select name="type" th:value="${type}">
+                    <option value='A' >전체</option>
+                    <option value='T' >제목</option>
+                    <option value='W' >작성자</option>
+                    <option value='C'>내용</option>
+                    <option value='TC'>제목+내용</option>
+                </select>
+                <input type="text" name="search" th:value="${search}">
+                <input type="submit" value="검색" id="sBtn">
+            </form>
+        </div>
+    </div>
     <div id="list">
         <table class="tableLine">
             <tr>

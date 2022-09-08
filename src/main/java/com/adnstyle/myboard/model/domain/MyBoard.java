@@ -4,6 +4,8 @@ import lombok.Data;
 import org.apache.ibatis.type.Alias;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Alias("myBoard")
 @Data
@@ -17,5 +19,7 @@ public class MyBoard {
     private String createdBy;// 작성자
     private String modifiedBy;// 수정자
     private Date modifiedDate;// 수정일
+
+    private List<JyAttach> jyAttachList;
 
 }

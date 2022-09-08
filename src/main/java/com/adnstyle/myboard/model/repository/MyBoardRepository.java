@@ -1,20 +1,20 @@
 package com.adnstyle.myboard.model.repository;
 
 import com.adnstyle.myboard.model.domain.MyBoard;
+import com.adnstyle.myboard.model.domain.PageHandle;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @Mapper
 public interface MyBoardRepository {
 
-    ArrayList<MyBoard> selectList(Map pageMap);
+    ArrayList<MyBoard> selectList(Map pageSearchMap);
 
-    ArrayList<MyBoard> myBoardPage(Map pageMap);
+//    ArrayList<MyBoard> myBoardPage(Map pageMap);
 
-    int countAll();
+    int countAll(PageHandle pageHandle);
     ArrayList<MyBoard> selectContent(Long id);
 
     void updateCount(Long id);
@@ -28,5 +28,6 @@ public interface MyBoardRepository {
 
     //검색
     ArrayList SearchCondition(Map searchMap);
-}
+
+    }
   

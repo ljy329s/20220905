@@ -15,6 +15,10 @@ public class PageHandle {
     private int endPage;//마지막 페이지
     private boolean showPrev;//이전으로 가기
     private boolean showNext;//다음으로 가기
+
+    /*검색용*/
+    private String type;
+    private String search;
     
 
     //총게시글수, 해당페이지, 페이지당 보일 게시글 수
@@ -28,7 +32,7 @@ public class PageHandle {
             총페이지수
             전체게시글 수/(double)페이지 사이즈 하고 소수점 올림
          */
-        this.totalPage=(int)(Math.ceil(totalCnt/(double)pageSize));
+        this.totalPage=(int)(Math.ceil(this.totalCnt/(double)pageSize));
 
 
         /*
@@ -71,4 +75,5 @@ public class PageHandle {
 
 
     }
+
 }

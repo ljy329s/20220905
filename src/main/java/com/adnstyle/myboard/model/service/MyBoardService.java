@@ -14,16 +14,17 @@ public class MyBoardService {
   @Autowired
   MyBoardRepository myBoardRepository;
 
-    public ArrayList<MyBoard> selectList(Map pageMap) {
-    return myBoardRepository.selectList(pageMap);
+    public ArrayList<MyBoard> selectList(Map pageSearchMap) {
+
+    return myBoardRepository.selectList(pageSearchMap);
 
     }
-    public ArrayList<MyBoard> myBoardPage(Map pageMap) {
-        return myBoardRepository.myBoardPage(pageMap);
-    }
+//    public ArrayList<MyBoard> myBoardPage(Map pageMap) {
+//        return myBoardRepository.myBoardPage(pageMap);
+//    }
 
-    public int countAll(){
-        return myBoardRepository.countAll();
+    public int countAll(PageHandle pageHandle){
+        return myBoardRepository.countAll(pageHandle);
     }
 
     public ArrayList<MyBoard> selectContent(Long id) {

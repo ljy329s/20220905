@@ -21,29 +21,34 @@ public class MyBoardController {
     public MyBoardService myBoardService;
 
    /*
-   전체 게시글 리스트 조회
+   전체 게시글 리스트 조회+페이징처리
+   +검색도 같이 검색후 검색조건에 맞게 페이징이 유지되어야함
+
    */
-
-
+   /*
+   1.검색조건의 유무 확인
+   */
    @GetMapping("/main")
-    public String myBoardList(Model model ,@RequestParam(defaultValue = "1") int page){
-       int totalCnt=myBoardService.countAll();//총게시물의 수
+    public String myBoardList(Model model , @RequestParam(defaultValue = "1") int page,PageHandle pageHandle){
+       int totalCnt = myBoardService.countAll(pageHandle);//총게시물의 수
        int pageSize = 8;
        int naviSize = 5;
+
+       //보고있는 페이지의 시작페이지와 끝페이지 정보를 가져온다
        PageHandle ph = new PageHandle(totalCnt,page,pageSize,naviSize);//총게시물의 수,페이지사이즈, 네비사이즈
 
        //페이징처리
-       Map pageMap = new HashMap();
-       pageMap.put("offset",((page-1)*pageSize));//몇번부터 시작할건지
-       pageMap.put("pageSize",pageSize);//화면에 몇개씩 보여줄건지
-       ArrayList<MyBoard> myBoardList = myBoardService.selectList(pageMap);//게시글리스트 조회용
-//       ArrayList<MyBoard> myBoardPage = myBoardService.myBoardPage(pageMap);//페이징처리 리스트 출력용
+       Map pageSearchMap = new HashMap();
+       pageSearchMap.put("offset",((page-1)*pageSize));//몇번부터 시작할건지
+       pageSearchMap.put("pageSize",pageSize);//화면에 몇개씩 보여줄건지
+       pageSearchMap.put("type",pageHandle.getType());
+       pageSearchMap.put("search",pageHandle.getSearch());
+
+
+       ArrayList<MyBoard> myBoardList = myBoardService.selectList(pageSearchMap);//게시글리스트 조회용
+
        model.addAttribute("myBoardList",myBoardList);
        model.addAttribute("ph",ph);
-
-//
-//       model.addAttribute("myBoardList",myBoardList);
-
 
        return "listBoard";
    }
@@ -98,22 +103,6 @@ public class MyBoardController {
         myBoardService.updateContent(board);
         return "redirect:/main";
 
-    }
-
-    /*
-    검색기능
-    */
-    @PostMapping("/search")
-    public String myBoardSearch(Model model,@RequestParam(defaultValue="1") int page, String type,String search){
-
-        HashMap<String,String> searchMap = new HashMap();
-
-        searchMap.put("type",type);
-        searchMap.put("search",search);
-        ArrayList searchList = myBoardService.SearchCondition(searchMap);//검색결과 반환
-
-        model.addAttribute("searchList", searchList);
-        return "searchList";
     }
 
 }
