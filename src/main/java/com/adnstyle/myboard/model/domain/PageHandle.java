@@ -7,14 +7,14 @@ import lombok.Setter;
 @Getter
 public class PageHandle {
     private int totalCnt;//총 게시물
-    private int pageSize;//한페이지당 보일 게시글 수
-    private int page;//현재 페이지
     private int totalPage;//총 페이지수
     private int naviSize;//네비 사이즈
     private int beginPage;//시작페이지
     private int endPage;//마지막 페이지
     private boolean showPrev;//이전으로 가기
     private boolean showNext;//다음으로 가기
+    private int pageSize;//한페이지당 보일 게시글 수
+    private int page;//현재 페이지
 
     /*검색용*/
     private String type;
@@ -58,16 +58,18 @@ public class PageHandle {
 			     startPage = startPage - 5(페이징의 개수);
 				 startPage -= pagingCount;
 			}
-
-			//아직도 시작페이지 구하기가 너무 어렵다ㅜㅜㅜㅜㅜ 구글링했는데 좀더 연구해보자
         */
 
        this.beginPage =this.page/this.naviSize * this.naviSize + 1;
         if(this.page % this.naviSize == 0){
             this.beginPage -= this.naviSize;
         }
+        //만약 끝페이지가 시작페이지보다 작거나 같다면 1로!.. 왜냐하믄..ㅠㅠㅠ 아까 시작1 끝페이지0나옴ㅠㅠ
+        if(this.endPage<=this.beginPage){
+            this.endPage=1;
+        }
 
-        //이전 버튼이 보이려면 시작페이지가 1이랑 같지 않을때
+            //이전 버튼이 보이려면 시작페이지가 1이랑 같지 않을때
         this.showPrev= this.beginPage>1;
 
         //다음 버튼이 보이려면 끝페이지가 총페이지랑 같지 않을때

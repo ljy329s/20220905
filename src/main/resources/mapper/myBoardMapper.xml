@@ -2,20 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.adnstyle.myboard.model.repository.MyBoardRepository">
 
-    <!--검색-->
+<!--    검색-->
     <sql id ="searchContents">
         <choose>
-            <when test='type=="A"'></when>
-            <when test='type=="T"'>
+            <when test='type.equals("A")'>
+                <if test='search==""'></if>
+                <if test='search!=""'>
+                    where title like concat('%',#{search},'%')
+                    or
+                    created_by like concat('%',#{search},'%')
+                    or
+                    content like concat('%',#{search},'%')
+                </if>
+            </when>
+            <when test='type.equals("T")'>
                 where title like concat('%',#{search},'%')
             </when>
-            <when test='type=="W"'>
+            <when test='type.equals("W")'>
                 where created_by like concat('%',#{search},'%')
             </when>
-            <when test='type=="C"'>
+            <when test='type.equals("C")'>
                 where content like concat('%',#{search},'%')
             </when>
-            <when test='type=="TC"'>
+            <when test='type.equals("TC")'>
                 where title like concat('%',#{search},'%') or content concat(like'%',#{search},'%')
             </when>
         </choose>
@@ -28,14 +37,15 @@
      from my_board
     <include refid="searchContents"></include>
     </select>
+
 <!-- 고객들이 볼 게시판 화면-->
-<!--    <select id="myBoardPage"  parameterType="map" resultType="com.adnstyle.myboard.model.domain.MyBoard">-->
-<!--        select id, title, view_count, modified_date, modified_by-->
-<!--        from my_board-->
-<!--        where del_yn = 'N'-->
-<!--        order by id desc-->
-<!--        limit #{offset}, #{pageSize}-->
-<!--    </select>-->
+    <select id="myBoardPage"  parameterType="map" resultType="com.adnstyle.myboard.model.domain.MyBoard">
+        select id, title, view_count, modified_date, modified_by
+        from my_board
+        where del_yn = 'N'
+        order by id desc
+        limit #{offset}, #{pageSize}
+    </select>
 
     <select id="selectList"  parameterType="map" resultType="com.adnstyle.myboard.model.domain.MyBoard">
         select id, title, view_count, modified_date, modified_by,del_yn
@@ -63,7 +73,7 @@
 
     <insert id="insertContent" parameterType="com.adnstyle.myboard.model.domain.MyBoard">
         insert into my_board (title, content ,view_count,created_by,modified_by,created_date,modified_date)
-        values ( #{title},#{content},0,#{createdBy},#{createdBy},NOW(),NOW())
+        values (#{title},#{content},0,#{createdBy},#{createdBy},NOW(),NOW())
     </insert>
 
     <update id="updateContent" parameterType="com.adnstyle.myboard.model.domain.MyBoard">

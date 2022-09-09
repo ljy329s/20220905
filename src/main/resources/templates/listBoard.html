@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -47,6 +47,7 @@
 
 </style>
 <body>
+<div>
     <div id="main">
         <div id="content">
             <form action="/main" method="get">
@@ -114,6 +115,7 @@
         </div>
     </div>
 </div>
+
 
 <script th:inline="javascript">
     let myBoardList =[[${myBoardList}]]

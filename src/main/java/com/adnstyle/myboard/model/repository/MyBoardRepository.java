@@ -10,12 +10,12 @@ import java.util.Map;
 @Mapper
 public interface MyBoardRepository {
 
-    ArrayList<MyBoard> selectList(Map pageSearchMap);
+    ArrayList<MyBoard> selectList(Map searchMap);
 
-//    ArrayList<MyBoard> myBoardPage(Map pageMap);
+    ArrayList<MyBoard> myBoardPage(Map pageMap);
 
-    int countAll(PageHandle pageHandle);
-    ArrayList<MyBoard> selectContent(Long id);
+    int countAll(Map searchMap);
+   ArrayList<MyBoard> selectContent(Long id);
 
     void updateCount(Long id);
 
@@ -27,7 +27,7 @@ public interface MyBoardRepository {
     void updateContent(MyBoard board);
 
     //검색
-    ArrayList SearchCondition(Map searchMap);
+   ArrayList SearchCondition(Map searchMap);
 
     }
   
