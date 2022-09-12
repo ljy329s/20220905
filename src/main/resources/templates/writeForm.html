@@ -31,16 +31,14 @@
   }
 </style>
 <body>
-<script src="webjars/jquery/dist/jquery.min.js"></script>
 <div id="main">
   <div id="content">
     <h1>게시글쓰기</h1>
-    <form action="insertContent" method="post">
+    <form action="insertContent" method="post" enctype="multipart/form-data">
       <div><p>제목</p><input type="text" name="title"/></div>
       <div><p>작성자</p><input type="text" name="createdBy"/></div>
       <div><p>내용</p>
         <textarea cols="50" rows="20" name="content"/></textarea></div>
-
       <div id="fileUpload">
         <input type="file" name="uploadFile" multiple>
       </div>

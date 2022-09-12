@@ -29,5 +29,6 @@ public interface MyBoardRepository {
     //검색
    ArrayList SearchCondition(Map searchMap);
 
-    }
+    Long selectId();
+}
   

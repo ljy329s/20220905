@@ -71,6 +71,13 @@
         where id=#{id}
     </update>
 
+    <select id="selectId" resultType="long">
+        SELECT ID
+        FROM my_board
+        ORDER BY ID DESC
+        limit 1;
+    </select>
+
     <insert id="insertContent" parameterType="com.adnstyle.myboard.model.domain.MyBoard">
         insert into my_board (title, content ,view_count,created_by,modified_by,created_date,modified_date)
         values (#{title},#{content},0,#{createdBy},#{createdBy},NOW(),NOW())

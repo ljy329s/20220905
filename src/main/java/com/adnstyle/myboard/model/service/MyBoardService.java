@@ -2,6 +2,7 @@ package com.adnstyle.myboard.model.service;
 
 import com.adnstyle.myboard.model.domain.MyBoard;
 import com.adnstyle.myboard.model.domain.PageHandle;
+import com.adnstyle.myboard.model.repository.JyAttachRepository;
 import com.adnstyle.myboard.model.repository.MyBoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.util.Map;
 public class MyBoardService {
 
   private final MyBoardRepository myBoardRepository;
+
 
     public ArrayList<MyBoard> selectList(Map searchMap) {
 
@@ -41,6 +43,7 @@ public class MyBoardService {
 
     public void insertContent(MyBoard board) {
         myBoardRepository.insertContent(board);
+
     }
 
     //게시글 수정하기
@@ -53,5 +56,9 @@ public class MyBoardService {
 
     public ArrayList SearchCondition(Map searchMap) {
         return myBoardRepository.SearchCondition(searchMap);//다른쿼리들을 인클루드하는 대장쿼리?
+    }
+
+    public Long selectId() {//최상단 게시글번호 가져오기
+        return myBoardRepository.selectId();
     }
 }
