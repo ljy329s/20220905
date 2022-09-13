@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>게시글 읽기</title>
@@ -40,47 +40,23 @@
             <div><p>작성자</p><input type="text" name="modifiedBy" th:value="${myContent.modifiedBy}" readonly="readonly"/></div>
             <div><p>내용</p>
                 <textarea cols="50" rows="20" name="content" th:text="${myContent.content}" readonly="readonly"/></textarea></div>
-        <input type="hidden" name="id" th:value="${myContent.id}">
+
+            <input type="hidden" name="id" th:value="${myContent.id}">
 
             <button type="submit" id="upd_btn">수정</button>
             <button type="button" onclick="location.href='/main'">목록</button>
 
         </form>
+        <div><p>첨부파일</p>
+            <form action="/downloadFile" method="get" th:each="attachList : ${attachList}">
+                <a th:href="@{/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}"><p th:text="${attachList.originName}"/></th:text></a>
+            </form>
+        </div>
         <form action="/deleteContent" th:each="myContent : ${myContent}">
             <input type="hidden" name="id" th:value="${myContent.id}"/>
         <button type="submit" id="sub_btn">삭제</button>
         </form>
     </div>
 </div>
-<script>
-    /*
-   $(function(){
-       let upd_btn =$("#upd_btn");
-
-       upd_btn.on("click",function(){
-       console.log("수정버튼 클릭");
-       const contentForm = $("#contentForm");
-           contentForm.attr("action","/updateContent");
-           contentForm.attr("method","post");
-           contentForm.attr("h1","게시글");
-           contentForm.submit();
-   })
-});
-
-   $(function(){
-       let sub_btn =$("#sub_btn");
-
-       sub_btn.onclick(function(){
-           console.log("등록버튼 클릭");
-           const contentForm = $("#contentForm");
-           contentForm.attr("action","/insertContent");
-           contentForm.attr("method","post");
-           $('h1').attr('title','게시글등록');
-           contentForm.submit();
-       })
-   });
-*/
-</script>
-
 </body>
 </html>

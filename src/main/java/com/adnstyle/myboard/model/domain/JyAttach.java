@@ -1,12 +1,12 @@
 package com.adnstyle.myboard.model.domain;
 
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class JyAttach {
     private String uuid;//uuid가 포함된 파일이름(저장될 파일명)

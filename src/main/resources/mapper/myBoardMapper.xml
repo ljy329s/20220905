@@ -54,11 +54,11 @@
         order by id desc
         limit #{offset}, #{pageSize}
     </select>
-
+<!--게시글 상세조회-->
     <select id="selectContent" parameterType="long" resultType="com.adnstyle.myboard.model.domain.MyBoard">
-        select id,title, modified_by,content, created_date
+        select title, created_by,content, created_date
         from my_board
-        where id=#{id}
+        where id=#{id};
     </select>
 
     <update id="updateCount" parameterType="long">

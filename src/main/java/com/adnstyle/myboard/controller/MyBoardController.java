@@ -7,17 +7,27 @@ import com.adnstyle.myboard.model.service.JyAttachService;
 import com.adnstyle.myboard.model.service.MyBoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 //@RestController restapi
 @Controller//타임리프를위해
@@ -80,8 +90,11 @@ public class MyBoardController {
    */
     @GetMapping("/boardContent")
     public String myBoardContent(Model model, long id){
-        ArrayList<MyBoard> myContent = myBoardService.selectContent(id);
+        ArrayList<MyBoard> myContent = myBoardService.selectContent(id);//게시글 번호로 내용 불러오기
+        ArrayList<JyAttach> attachList = jyAttachService.attachList(id);
         model.addAttribute("myContent",myContent);
+        model.addAttribute("attachList",attachList);
+        System.out.println("myBoardContent컨틀롤러 attachList는"+attachList);
         return "boardContent";
     }
 
@@ -129,7 +142,9 @@ private String getFolder(){
     // 게시글 등록
     @PostMapping("/insertContent")
     public String myBoardInsertContent(MultipartFile[] uploadFile, MyBoard board, Model model){
-
+        myBoardService.insertContent(board);//db에 입력
+        Long id = myBoardService.selectId();
+        List fileList = new ArrayList();
         String uploadFolder = "C:\\upload"; //파일이 저장될 상위경로
 
         //같은폴더에 파일이 많으면 속도 저하 개수제한 문제등이 생긴다 날짜로 폴더 만들어주기
@@ -154,7 +169,16 @@ private String getFolder(){
             //동일한 파일명일때 기존파일 덮어버리는 문제 해결위해 UUID
             UUID uuid = UUID.randomUUID();
             changeUploadFileName = uuid.toString()+"-"+originUploadFileName;//랜덤uuid+"-"+원본명
-            File saveFile = new File(uploadPath, originUploadFileName);
+            File saveFile = new File(uploadPath, changeUploadFileName);
+
+            JyAttach attach = new JyAttach();
+            attach.setUuid(changeUploadFileName);
+            attach.setUploadPath(String.valueOf(uploadPath));
+            attach.setOriginName(originUploadFileName);
+            attach.setBno(id);
+
+            System.out.println("attatch에 담긴 값 "+ attach.toString());
+            fileList.add(attach);
 
             try {
                 multipartFile.transferTo(saveFile);//파일에 저장 try Catch해주기
@@ -165,21 +189,39 @@ private String getFolder(){
 
 
         System.out.println("입력한값"+board);
-        myBoardService.insertContent(board);//db에 입력
-        Long id = myBoardService.selectId();
 
-        Map<String,Object> fileMap = new HashMap<>();
-        fileMap.put("uuid",changeUploadFileName);
-        fileMap.put("uploadPath",uploadPath);
-        fileMap.put("originName",originUploadFileName);
-        fileMap.put("bno",id);
-        System.out.println("fileMap은?"+fileMap);
 
-        jyAttachService.insertFile(fileMap);
+        jyAttachService.insertFile((ArrayList) fileList);
 
         return "redirect:/main";
 
     }
+
+    /*
+    첨부파일 다운로드
+    */
+    @GetMapping(value="/downloadFile", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @ResponseBody
+    public ResponseEntity<Resource> downloadFile(String uploadPath,String fileName){
+
+       System.out.println("파일의경로는"+uploadPath+"파일의 이름은"+fileName);
+        Resource resource = new FileSystemResource(uploadPath+fileName);
+
+        String resourceName = resource.getFilename();
+
+        HttpHeaders headers = new HttpHeaders();
+
+        try {
+            headers.add("Content-Disposition", "attachment; " +
+                    "fileName="+new String(resourceName.getBytes("UTF-8"),
+                    "ISO-8859-1"));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+
+        return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
+    }
+
     /*
     게시글 수정하기
     */
