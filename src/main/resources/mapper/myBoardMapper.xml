@@ -56,7 +56,7 @@
     </select>
 <!--게시글 상세조회-->
     <select id="selectContent" parameterType="long" resultType="com.adnstyle.myboard.model.domain.MyBoard">
-        select title, created_by,content, created_date
+        select title, modified_by,content,modified_date,id
         from my_board
         where id=#{id};
     </select>

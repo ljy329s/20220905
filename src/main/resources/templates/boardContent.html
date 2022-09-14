@@ -34,17 +34,29 @@
 <body>
 <div id="main">
     <div id="content">
-        <h1>게시글읽기</h1>
-        <form action="/updateContent" method="get" id="contentForm" th:each="myContent : ${myContent}">
-            <div><p>제목</p><input type="text" name="title" th:value="${myContent.title}" readonly="readonly"/></div>
-            <div><p>작성자</p><input type="text" name="modifiedBy" th:value="${myContent.modifiedBy}" readonly="readonly"/></div>
+        <h1 id="mainTitle">게시글읽기</h1>
+        <form action="/updateContent" method="post" id="contentForm" th:each="myContent : ${myContent}">
+            <div><p>제목</p><input type="text" name="title" th:value="${myContent.title}" class="form" readonly="readonly"/></div>
+            <div><p>작성자</p><input type="text" name="modifiedBy" th:value="${myContent.modifiedBy}" class="form" readonly="readonly"/></div>
             <div><p>내용</p>
-                <textarea cols="50" rows="20" name="content" th:text="${myContent.content}" readonly="readonly"/></textarea></div>
+
+                <input type="text" name="page" th:value="${page}">
+                <input type="text" name="type" th:value="${type}">
+                <input type="text" name="search" th:value="${search}">
+                <textarea cols="50" rows="20" name="content" th:text="${myContent.content}" class="form" readonly="readonly"/></textarea></div>
+
 
             <input type="hidden" name="id" th:value="${myContent.id}">
 
-            <button type="submit" id="upd_btn">수정</button>
-            <button type="button" onclick="location.href='/main'">목록</button>
+
+            <div>
+            <button type="button" id="upd_btn" style="display: inline">수정하기</button>
+            <button type="submit" id="upd_sub" style="display: none">수정완료</button>
+                <!--이전에보던 페이지 위치로 이동함 -->
+            <button type="button" th:onclick="|location.href='@{main(page=${page},type=${type},search=${search})}'|">목록</button>
+            <!-- th:onclick="|location.href='@{deleteContent(id=${myContent.id})}'|" [경로에 파라미터 같이 보내는법] 앞뒤로 | 적어줘야함 -->
+            <button type="button" th:onclick="|location.href='@{deleteContent(id=${myContent.id})}'|">삭제</button>
+            </div>
 
         </form>
         <div><p>첨부파일</p>
@@ -52,11 +64,33 @@
                 <a th:href="@{/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}"><p th:text="${attachList.originName}"/></th:text></a>
             </form>
         </div>
-        <form action="/deleteContent" th:each="myContent : ${myContent}">
-            <input type="hidden" name="id" th:value="${myContent.id}"/>
-        <button type="submit" id="sub_btn">삭제</button>
-        </form>
+
     </div>
 </div>
+<script>
+    //제이쿼리 없이 바닐라js로 (부트스트랩5 사용예정)
+
+    //수정버튼 클릭시 upd_btnE 함수를 실행해라
+    const upd_btn = document.getElementById("upd_btn")
+        upd_btn.addEventListener('click',upd_btnE);
+
+    //수정버튼 클릭시 upd_btnE 실행
+    function upd_btnE(){
+        //기존 수정하기 버튼 가리기
+        document.getElementById("upd_btn").style.display="none";
+        //수정완료 버튼 보이게 하기
+        document.getElementById("upd_sub").style.display="inline";
+        let mainTitleU = document.getElementById("mainTitle");//게시글읽기->게시글수정으로 변경
+        mainTitleU.innerText="게시글수정";
+
+        //input의 class이름을 가지고 for문을 돌려서 readOnly를 false로(텍스트 수정가능하게)
+        let formU = document.getElementsByClassName("form");
+        for(let i = 0; i < formU.length; i++){
+            formU[i].readOnly=false;
+        }
+
+    }
+
+</script>
 </body>
 </html>

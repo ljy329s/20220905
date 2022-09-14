@@ -51,15 +51,16 @@
     <div id="main">
         <div id="content">
             <form action="/main" method="get">
-                <select name="type" th:value="${type}">
-                    <option value='A' >전체</option>
-                    <option value='T' >제목</option>
-                    <option value='W' >작성자</option>
-                    <option value='C'>내용</option>
-                    <option value='TC'>제목+내용</option>
+                <select th:name="type" th:value="${type}">
+                    <option value='A' th:selected="${type}=='A'">전체</option>
+                    <option value='T' th:selected="${type}=='T'">제목</option>
+                    <option value='W' th:selected="${type}=='W'">작성자</option>
+                    <option value='C' th:selected="${type}=='C'">내용</option>
+                    <option value='TC' th:selected="${type}=='TC'">제목+내용</option>
                 </select>
-                <input type="text" name="search" th:value="${search}">
+                <input type="text" th:name="search" th:value="${search}">
                 <input type="submit" value="검색" id="sBtn">
+                <input type="text" th:value="${ph.page}">
             </form>
         </div>
     </div>
@@ -78,12 +79,12 @@
             <tr th:each="board : ${myBoardList}">
 
                 <td th:text="${board.id}"></td>
-                <td><a th:href="@{/boardContent(id=${board.id})}"th:text="${board.title}"></a></td>
+<!--                <a th:href="@{/board/view(id = ${board.id}, writer = ${board.writer}})}">글 상세보기</a>-->
+                <td><a th:href="@{/boardContent(id=${board.id},page=${ph.page},type=${type},search=${search})}"th:text="${board.title}"/></td>
                 <td th:text="${board.modifiedBy}"></td>
                 <td th:text="${board.modifiedDate}"></td>
                 <td th:text="${board.viewCount}"></td>
                 <td th:text="${board.delYn}"></td>
-
             </tr>
 
 
@@ -97,19 +98,21 @@
         <div id="pageNavi">
             <!--prev -->
             <th:block th:if ="${ph.showPrev}">
-                <a th:href ="@{/main(page=${ph.beginPage}-1)}"><</a>
+                <a th:href ="@{/main(page=${ph.beginPage}-1,type=${type},search=${search})}"><</a>
             </th:block>
 
             <!--         페이징        -->
             <th:block th:with="ph = ${ph}">
                 <th:block th:each="num : ${#numbers.sequence(ph.beginPage,ph.endPage)}">
-                    <a th:href="@{/main(page=${num})}"th:text="${num}"></a>
+<!--                    <a th:href="@{/main(page=${num})}"th:text="${num}"></a>-->
+                    <a th:href="@{/main(page=${num},type=${type},search=${search})}"th:text="${num}"></a>
+<!--                    page=${ph.page},type=${type},search=${search})-->
                 </th:block>
             </th:block>
 
             <!--next-->
             <th:block th:if ="${ph.showNext}">
-                <a th:href ="@{/main(page=${ph.endPage}+1)}">></a>
+                <a th:href ="@{/main(page=${ph.endPage}+1,type=${type},search=${search})}">></a>
             </th:block>
 
         </div>

@@ -15,10 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.*;
@@ -37,30 +34,6 @@ public class MyBoardController {
     private final MyBoardService myBoardService;
     private final JyAttachService jyAttachService;
 
-//    @GetMapping("/main")
-//    public String myBoardList(Model model , @RequestParam(defaultValue = "1") int page,PageHandle pageHandle){
-//       int totalCnt = myBoardService.countAll(pageHandle);//총게시물의 수
-//       int pageSize = 8;
-//       int naviSize = 5;
-//
-//       //보고있는 페이지의 시작페이지와 끝페이지 정보를 가져온다
-//       PageHandle ph = new PageHandle(totalCnt,page,pageSize,naviSize);//총게시물의 수,페이지사이즈, 네비사이즈
-//
-//       //페이징처리
-//       Map pageSearchMap = new HashMap();
-//       pageSearchMap.put("offset",((page-1)*pageSize));//몇번부터 시작할건지
-//       pageSearchMap.put("pageSize",pageSize);//화면에 몇개씩 보여줄건지
-//       pageSearchMap.put("type",pageHandle.getType());
-//       pageSearchMap.put("search",pageHandle.getSearch());
-//
-//
-//       ArrayList<MyBoard> myBoardList = myBoardService.selectList(pageSearchMap);//게시글리스트 조회용
-//
-//       model.addAttribute("myBoardList",myBoardList);
-//       model.addAttribute("ph",ph);
-//
-//       return "listBoard";
-//   }
     @GetMapping("/main")
     public String myBoardList(Model model , @RequestParam(value="page", defaultValue = "1") int page,@RequestParam(value="type",defaultValue = "A") String type,@RequestParam(value = "search", defaultValue = "")String search){//required = false
         Map searchMap = new HashMap();
@@ -81,6 +54,8 @@ public class MyBoardController {
 
         model.addAttribute("myBoardList",myBoardList);//보여질 정보
         model.addAttribute("ph",ph);//화면에 보일 페이지네비
+        model.addAttribute("type",type);//검색조건
+        model.addAttribute("search",search);//검색내용
         System.out.println("myBoardList"+myBoardList);
         return "listBoard";
     }
@@ -89,12 +64,17 @@ public class MyBoardController {
    해당번호의 게시글 리스트 조회
    */
     @GetMapping("/boardContent")
-    public String myBoardContent(Model model, long id){
+    public String myBoardContent(Model model, long id,@RequestParam("page") int page, @RequestParam("type") String type, @RequestParam("search") String search){
         ArrayList<MyBoard> myContent = myBoardService.selectContent(id);//게시글 번호로 내용 불러오기
         ArrayList<JyAttach> attachList = jyAttachService.attachList(id);
-        model.addAttribute("myContent",myContent);
-        model.addAttribute("attachList",attachList);
-        System.out.println("myBoardContent컨틀롤러 attachList는"+attachList);
+        model.addAttribute("myContent",myContent);//게시글내용
+        model.addAttribute("attachList",attachList);//첨부파일
+        model.addAttribute("page",page);//페이지
+        model.addAttribute("type",type);//검색ㅁ타입
+        model.addAttribute("search",search);//검색내용
+   
+
+        System.out.println("myBoardContent 컨트롤러 model은"+model);
         return "boardContent";
     }
 
@@ -102,8 +82,9 @@ public class MyBoardController {
     게시글 삭제 상태값 Y로 변경
     */
     @GetMapping("/deleteContent")
-    public String myBoardContentDelete(MyBoard board){
-        myBoardService.deleteContent(board);
+    public String myBoardContentDelete(long id){
+        System.out.println("삭제버튼 타고 컨트롤러옴"+id);
+        myBoardService.deleteContent(id);
         return "redirect:/main";
     }
 
@@ -113,7 +94,7 @@ public class MyBoardController {
 
     @GetMapping("/writeForm")
     public String Write(){
-        return "writeForm";//작성화면
+    return "writeForm";//작성화면
     }
 
 //    @PostMapping("/insertContent")
@@ -198,14 +179,15 @@ private String getFolder(){
     }
 
     /*
-    첨부파일 다운로드
+    첨부파일 다운로드 정리하기
     */
     @GetMapping(value="/downloadFile", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     @ResponseBody
     public ResponseEntity<Resource> downloadFile(String uploadPath,String fileName){
 
        System.out.println("파일의경로는"+uploadPath+"파일의 이름은"+fileName);
-        Resource resource = new FileSystemResource(uploadPath+fileName);
+       //파일경로와 폴더 사이에 역슬래시 있어야함!!!
+        Resource resource = new FileSystemResource(uploadPath+"\\"+fileName);//역슬래시를 한번 문자열으로 출력하려면 \\두번!
 
         String resourceName = resource.getFilename();
 
@@ -235,6 +217,7 @@ private String getFolder(){
    @PostMapping("/updateContent")
     public String myBoardUpdateContent(MyBoard board){
         myBoardService.updateContent(board);
+        System.out.println("수정할값"+board);
         return "redirect:/main";
 
     }

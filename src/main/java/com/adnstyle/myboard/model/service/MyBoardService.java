@@ -37,8 +37,8 @@ public class MyBoardService {
         return myBoardRepository.selectContent(id);
     }
 
-    public void deleteContent(MyBoard board) {
-        myBoardRepository.deleteContent(board);
+    public void deleteContent(long id) {
+        myBoardRepository.deleteContent(id);
     }
 
     public void insertContent(MyBoard board) {

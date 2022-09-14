@@ -63,7 +63,7 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.12.0</version>
         </dependency>
-        <!-- File Upload (대용량 파일 처리) -->
+        <!-- 파일을 byte로 변환하기위한 dependency -->
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <dependency>
             <groupId>commons-io</groupId>

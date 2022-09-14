@@ -21,7 +21,8 @@
         <select id="attachList" parameterType="long" resultType="com.adnstyle.myboard.model.domain.JyAttach">
             select originName,uuid,uploadPath
             from jy_attach
-            where bno=#{id};
+            where bno=#{id}
+            and del_yn='N'
         </select>
 
 <!--    <delete id="deleteFile">-->

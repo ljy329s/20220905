@@ -24,6 +24,7 @@ public class PageHandle {
     //총게시글수, 해당페이지, 페이지당 보일 게시글 수
 
     public PageHandle(int totalCnt, int page, int pageSize, int naviSize){
+
         this.totalCnt = totalCnt;
         this.page = page;
         this.pageSize = pageSize;
