@@ -22,6 +22,9 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -70,12 +73,30 @@ public class MyBoardController {
         model.addAttribute("myContent",myContent);//게시글내용
         model.addAttribute("attachList",attachList);//첨부파일
         model.addAttribute("page",page);//페이지
-        model.addAttribute("type",type);//검색ㅁ타입
+        model.addAttribute("type",type);//검색타입
         model.addAttribute("search",search);//검색내용
    
 
         System.out.println("myBoardContent 컨트롤러 model은"+model);
         return "boardContent";
+    }
+
+    private void deleteFiles(List<JyAttach> attachList){
+        //첨부파일이 없으면 그냥 메서드 끝내기
+        if(attachList==null || attachList.size()==0){
+            return;
+        }
+        //첨부파일이 있으면
+        //collection.forEach(변수 -> 반복처리(변수)) //forEach
+        attachList.forEach(jyAttach -> {
+            Path file = Paths.get(jyAttach.getUploadPath()+"\\s_"+ jyAttach.getUuid()+"_"+jyAttach.getOriginName());
+            try {
+                Files.deleteIfExists(file);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        });
     }
 
     /*
@@ -94,33 +115,29 @@ public class MyBoardController {
 
     @GetMapping("/writeForm")
     public String Write(){
-    return "writeForm";//작성화면
+        return "writeForm";//작성화면
     }
 
-//    @PostMapping("/insertContent")
-//    public String myBoardInsertContent(MyBoard board){
-//        System.out.println("입력한값"+board);
-//        myBoardService.insertContent(board);//db에 입력
-//        return "redirect:/main";
-//
-//    }
+
 /*
 첨부파일 포함 게시물 등록
 */
 //년/월/일 폴더 생성 메서드
-private String getFolder(){
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");//mm은 분 MM은 월!
+    private String getFolder(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");//mm은 분 MM은 월!
 
-    Date date = new Date();
+        Date date = new Date();
 
-    String str = sdf.format(date);//오늘날짜를 지정한 포멧 형식으로 변환
-    
-    //format패턴의 "-"를 os의 구분자로 바꾸겠다 os마다 구분자가 달라서 File.separator 적어줘야함
-    return str.replace("-",File.separator);
-    
+        String str = sdf.format(date);//오늘날짜를 지정한 포멧 형식으로 변환
 
-}
-    // 게시글 등록
+        //format패턴의 "-"를 os의 구분자로 바꾸겠다 os마다 구분자가 달라서 File.separator 적어줘야함
+        return str.replace("-",File.separator);
+
+    }
+    /*
+    게시글 등록
+    */
+
     @PostMapping("/insertContent")
     public String myBoardInsertContent(MultipartFile[] uploadFile, MyBoard board, Model model){
         myBoardService.insertContent(board);//db에 입력
@@ -168,9 +185,7 @@ private String getFolder(){
             }
         }
 
-
         System.out.println("입력한값"+board);
-
 
         jyAttachService.insertFile((ArrayList) fileList);
 
@@ -182,7 +197,7 @@ private String getFolder(){
     첨부파일 다운로드 정리하기
     */
     @GetMapping(value="/downloadFile", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    @ResponseBody
+   // @ResponseBody
     public ResponseEntity<Resource> downloadFile(String uploadPath,String fileName){
 
        System.out.println("파일의경로는"+uploadPath+"파일의 이름은"+fileName);
