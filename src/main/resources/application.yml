@@ -13,6 +13,7 @@ spring:
     prefix: classpath:templates/
     suffix: .html
 mybatis:
+  type-aliases-package: com.adnstyle.myboard.model.domain
   mapper-locations: mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true

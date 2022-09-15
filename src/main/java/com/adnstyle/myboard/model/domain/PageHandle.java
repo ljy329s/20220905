@@ -2,9 +2,12 @@ package com.adnstyle.myboard.model.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.ibatis.type.Alias;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Setter
 @Getter
+@Alias("pageHandle")
 public class PageHandle {
     private int totalCnt;//총 게시물
     private int totalPage;//총 페이지수
@@ -78,5 +81,6 @@ public class PageHandle {
 
 
     }
+    
 
 }

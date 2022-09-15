@@ -18,17 +18,18 @@
         </foreach>
     </insert>
 
-        <select id="attachList" parameterType="long" resultType="com.adnstyle.myboard.model.domain.JyAttach">
+        <select id="attachList" parameterType="long" resultType="jyAttach">
             select originName,uuid,uploadPath
             from jy_attach
             where bno=#{id}
             and del_yn='N'
         </select>
 
-<!--    <delete id="deleteFile">-->
-<!--        delete from jy_attach-->
-<!--        where uuid = #{uuid}-->
-<!--    </delete>-->
+<!--    게시글 삭제시 첨부파일도 함께 삭제-->
+    <delete id="deleteAll">
+        delete from jy_attach
+        where bno = #{id}
+    </delete>
 
 
 </mapper>

@@ -22,6 +22,9 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -70,7 +73,7 @@ public class MyBoardController {
         model.addAttribute("myContent",myContent);//게시글내용
         model.addAttribute("attachList",attachList);//첨부파일
         model.addAttribute("page",page);//페이지
-        model.addAttribute("type",type);//검색ㅁ타입
+        model.addAttribute("type",type);//검색타입
         model.addAttribute("search",search);//검색내용
    
 
@@ -78,13 +81,41 @@ public class MyBoardController {
         return "boardContent";
     }
 
+    private int deleteFiles(List<JyAttach> attachList){
+        //첨부파일이 존재하지 않으면 걍 끝내기
+        if(attachList==null || attachList.size()==0){
+            return 0;
+        }
+        //파일 경로랑 서버에 저장된 이름을 Path file에 저장해서 실제파일 제하기
+        attachList.forEach(attach ->{
+            Path file = Paths.get(attach.getUploadPath()+"//"+attach.getUuid());//경로+서버에 저장된 이름
+            try {
+                Files.deleteIfExists(file);//파일이 존재하면 삭제
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        return 1;//삭제됐다면
+    }
+
     /*
-    게시글 삭제 상태값 Y로 변경
+    게시글 삭제 상태값 Y로 변경 -게시글은 상태값만 바꾸고 첨부파일은 삭제
     */
     @GetMapping("/deleteContent")
     public String myBoardContentDelete(long id){
         System.out.println("삭제버튼 타고 컨트롤러옴"+id);
-        myBoardService.deleteContent(id);
+        int num = myBoardService.deleteContent(id);//게시물 삭제 결과가 있다면
+        if(num>0) {
+            ArrayList<JyAttach> attachList = jyAttachService.attachList(id);
+            int no = deleteFiles(attachList);//실제파일 삭제
+            if(no>0){//실제파일이 삭제되었다면
+                jyAttachService.deleteAttach(id);//db에서 삭제
+                System.out.println("게시글 삭제처리후 첨부파일 삭제됨");
+
+            }
+
+        }
+
         return "redirect:/main";
     }
 
@@ -94,16 +125,11 @@ public class MyBoardController {
 
     @GetMapping("/writeForm")
     public String Write(){
-    return "writeForm";//작성화면
+
+        return "writeForm";//작성화면
+
     }
 
-//    @PostMapping("/insertContent")
-//    public String myBoardInsertContent(MyBoard board){
-//        System.out.println("입력한값"+board);
-//        myBoardService.insertContent(board);//db에 입력
-//        return "redirect:/main";
-//
-//    }
 /*
 첨부파일 포함 게시물 등록
 */

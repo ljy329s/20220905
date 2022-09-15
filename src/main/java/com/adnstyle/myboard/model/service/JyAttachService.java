@@ -20,4 +20,8 @@ public class JyAttachService {
     public ArrayList<JyAttach> attachList(long id) {
         return jyAttachRepository.attachList(id);
     }
+
+    public void deleteAttach (Long id){
+        jyAttachRepository.deleteAll(id);
+    }
 }

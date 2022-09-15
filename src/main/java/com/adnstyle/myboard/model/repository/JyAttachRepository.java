@@ -12,6 +12,9 @@ public interface JyAttachRepository {
 
     ArrayList<JyAttach> attachList(long id);
 
+    //db에서 첨부파일 삭제
+    void deleteAll(Long id);
+
 
 //    void deleteFile(String uuid);//첨부파일 삭제
 
