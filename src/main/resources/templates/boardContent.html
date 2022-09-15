@@ -22,6 +22,7 @@
     textarea{
         resize: none;
     }
+
 </style>
 <body>
 <div id="main">
@@ -55,18 +56,13 @@
             </div>
 
         </form>
-        <div><p>첨부파일</p>
-            <form action="/downloadFile" method="get" th:each="attachList : ${attachList}">
-                <a th:href="@{/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}"><p th:text="${attachList.originName}"/></th:text></a>
-            </form>
+        <div>
+            <p>첨부파일</p>
+              <th:block th:each="attachList : ${attachList}">
+               <div class="aaa" style="display:flex;"><a th:href="@{/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}"><p th:text="${attachList.originName}"/></a><button type="button" class="delete" id="${attachList.uuid}" style="display: none">x</button></div>
+              </th:block>
         </div>
 
-<!--        게시글 수정하면서 첨부파일 새로운거 있나 확인해보고 컨트롤러에서 분기하기?!-->
-<!--        <form id="onlyAttach" style="display: none" action="/onlyAttach" method="post" enctype="multipart/form-data">-->
-<!--            <input type="file" name="uploadFile" multiple>-->
-<!--            <input type="text" name="id" th:value="${id}">-->
-<!--            <input type="submit" value="첨부파일추가">-->
-<!--        </form>-->
     </div>
 </div>
 <script>
@@ -87,38 +83,31 @@
         //파일추가 보이게 하기
         document.getElementById("onlyAttach").style.display="inline";
 
+        //첨부파일 삭제 버튼 보이게하기
+        const deleteBtn = document.getElementsByClassName("delete");
+        for(let i=0; i<deleteBtn.length;i++){
+            deleteBtn[i].style.display="inline";
+        }
+
         //input의 class이름을 가지고 for문을 돌려서 readOnly를 false로(텍스트 수정가능하게)
         let formU = document.getElementsByClassName("form");
         for(let i = 0; i < formU.length; i++){
             formU[i].readOnly=false;
         }
 
+        //삭제버튼 클릭시
+        let remove = document.getElementById("delete");
+        console.log("삭제버튼클릭");
+            remove.addEventListener('click',hideE);
+
+        //첨부파일 가려지게
+        function hideE(){
+            console.log("hideE함수실행");
+            document.getElementById("delete").style.display="none";
+
+        }
     }
 
-
-
-    // <!--<table>-->
-    // <!--&lt;!&ndash; 리스트에 첨부파일 uuid를 값으로 리스트내용을 첨부파일 원본명으로 &ndash;&gt;-->
-    // <!-- <tr value="1"><td><input type="checkbox" name="attach" value="1"> 첨부파일이름</td></tr> -->
-    // <!--<tr value="2"><td><input type="checkbox" name="attach" value="2"> 첨부파일이름</td></tr>-->
-    // <!--<tr value="3"><td><input type="checkbox" name="attach" value="3"> 첨부파일이름</td></tr>-->
-    // <!--</table>-->
-    // <!--&lt;!&ndash;삭제하기 버튼 누르면 배열로 저장시키고 수정하기 버튼 누르면 반영&ndash;&gt;-->
-    // <!--<button type = "button" id="update">수정완료</button>-->
-    // <!--<input type ="button" id="array_btn" onclick="del()">-->
-    // <!--<button type ="button">취소</button>-->
-    // <!--<span id="result"></span>-->
-    // <!--</body>-->
-    // <!--<script>-->
-    // <!--  // 1. 삭제하기를 누르면 값 가져오기-->
-    // <!--  function del(){-->
-    // <!--    var chkList = document.querySelectorAll("input[name=attach]:checked");-->
-    // <!--    chkList.forEach(function (ch) {-->
-    // <!--      //console.log(ch.value);-->
-    // <!--      alert(ch.value);-->
-    //
-    // <!--    })-->
-    // <!--  };-->
 
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
