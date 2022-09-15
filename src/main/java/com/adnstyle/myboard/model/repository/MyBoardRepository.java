@@ -19,7 +19,7 @@ public interface MyBoardRepository {
 
     void updateCount(Long id);
 
-    void deleteContent(Long id);
+    int deleteContent(Long id);
 
     void insertContent(MyBoard board);
 

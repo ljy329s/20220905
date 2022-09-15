@@ -32,14 +32,14 @@
 
 
 <!--  게시물 총 내용  -->
-    <select id="countAll" resultType="int" parameterType="com.adnstyle.myboard.model.domain.PageHandle">
+    <select id="countAll" resultType="int" parameterType="pageHandle">
     select count(*)
      from my_board
     <include refid="searchContents"></include>
     </select>
 
 <!-- 고객들이 볼 게시판 화면-->
-    <select id="myBoardPage"  parameterType="map" resultType="com.adnstyle.myboard.model.domain.MyBoard">
+    <select id="myBoardPage"  parameterType="map" resultType="myBoard">
         select id, title, view_count, modified_date, modified_by
         from my_board
         where del_yn = 'N'
@@ -47,7 +47,7 @@
         limit #{offset}, #{pageSize}
     </select>
 
-    <select id="selectList"  parameterType="map" resultType="com.adnstyle.myboard.model.domain.MyBoard">
+    <select id="selectList"  parameterType="map" resultType="myBoard">
         select id, title, view_count, modified_date, modified_by,del_yn
         from my_board
         <include refid="searchContents"></include>
@@ -55,7 +55,7 @@
         limit #{offset}, #{pageSize}
     </select>
 <!--게시글 상세조회-->
-    <select id="selectContent" parameterType="long" resultType="com.adnstyle.myboard.model.domain.MyBoard">
+    <select id="selectContent" parameterType="long" resultType="myBoard">
         select title, modified_by,content,modified_date,id
         from my_board
         where id=#{id};
@@ -78,12 +78,12 @@
         limit 1;
     </select>
 
-    <insert id="insertContent" parameterType="com.adnstyle.myboard.model.domain.MyBoard">
+    <insert id="insertContent" parameterType="myBoard">
         insert into my_board (title, content ,view_count,created_by,modified_by,created_date,modified_date)
         values (#{title},#{content},0,#{createdBy},#{createdBy},NOW(),NOW())
     </insert>
 
-    <update id="updateContent" parameterType="com.adnstyle.myboard.model.domain.MyBoard">
+    <update id="updateContent" parameterType="myBoard">
          update my_board set title = #{title}, content=#{content},modified_by=#{modifiedBy},modified_date=NOW()
          where id=#{id}
      </update>

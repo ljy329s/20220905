@@ -37,8 +37,8 @@ public class MyBoardService {
         return myBoardRepository.selectContent(id);
     }
 
-    public void deleteContent(long id) {
-        myBoardRepository.deleteContent(id);
+    public int deleteContent(long id) {
+      return myBoardRepository.deleteContent(id);
     }
 
     public void insertContent(MyBoard board) {
@@ -59,6 +59,7 @@ public class MyBoardService {
     }
 
     public Long selectId() {//최상단 게시글번호 가져오기
+
         return myBoardRepository.selectId();
     }
 }

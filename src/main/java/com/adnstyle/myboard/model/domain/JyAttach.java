@@ -5,9 +5,11 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.ibatis.type.Alias;
 
 @Data
 @NoArgsConstructor
+@Alias("jyAttach")
 public class JyAttach {
     private String uuid;//uuid가 포함된 파일이름(저장될 파일명)
 

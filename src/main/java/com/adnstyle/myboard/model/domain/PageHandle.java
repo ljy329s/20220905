@@ -2,9 +2,12 @@ package com.adnstyle.myboard.model.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.ibatis.type.Alias;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Setter
 @Getter
+@Alias("pageHandle")
 public class PageHandle {
     private int totalCnt;//총 게시물
     private int totalPage;//총 페이지수
@@ -45,7 +48,7 @@ public class PageHandle {
             13/10=1.3->(올림)->2->(*네비사이즈)=20
          */
         this.endPage= (int)Math.ceil(page/(double)naviSize)*naviSize;
-        if(this.endPage>this.totalPage){//endPage가 총페이지보다 크다면 총 페이지가 endPage인걸로
+        if(this.endPage>=this.totalPage){//endPage가 총페이지보다 크다면 총 페이지가 endPage인걸로
             this.endPage=this.totalPage;
         }
 
@@ -66,7 +69,7 @@ public class PageHandle {
             this.beginPage -= this.naviSize;
         }
         //만약 끝페이지가 시작페이지보다 작거나 같다면 1로!.. 왜냐하믄..ㅠㅠㅠ 아까 시작1 끝페이지0나옴ㅠㅠ
-        if(this.endPage<=this.beginPage){
+        if(this.endPage<this.beginPage){
             this.endPage=1;
         }
 
@@ -78,5 +81,6 @@ public class PageHandle {
 
 
     }
+    
 
 }
