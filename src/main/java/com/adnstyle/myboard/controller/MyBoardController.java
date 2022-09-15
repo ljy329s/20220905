@@ -75,6 +75,7 @@ public class MyBoardController {
         model.addAttribute("page",page);//페이지
         model.addAttribute("type",type);//검색타입
         model.addAttribute("search",search);//검색내용
+        model.addAttribute("id",id);//검색내용
    
 
         System.out.println("myBoardContent 컨트롤러 model은"+model);
@@ -148,7 +149,7 @@ private String getFolder(){
 }
     // 게시글 등록
     @PostMapping("/insertContent")
-    public String myBoardInsertContent(MultipartFile[] uploadFile, MyBoard board, Model model){
+    public String myBoardInsertContent(MultipartFile[] uploadFile, MyBoard board){
         myBoardService.insertContent(board);//db에 입력
         Long id = myBoardService.selectId();
         List fileList = new ArrayList();
@@ -204,8 +205,64 @@ private String getFolder(){
 
     }
 
+    //게시물 수정시 첨부파일만 추가
+    @PostMapping("/onlyAttach")
+    public void OnlyAttach(long id ,MultipartFile[] uploadFile){
+
+        List fileList = new ArrayList();
+        String uploadFolder = "C:\\upload"; //파일이 저장될 상위경로
+
+        //같은폴더에 파일이 많으면 속도 저하 개수제한 문제등이 생긴다 날짜로 폴더 만들어주기
+        File uploadPath = new File(uploadFolder, getFolder());//File(상위경로,하위경로?)
+
+        if(uploadPath.exists()==false){
+            uploadPath.mkdirs();//mkdirs(); 폴더 만드는 메서드
+            System.out.println("폴더생성");
+        }else{
+            System.out.println("이미 폴더가 있습니다");
+        }
+
+        String originUploadFileName="";
+        String changeUploadFileName="";
+        for(MultipartFile multipartFile : uploadFile){
+
+            originUploadFileName = multipartFile.getOriginalFilename();//파일원본명
+            long size = multipartFile.getSize();//파일사이즈
+
+            System.out.println("uploadFileName "+originUploadFileName + "size"+size);
+
+            //동일한 파일명일때 기존파일 덮어버리는 문제 해결위해 UUID
+            UUID uuid = UUID.randomUUID();
+            changeUploadFileName = uuid.toString()+"-"+originUploadFileName;//랜덤uuid+"-"+원본명
+            File saveFile = new File(uploadPath, changeUploadFileName);
+
+            JyAttach attach = new JyAttach();
+            attach.setUuid(changeUploadFileName);
+            attach.setUploadPath(String.valueOf(uploadPath));
+            attach.setOriginName(originUploadFileName);
+            attach.setBno(id);
+
+            System.out.println("attatch에 담긴 값 "+ attach.toString());
+            fileList.add(attach);
+
+            try {
+                multipartFile.transferTo(saveFile);//파일에 저장 try Catch해주기
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+
+        System.out.println("첨부파일내용"+fileList);
+
+
+        jyAttachService.insertFile((ArrayList) fileList);
+
+    }
+
+
     /*
-    첨부파일 다운로드 정리하기
+    첨부파일 다운로드
     */
     @GetMapping(value="/downloadFile", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     @ResponseBody
@@ -241,9 +298,10 @@ private String getFolder(){
 
    }
    @PostMapping("/updateContent")
-    public String myBoardUpdateContent(MyBoard board){
+    public String myBoardUpdateContent(MyBoard board, MultipartFile[] FileList){
         myBoardService.updateContent(board);
         System.out.println("수정할값"+board);
+        System.out.println("들어온파일"+FileList);
         return "redirect:/main";
 
     }
