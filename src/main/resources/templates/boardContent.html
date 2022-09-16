@@ -50,25 +50,60 @@
             <button type="button" class="btn btn-primary" th:onclick="|location.href='@{deleteContent(id=${myContent.id})}'|">삭제</button>
             </div>
 
-        </form>
-        <div>
-            <p>첨부파일</p>
-<!--            <th:block th:if="${!attachList.isEmpty()}">-->
-                <div th:if="${attachList.isEmpty()}">
-                    <th:block th:each="attachList : ${attachList}">
-                   <div class="attachList" style="display:flex;" th:value="${attachList.uuid}"><a th:href="@{/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}"><p th:text="${attachList.originName}"/></a>
-                          <select th:name="uuid" th:value="${attachList.uuid}" class="delete" style="display: none">
-                              <option value='' >o</option>
-                              <option value='${attachList.uuid}'>x</option>
-                          </select>
-                      </div>
-              </th:block>
-              </div>
-        </div>
 
+        <div>
+<!--            <p>첨부파일</p>-->
+<!--                <div th:if="${attachList!=null}">-->
+<!--                    <th:block th:each="attachList : ${attachList}">-->
+<!--                   <div class="attachList" style="display:flex;" th:value="${attachList.uuid}"><a th:href="@{/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}"><p th:text="${attachList.originName}"/></a>-->
+
+<!--                          <select name="uuid" class="delete" style="display: none">-->
+<!--                              <option>유지</option>-->
+<!--                              <option th:value='${attachList.uuid}'>삭제</option>-->
+<!--                          </select>-->
+<!--                      </div>-->
+<!--              </th:block>-->
+<!--              </div>-->
+
+
+
+            <div id="attachUl" th:if="${!attachList.isEmpty()}">
+                <ul style="list-style: none">
+                    <li th:each="attachList : ${attachList}">
+                        <a th:href="@{/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}"><span th:text="${attachList.originName}"/></a>
+                            <input type="checkbox" th:value='${attachList.uuid}' class="checkBtn" style="display: none" name="uuid">
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+        </form>
     </div>
 </div>
 <script>
+
+
+
+    let ul = document.querySelector('ul');
+
+    const checkClick = (i) => {
+        if(ul.children[i].querySelector('span').style.textDecorationLine === "line-through"){
+            ul.children[i].querySelector('span').style.textDecorationLine = '';
+        } else {
+            ul.children[i].querySelector('span').style.textDecorationLine = "line-through"
+        }
+    }
+
+    for(let i = 0; i < ul.childElementCount; i++){
+        ul.children[i].querySelector('input').value = i
+        ul.children[i].querySelector('input').setAttribute('onClick', `checkClick(${i})`);
+    }
+
+
+
+
+
+
 
 
     let btnVal= document.getElementsByClassName("delete");
@@ -91,10 +126,11 @@
         document.getElementById("onlyAttach").style.display="inline";
 
         //첨부파일 삭제 버튼 보이게하기
-        const deleteBtn = document.getElementsByClassName("delete");
-        for(let i=0; i<deleteBtn.length;i++){
-            deleteBtn[i].style.display="inline";
+        let checkBtn = document.getElementsByClassName("checkBtn");
+        for(let i=0; i <checkBtn.length; i++){
+             checkBtn[i].style.display="inline";
         }
+
 
 
         //input의 class이름을 가지고 for문을 돌려서 readOnly를 false로(텍스트 수정가능하게)

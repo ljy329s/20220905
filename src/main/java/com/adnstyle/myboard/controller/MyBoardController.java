@@ -6,7 +6,6 @@ import com.adnstyle.myboard.model.domain.PageHandle;
 import com.adnstyle.myboard.model.service.JyAttachService;
 import com.adnstyle.myboard.model.service.MyBoardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -18,11 +17,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
@@ -71,20 +71,50 @@ public class MyBoardController {
         model.addAttribute("myContent",myContent);//게시글내용
         model.addAttribute("attachList",attachList);//첨부파일
         model.addAttribute("page",page);//페이지
-        model.addAttribute("type",type);//검색ㅁ타입
+        model.addAttribute("type",type);//검색타입
         model.addAttribute("search",search);//검색내용
 
         System.out.println("myBoardContent 컨트롤러 model은"+model);
         return "boardContent";
     }
 
+
+    private int deleteFiles(List<JyAttach> attachList){
+        //첨부파일이 없으면 그냥 메서드 끝내기
+        if(attachList==null || attachList.size()==0){
+            return 0;
+        }
+        //첨부파일이 있으면
+        //collection.forEach(변수 -> 반복처리(변수)) //forEach
+        attachList.forEach(jyAttach -> {
+            Path file = Paths.get(jyAttach.getUploadPath()+"\\s_"+ jyAttach.getUuid()+"_"+jyAttach.getOriginName());
+            try {
+                Files.deleteIfExists(file);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        });
+        return 1;
+    }
     /*
-    게시글 삭제 상태값 Y로 변경
+    게시글 삭제 상태값 Y로 변경 -게시글은 상태값만 바꾸고 첨부파일은 삭제
     */
     @GetMapping("/deleteContent")
     public String myBoardContentDelete(long id){
         System.out.println("삭제버튼 타고 컨트롤러옴"+id);
-        myBoardService.deleteContent(id);
+        int num = myBoardService.deleteContent(id);//게시물 삭제 결과가 있다면
+        if(num>0) {
+            ArrayList<JyAttach> attachList = jyAttachService.attachList(id);
+            int no = deleteFiles(attachList);//실제파일 삭제
+            if(no>0){//실제파일이 삭제되었다면
+                jyAttachService.deleteAttach(id);//db에서 삭제
+                System.out.println("게시글 삭제처리후 첨부파일 삭제됨");
+
+            }
+
+        }
+
         return "redirect:/main";
     }
 
@@ -97,13 +127,6 @@ public class MyBoardController {
     return "writeForm";//작성화면
     }
 
-//    @PostMapping("/insertContent")
-//    public String myBoardInsertContent(MyBoard board){
-//        System.out.println("입력한값"+board);
-//        myBoardService.insertContent(board);//db에 입력
-//        return "redirect:/main";
-//
-//    }
 /*
 첨부파일 포함 게시물 등록
 */
@@ -125,55 +148,63 @@ private String getFolder(){
     public String myBoardInsertContent(MultipartFile[] uploadFile, MyBoard board, Model model){
         myBoardService.insertContent(board);//db에 입력
         Long id = myBoardService.selectId();
-        List fileList = new ArrayList();
-        String uploadFolder = "C:\\upload"; //파일이 저장될 상위경로
 
-        //같은폴더에 파일이 많으면 속도 저하 개수제한 문제등이 생긴다 날짜로 폴더 만들어주기
-        File uploadPath = new File(uploadFolder, getFolder());//File(상위경로,하위경로?)
+        String originUploadFileName = "";
+        String changeUploadFileName = "";
 
-        if(uploadPath.exists()==false){
-            uploadPath.mkdirs();//mkdirs(); 폴더 만드는 메서드
-            System.out.println("폴더생성");
-        }else{
-            System.out.println("이미 폴더가 있습니다");
-        }
-
-        String originUploadFileName="";
-        String changeUploadFileName="";
-        for(MultipartFile multipartFile : uploadFile){
+        for (MultipartFile multipartFile : uploadFile) {
 
             originUploadFileName = multipartFile.getOriginalFilename();//파일원본명
-            long size = multipartFile.getSize();//파일사이즈
-
-            System.out.println("uploadFileName "+originUploadFileName + "size"+size);
-
-            //동일한 파일명일때 기존파일 덮어버리는 문제 해결위해 UUID
-            UUID uuid = UUID.randomUUID();
-            changeUploadFileName = uuid.toString()+"-"+originUploadFileName;//랜덤uuid+"-"+원본명
-            File saveFile = new File(uploadPath, changeUploadFileName);
-
-            JyAttach attach = new JyAttach();
-            attach.setUuid(changeUploadFileName);
-            attach.setUploadPath(String.valueOf(uploadPath));
-            attach.setOriginName(originUploadFileName);
-            attach.setBno(id);
-
-            System.out.println("attatch에 담긴 값 "+ attach.toString());
-            fileList.add(attach);
-
-            try {
-                multipartFile.transferTo(saveFile);//파일에 저장 try Catch해주기
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         }
 
+        if(originUploadFileName.length()>0) {
 
-        System.out.println("입력한값"+board);
+            List fileList = new ArrayList();
+            String uploadFolder = "C:\\upload"; //파일이 저장될 상위경로
+
+            //같은폴더에 파일이 많으면 속도 저하 개수제한 문제등이 생긴다 날짜로 폴더 만들어주기
+            File uploadPath = new File(uploadFolder, getFolder());//File(상위경로,하위경로?)
+
+            if (uploadPath.exists() == false) {
+                uploadPath.mkdirs();//mkdirs(); 폴더 만드는 메서드
+                System.out.println("폴더생성");
+            } else {
+                System.out.println("이미 폴더가 있습니다");
+            }
 
 
-        jyAttachService.insertFile((ArrayList) fileList);
+            for (MultipartFile multipartFile : uploadFile) {
 
+                originUploadFileName = multipartFile.getOriginalFilename();//파일원본명
+                long size = multipartFile.getSize();//파일사이즈
+
+                //동일한 파일명일때 기존파일 덮어버리는 문제 해결위해 UUID
+                UUID uuid = UUID.randomUUID();
+                changeUploadFileName = uuid.toString() + "-" + originUploadFileName;//랜덤uuid+"-"+원본명
+                File saveFile = new File(uploadPath, changeUploadFileName);
+
+                JyAttach attach = new JyAttach();
+                attach.setUuid(changeUploadFileName);
+                attach.setUploadPath(String.valueOf(uploadPath));
+                attach.setOriginName(originUploadFileName);
+                attach.setBno(id);
+
+                System.out.println("attatch에 담긴 값 " + attach.toString());
+                fileList.add(attach);
+
+                try {
+                    multipartFile.transferTo(saveFile);//파일에 저장 try Catch해주기
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }//end for
+
+
+            System.out.println("입력한값" + board);
+
+
+            jyAttachService.insertFile((ArrayList) fileList);
+        }
         return "redirect:/main";
 
     }
@@ -204,19 +235,10 @@ private String getFolder(){
         return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
     }
 
-    /*
-    게시글 수정하기
-    */
-//   @GetMapping("/updateContent")
-//   public String myBoardUpdateForm(Long id,Model model){
-//       ArrayList<MyBoard> myContent = myBoardService.selectContent(id);//글조회해서 띄우기
-//       model.addAttribute("myContent",myContent);
-//       return "boardContent";
-//
-//   }
    @PostMapping("/updateContent")
-    public String myBoardUpdateContent(MyBoard board,MultipartFile[] uploadFile){
+    public String myBoardUpdateContent(MyBoard board,MultipartFile[] uploadFile, @RequestParam(value = "uuid", required = false) List uuidList){
 
+        System.out.println("uuid리스트는"+uuidList.toString());
        myBoardService.updateContent(board);//게시글수정
 
        if(uploadFile.length>0) {
