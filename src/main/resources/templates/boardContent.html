@@ -33,11 +33,6 @@
             <div><p>작성자</p><input type="text" name="modifiedBy" th:value="${myContent.modifiedBy}" class="form" readonly="readonly"/></div>
             <div><p>내용</p>
 
-                <div>
-                <input type="text" name="page" th:value="${page}">
-                <input type="text" name="type" th:value="${type}">
-                <input type="text" name="search" th:value="${search}">
-                </div>
                 <textarea cols="50" rows="20" name="content" th:text="${myContent.content}" class="form" readonly="readonly"/></textarea></div>
 
 
@@ -59,13 +54,25 @@
         <div>
             <p>첨부파일</p>
               <th:block th:each="attachList : ${attachList}">
-               <div class="aaa" style="display:flex;"><a th:href="@{/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}"><p th:text="${attachList.originName}"/></a><button type="button" class="delete" id="${attachList.uuid}" style="display: none">x</button></div>
+                  <th:if attachList!=null>
+<!--               <div class="attachList" style="display:flex;" th:value="${attachList.uuid}"><a th:href="@{/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}"><p th:text="${attachList.originName}"/></a><button type="button" class="delete" th:value="${attachList.uuid}" style="display: none">x</button></div>-->
+                      <div class="attachList" style="display:flex;" th:value="${attachList.uuid}"><a th:href="@{/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}"><p th:text="${attachList.originName}"/></a>
+                          <select th:name="uuid" th:value="${attachList.uuid}" class="delete">
+                              <option value='' >o</option>
+                              <option value='${attachList.uuid}'>x</option>
+                          </select>
+                      </div>
+                 </th:if>
               </th:block>
         </div>
 
     </div>
 </div>
 <script>
+
+
+    let btnVal= document.getElementsByClassName("delete");
+
     //제이쿼리 없이 바닐라js로 (부트스트랩5 사용예정)
 
     //수정버튼 클릭시 upd_btnE 함수를 실행해라
@@ -89,6 +96,7 @@
             deleteBtn[i].style.display="inline";
         }
 
+
         //input의 class이름을 가지고 for문을 돌려서 readOnly를 false로(텍스트 수정가능하게)
         let formU = document.getElementsByClassName("form");
         for(let i = 0; i < formU.length; i++){
@@ -100,10 +108,10 @@
         console.log("삭제버튼클릭");
             remove.addEventListener('click',hideE);
 
-        //첨부파일 가려지게
-        function hideE(){
+        //삭제버튼 클릭시 첨부파일 가려지게
+        function hideE() {
             console.log("hideE함수실행");
-            document.getElementById("delete").style.display="none";
+            document.getElementById("delete").style.display = "none";
 
         }
     }
