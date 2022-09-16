@@ -53,17 +53,17 @@
         </form>
         <div>
             <p>첨부파일</p>
-              <th:block th:each="attachList : ${attachList}">
-                  <th:if attachList!=null>
-<!--               <div class="attachList" style="display:flex;" th:value="${attachList.uuid}"><a th:href="@{/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}"><p th:text="${attachList.originName}"/></a><button type="button" class="delete" th:value="${attachList.uuid}" style="display: none">x</button></div>-->
-                      <div class="attachList" style="display:flex;" th:value="${attachList.uuid}"><a th:href="@{/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}"><p th:text="${attachList.originName}"/></a>
-                          <select th:name="uuid" th:value="${attachList.uuid}" class="delete">
+<!--            <th:block th:if="${!attachList.isEmpty()}">-->
+                <div th:if="${attachList.isEmpty()}">
+                    <th:block th:each="attachList : ${attachList}">
+                   <div class="attachList" style="display:flex;" th:value="${attachList.uuid}"><a th:href="@{/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}"><p th:text="${attachList.originName}"/></a>
+                          <select th:name="uuid" th:value="${attachList.uuid}" class="delete" style="display: none">
                               <option value='' >o</option>
                               <option value='${attachList.uuid}'>x</option>
                           </select>
                       </div>
-                 </th:if>
               </th:block>
+              </div>
         </div>
 
     </div>
