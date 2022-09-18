@@ -4,6 +4,7 @@ import lombok.Data;
 import org.apache.ibatis.type.Alias;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +16,10 @@ public class MyBoard {
     private String content; //글내용
     private char delYn; //삭제여부 디폴트값('N')
     private int viewCount;// 조회수
-    private Date createdDate;// 작성일
+    private LocalDateTime createdDate;// 작성일
     private String createdBy;// 작성자
     private String modifiedBy;// 수정자
-    private Date modifiedDate;// 수정일
+    private LocalDateTime modifiedDate;// 수정일
 
     private List<JyAttach> jyAttachList;
 

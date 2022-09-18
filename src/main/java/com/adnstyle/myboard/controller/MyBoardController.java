@@ -35,14 +35,14 @@ public class MyBoardController {
     private final MyBoardService myBoardService;
     private final JyAttachService jyAttachService;
 
-    @GetMapping("/main")
+    @GetMapping("/")
     public String myBoardList(Model model , @RequestParam(value="page", defaultValue = "1") int page,@RequestParam(value="type",defaultValue = "A") String type,@RequestParam(value = "search", defaultValue = "")String search){//required = false
         Map searchMap = new HashMap();
         searchMap.put("type",type);
         searchMap.put("search",search);
         int totalCnt = myBoardService.countAll(searchMap);//검색조건으로 찾은 총게시물의 수
-        int pageSize = 5;
-        int naviSize = 5;
+        int pageSize = 10;
+        int naviSize = 10;
 
         //보고있는 페이지의 시작페이지와 끝페이지 정보를 가져온다
         PageHandle ph = new PageHandle(totalCnt,page,pageSize,naviSize);//총게시물의 수,페이지사이즈, 네비사이즈
@@ -74,6 +74,7 @@ public class MyBoardController {
         model.addAttribute("type",type);//검색타입
         model.addAttribute("search",search);//검색내용
 
+        System.out.println("attachList는"+attachList);
         System.out.println("myBoardContent 컨트롤러 model은"+model);
         return "boardContent";
     }
@@ -115,7 +116,7 @@ public class MyBoardController {
 
         }
 
-        return "redirect:/main";
+        return "redirect:/";
     }
 
     /*
@@ -205,7 +206,7 @@ private String getFolder(){
 
             jyAttachService.insertFile((ArrayList) fileList);
         }
-        return "redirect:/main";
+        return "redirect:/";
 
     }
 
@@ -236,13 +237,24 @@ private String getFolder(){
     }
 
    @PostMapping("/updateContent")
-    public String myBoardUpdateContent(MyBoard board,MultipartFile[] uploadFile, @RequestParam(value = "uuid", required = false) List uuidList){
+    public String myBoardUpdateContent(MyBoard board,MultipartFile[] uploadFile,@RequestParam(value = "attBno", required = false) String[] attBno){// @RequestParam(value = "attBnos", required = false) Long[] attList)
 
-        System.out.println("uuid리스트는"+uuidList.toString());
+
+        System.out.println("게시글맵"+attBno);
+
        myBoardService.updateContent(board);//게시글수정
 
-       if(uploadFile.length>0) {
-           List fileList = new ArrayList();
+       String originUploadFileName = "";
+       String changeUploadFileName = "";
+
+       for (MultipartFile multipartFile : uploadFile) {
+
+           originUploadFileName = multipartFile.getOriginalFilename();//파일원본명
+       }
+
+       List fileList = new ArrayList();
+       if(originUploadFileName.length()>0) {
+
            String uploadFolder = "C:\\upload"; //파일이 저장될 상위경로
 
            //같은폴더에 파일이 많으면 속도 저하 개수제한 문제등이 생긴다 날짜로 폴더 만들어주기
@@ -255,8 +267,6 @@ private String getFolder(){
                System.out.println("이미 폴더가 있습니다");
            }
 
-           String originUploadFileName = "";
-           String changeUploadFileName = "";
            for (MultipartFile multipartFile : uploadFile) {
 
                originUploadFileName = multipartFile.getOriginalFilename();//파일원본명
@@ -265,8 +275,8 @@ private String getFolder(){
                System.out.println("uploadFileName " + originUploadFileName + "size" + size);
 
                //동일한 파일명일때 기존파일 덮어버리는 문제 해결위해 UUID
-               UUID uuid = UUID.randomUUID();
-               changeUploadFileName = uuid.toString() + "-" + originUploadFileName;//랜덤uuid+"-"+원본명
+               UUID UUid = UUID.randomUUID();
+               changeUploadFileName = UUid.toString() + "-" + originUploadFileName;//랜덤uuid+"-"+원본명
                File saveFile = new File(uploadPath, changeUploadFileName);
 
                JyAttach attach = new JyAttach();
@@ -288,10 +298,9 @@ private String getFolder(){
 
            System.out.println("입력한값" + board);
 
-
-           jyAttachService.insertFile((ArrayList) fileList);
+           jyAttachService.insertFile((ArrayList)fileList);
        }
-       return "redirect:/main";
+       return "redirect:/";
 
     }
 
