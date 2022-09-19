@@ -86,24 +86,25 @@
             let msg = [[${attachList}]]
             console.log(msg)
 
-        let ul = document.querySelector('ul');
+            // 체크박스 클릭시 취소선 생기게하기
+            let ul = document.querySelector('ul');
 
-
-        const checkClick = (i) => {
-            if (ul.children[i].querySelector('span').style.textDecorationLine === "line-through") {
-                ul.children[i].querySelector('span').style.textDecorationLine = '';
-            } else {
-                ul.children[i].querySelector('span').style.textDecorationLine = "line-through";
+            const checkClick = (i) => {
+                if (ul.children[i].querySelector('span').style.textDecorationLine === "line-through") {
+                    ul.children[i].querySelector('span').style.textDecorationLine = '';
+                } else {
+                    ul.children[i].querySelector('span').style.textDecorationLine = "line-through";
+                }
             }
-        }
 
-        if (ul) {
-            for(let i = 0; i < ul.childElementCount; i++){
-                // ul.children[i].querySelector('span').value = i
-                ul.children[i].querySelector('input').setAttribute('onClick', `checkClick(${i})`);
+            if (ul) {
+                for(let i = 0; i < ul.childElementCount; i++){
+                    ul.children[i].querySelector('span').value = i;
+                    ul.children[i].querySelector('input').setAttribute('onClick', `checkClick(${i})`);
 
+                }
             }
-        }
+
 
 
         //수정버튼 클릭시 upd_btnE 함수를 실행해라
@@ -127,23 +128,27 @@
             //파일추가 보이게 하기
             document.getElementById("onlyAttach").style.display = "inline";
 
-            //첨부파일있을때 삭제 버튼 보이게하기
+            //첨부파일있을때 체크박스 보이게하기
             let checkBtn = document.getElementsByClassName("checkBtn")
             for (let i = 0; i < checkBtn.length; i++) {
                 checkBtn[i].style.display = "inline";
             }
 
-            //삭제버튼 클릭시
-            let remove = document.getElementById("delete");
-            console.log("삭제버튼클릭");
-            remove.addEventListener('click', hideE);
 
-            // 삭제버튼 클릭시 첨부파일 가려지게
-            function hideE() {
-                console.log("hideE 함수실행");
-                document.getElementById("delete").style.display = "none";
 
-            }
+
+
+            // //삭제버튼 클릭시
+            // let remove = document.getElementById("delete");
+            // console.log("삭제버튼클릭");
+            // remove.addEventListener('click', hideE);
+            //
+            // // 삭제버튼 클릭시 첨부파일 가려지게
+            // function hideE() {
+            //     console.log("hideE 함수실행");
+            //     document.getElementById("delete").style.display = "none";
+            //
+            // }
         }
 
 </script>

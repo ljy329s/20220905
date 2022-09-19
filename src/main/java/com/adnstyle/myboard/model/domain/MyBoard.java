@@ -1,6 +1,7 @@
 package com.adnstyle.myboard.model.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.ibatis.type.Alias;
 
 import java.sql.Date;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Alias("myBoard")
 @Data
+@NoArgsConstructor
 public class MyBoard {
     private Long id; //글번호
     private String title; //글제목

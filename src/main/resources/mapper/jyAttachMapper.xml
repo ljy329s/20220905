@@ -18,7 +18,7 @@
         </foreach>
     </insert>
 
-        <select id="attachList" parameterType="long" resultType="jyAttach">
+        <select id="attachList" resultType="jyAttach">
             select attBno,originName,uuid,uploadPath
             from jy_attach
             where bno=#{id}
@@ -30,11 +30,11 @@
         where bno = #{id}
     </delete>
 
-    <delete id="deleteOnlyAttach" parameterType="java.util.List">
+    <delete id="deleteOnlyAttach">
         delete from jy_attach
         where attBno in
-        <foreach collection="list" item="item" separator="," open="( " close=")">
-              #{item.attBno}
+        <foreach collection="list" item="item" open="(" separator=","  close=")">
+        #{item}
         </foreach>
     </delete>
 
