@@ -21,8 +21,9 @@ public class JyAttach {
 
     private boolean fileType;//이미지 존재 여부
 
-    private long bno;//게시글 번호
+    private Long bno;//게시글 번호
 }
+
 /*
     FILE_NO NUMBER,                         --파일 번호
     BNO NUMBER NOT NULL,                    --게시판 번호

@@ -1,5 +1,6 @@
 package com.adnstyle.myboard.controller;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import com.adnstyle.myboard.model.domain.JyAttach;
 import com.adnstyle.myboard.model.domain.MyBoard;
 import com.adnstyle.myboard.model.domain.PageHandle;
@@ -17,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
@@ -238,13 +240,14 @@ private String getFolder(){
     }
 
    @PostMapping("/updateContent")
-    public String myBoardUpdateContent(MyBoard board, MultipartFile[] uploadFile,@RequestParam(value = "attBno", required = false) Long[] attList ){// )HttpServletRequest request
+    public String myBoardUpdateContent(MyBoard board, MultipartFile[] uploadFile,@RequestParam(value = "attBno", required = false) List<Long> attlist){// )HttpServletRequest request
 
-        List attBnoList = new ArrayList();
-        for(Long attBno : attList){
-            attBnoList.add(attBno);
+    List<Long> attFileList = new ArrayList();
+        for(Long attBno : attlist){
+            attFileList.add(attBno);
         }
-       jyAttachService.deleteOnlyAttch(attBnoList);
+       System.out.println(attFileList);
+           jyAttachService.deleteOnlyAttach(attFileList);
 
 
        myBoardService.updateContent(board);//게시글수정
@@ -290,7 +293,6 @@ private String getFolder(){
                attach.setOriginName(originUploadFileName);
                attach.setBno(board.getId());
 
-               System.out.println("attatch에 담긴 값 " + attach.toString());
                fileList.add(attach);
 
                try {
@@ -303,7 +305,7 @@ private String getFolder(){
 
            System.out.println("입력한값" + board);
 
-           jyAttachService.insertFile((ArrayList)fileList);
+           jyAttachService.insertFile((ArrayList) fileList);
        }
        return "redirect:/";
 

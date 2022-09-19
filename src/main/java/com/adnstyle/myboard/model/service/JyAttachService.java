@@ -26,8 +26,8 @@ public class JyAttachService {
         jyAttachRepository.deleteAll(id);
     }
 
-    public void deleteOnlyAttch (List attBnoList){
-        jyAttachRepository.deleteOnlyAttch(attBnoList);
+    public void deleteOnlyAttach (List<Long> attlist){
+        jyAttachRepository.deleteOnlyAttach(attlist);
     }
 
 

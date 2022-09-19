@@ -30,11 +30,11 @@
         where bno = #{id}
     </delete>
 
-    <delete id="deleteOnlyAttch" parameterType="java.util.List">
+    <delete id="deleteOnlyAttach" parameterType="java.util.List">
         delete from jy_attach
-        where attBno In
-        <foreach collection="attachList" item="attachList" separator="," open="( " close=")">
-              #{attachList.attBno}
+        where attBno in
+        <foreach collection="list" item="item" separator="," open="( " close=")">
+              #{item.attBno}
         </foreach>
     </delete>
 
