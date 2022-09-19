@@ -1,108 +1,90 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/default_layout}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-     <title>게시글 읽기</title>
+    <title>게시글 읽기</title>
 </head>
 <th:block layout:fragment="content">
-<style>
-    form{
-        text-align: center;
-    }
-    textarea{
-        resize: none;
-    }
-    .btn-group{
-        float: right;
-    }
-    #upd_btn, #del_btn, #upd_sub{
-        background-color:#66b2ff;
-    }
-    #main_btn{
-        background-color: #ffffff;
-        color: #000000;
-    }
-    label{
-        float: left;
-    }
-    .form-control{
-        margin-bottom: 20px;
-    }
-    #main{
-        margin-top: 50px;
-    }
-    #mainTitle{
-        text-align: center;
-    }
-</style>
-<body>
-<div>
-    <div class="container">
+    <style>
+        form{
+            text-align: center;
+        }
+        textarea{
+            resize: none;
+        }
+        .btn-group{
+            float: right;
+        }
+        #upd_btn, #del_btn, #upd_sub{
+            background-color:#66b2ff;
+        }
+        #main_btn{
+            background-color: #ffffff;
+            color: #000000;
+        }
+        label{
+            float: left;
+        }
+        .form-control{
+            margin-bottom: 20px;
+        }
+        #main{
+            margin-top: 50px;
+        }
+        #mainTitle{
+            text-align: center;
+        }
+    </style>
+    <body>
+    <div>
+        <div class="container">
 
-        <h1 id="mainTitle">게시글읽기</h1>
-        <div id="main">
-        <form action="/updateContent" method="post" id="contentForm" enctype="multipart/form-data" th:each="myContent : ${myContent}">
-            <label for="titleBox" class="form-label fs-5 fw-bold">제목</label>
-            <input type="text" id="titleBox" class="form-control" name="title" th:value="${myContent.title}" readonly="readonly">
-            <label for="writerBox" class="form-label fs-5 fw-bold">작성자</label>
-            <input type="text" id="writerBox" class="form-control" name="modifiedBy" th:value="${myContent.modifiedBy}" readonly="readonly">
-            <label for="contentBox" class="form-label fs-5 fw-bold">내용</label>
-            <textarea rows="20" name="content" id="contentBox" th:text="${myContent.content}" class="form-control" readonly="readonly"/>
-            <input type="file" id="onlyAttach" class="form-control" style="display: none" name="uploadFile" multiple>
+            <h1 id="mainTitle">게시글읽기</h1>
+            <div id="main">
+                <form action="/updateContent" method="post" id="contentForm" enctype="multipart/form-data" th:each="myContent : ${myContent}">
+                    <label for="titleBox" class="form-label fs-5 fw-bold">제목</label>
+                    <input type="text" id="titleBox" class="form-control" name="title" th:value="${myContent.title}" readonly="readonly">
+                    <label for="writerBox" class="form-label fs-5 fw-bold">작성자</label>
+                    <input type="text" id="writerBox" class="form-control" name="modifiedBy" th:value="${myContent.modifiedBy}" readonly="readonly">
+                    <label for="contentBox" class="form-label fs-5 fw-bold">내용</label>
+                    <textarea rows="20" name="content" id="contentBox" th:text="${myContent.content}" class="form-control" readonly="readonly"/>
+                    <input type="file" id="onlyAttach" class="form-control" style="display: none" name="uploadFile" multiple>
 
-            <input type="hidden" name="id" th:value="${myContent.id}">
+                    <input type="hidden" name="id" th:value="${myContent.id}">
 
 
-        <div>
+                    <div>
                         <div id="attachUl" th:if="${!attachList.isEmpty()}">
-                            <ul style="list-style: none">
-                                <li th:each="attachList : ${attachList}">
+                            <ul th:each="attachList : ${attachList}" style="list-style: none" >
+                                <li>
                                     <a th:href="@{/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}"><span th:text="${attachList.originName}"/></a>
-                                        <input type="checkbox" name="attBno" th:value="${attachList.getAttBno()}" class="checkBtn" style="display: none">
-                                        <p th:text="${attachList.attBno}"></p>
+                                    <input type="checkbox" name="attBno" th:value="${attachList.attBno}" class="checkBtn" style="display: none">
 
                                 </li>
                             </ul>
                         </div>
 
+                    </div>
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-primary" id="upd_btn" style="display: inline">수정하기</button>
+                        <button type="submit" class="btn btn-primary" id="upd_sub" style="display: none">수정완료</button>
+                        <button type="button" id="main_btn" class="btn btn-primary" th:onclick="|location.href='@{/(page=${page},type=${type},search=${search})}'|">목록</button>
+                        <button type="button" id="del_btn" class="btn btn-primary" th:onclick="|location.href='@{deleteContent(id=${myContent.id})}'|">삭제</button>
+                    </div>
+                </form>
             </div>
-            <div class="btn-group" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-primary" id="upd_btn" style="display: inline">수정하기</button>
-                <button type="submit" class="btn btn-primary" id="upd_sub" style="display: none">수정완료</button>
-                <!--이전에보던 페이지 위치로 이동함 -->
-                <button type="button" id="main_btn" class="btn btn-primary" th:onclick="|location.href='@{/(page=${page},type=${type},search=${search})}'|">목록</button>
-                <button type="button" id="del_btn" class="btn btn-primary" th:onclick="|location.href='@{deleteContent(id=${myContent.id})}'|">삭제</button>
-            </div>
-        </form>
         </div>
     </div>
     </div>
-</div>
 
 
-<!--타임리프 변수를 자바스크립트에서 쓰기위해서-->
-<script th:inline="javascript">
-    /*<![CDATA[*/
-
-        let att = /*[[${attachList.attBno}]]*/;
-
-        document.getElementsByClassName('checkBtn').value=att;
-    }
-    /*]]>*/
-</script>
-
-
-
-
-
-
-
-<script>
-
+    <script th:inline="javascript">
+            let msg = [[${attachList}]]
+            console.log(msg)
 
         let ul = document.querySelector('ul');
 
@@ -111,18 +93,18 @@
             if (ul.children[i].querySelector('span').style.textDecorationLine === "line-through") {
                 ul.children[i].querySelector('span').style.textDecorationLine = '';
             } else {
-                ul.children[i].querySelector('span').style.textDecorationLine = "line-through"
+                ul.children[i].querySelector('span').style.textDecorationLine = "line-through";
             }
         }
 
         if (ul) {
-            for (let i = 0; i < ul.childElementCount; i++) {
-                ul.children[i].querySelector('input').value = i;
+            for(let i = 0; i < ul.childElementCount; i++){
+                // ul.children[i].querySelector('span').value = i
                 ul.children[i].querySelector('input').setAttribute('onClick', `checkClick(${i})`);
+
             }
         }
 
-        let btnVal = document.getElementsByClassName("delete");
 
         //수정버튼 클릭시 upd_btnE 함수를 실행해라
         const upd_btn = document.getElementById("upd_btn")
@@ -158,32 +140,14 @@
 
             // 삭제버튼 클릭시 첨부파일 가려지게
             function hideE() {
-                console.log("hideE함수실행");
+                console.log("hideE 함수실행");
                 document.getElementById("delete").style.display = "none";
 
             }
-            //수정완료 버튼 클릭시
-            //  const upd_sub = document.getElementById("upd_sub")
-            // upd_sub.addEventListener('click', upd_subE);
-            //
-            //  let attList = [];
-            //  function upd_subE() {
-            //      let check_btn=document.getElementsByClassName("checkBtn").length;
-            //      for (let i = 0; i < check_btn; i++) {
-            //          if (document.getElementsByName("checkBtn")[i].checked == true) {
-            //              let attBno=document.getElementsByName("checkBtn")[i]
-            //              attList.push(attBno);
-            //
-            //          }
-            //      }
-            //      console.log(attList);
-            //     document.getElementsByClassName("checkBtn").value=attList;
-            //  }
-    }
-
+        }
 
 </script>
 
-</body>
-    </th:block>
+    </body>
+</th:block>
 </html>

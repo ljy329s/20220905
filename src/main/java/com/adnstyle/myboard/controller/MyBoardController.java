@@ -240,10 +240,12 @@ private String getFolder(){
    @PostMapping("/updateContent")
     public String myBoardUpdateContent(MyBoard board, MultipartFile[] uploadFile,@RequestParam(value = "attBno", required = false) Long[] attList ){// )HttpServletRequest request
 
-       System.out.println("testX"+attList[0]);
-        for(Long att : attList){
-            System.out.println("att제발 값좀.."+att);
+        List attBnoList = new ArrayList();
+        for(Long attBno : attList){
+            attBnoList.add(attBno);
         }
+       jyAttachService.deleteOnlyAttch(attBnoList);
+
 
        myBoardService.updateContent(board);//게시글수정
 

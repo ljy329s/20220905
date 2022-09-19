@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,4 +25,10 @@ public class JyAttachService {
     public void deleteAttach (Long id){
         jyAttachRepository.deleteAll(id);
     }
+
+    public void deleteOnlyAttch (List attBnoList){
+        jyAttachRepository.deleteOnlyAttch(attBnoList);
+    }
+
+
 }
