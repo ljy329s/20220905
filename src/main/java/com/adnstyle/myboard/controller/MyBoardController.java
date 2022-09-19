@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -237,10 +238,12 @@ private String getFolder(){
     }
 
    @PostMapping("/updateContent")
-    public String myBoardUpdateContent(MyBoard board,MultipartFile[] uploadFile,@RequestParam(value = "attBno", required = false) String[] attBno){// @RequestParam(value = "attBnos", required = false) Long[] attList)
+    public String myBoardUpdateContent(MyBoard board, MultipartFile[] uploadFile,@RequestParam(value = "attBno", required = false) Long[] attList ){// )HttpServletRequest request
 
-
-        System.out.println("게시글맵"+attBno);
+       System.out.println("testX"+attList[0]);
+        for(Long att : attList){
+            System.out.println("att제발 값좀.."+att);
+        }
 
        myBoardService.updateContent(board);//게시글수정
 

@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns:th="http://thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/default_layout}">
 <head>
@@ -50,16 +50,11 @@
             <input type="text" id="titleBox" class="form-control" name="title" th:value="${myContent.title}" readonly="readonly">
             <label for="writerBox" class="form-label fs-5 fw-bold">작성자</label>
             <input type="text" id="writerBox" class="form-control" name="modifiedBy" th:value="${myContent.modifiedBy}" readonly="readonly">
-         <label for="contentBox" class="form-label fs-5 fw-bold">내용</label>
-
+            <label for="contentBox" class="form-label fs-5 fw-bold">내용</label>
             <textarea rows="20" name="content" id="contentBox" th:text="${myContent.content}" class="form-control" readonly="readonly"/>
             <input type="file" id="onlyAttach" class="form-control" style="display: none" name="uploadFile" multiple>
 
             <input type="hidden" name="id" th:value="${myContent.id}">
-            <!--첨부파일 추가 테스트용-->
-
-
-
 
 
         <div>
@@ -67,7 +62,7 @@
                             <ul style="list-style: none">
                                 <li th:each="attachList : ${attachList}">
                                     <a th:href="@{/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}"><span th:text="${attachList.originName}"/></a>
-                                        <input type="checkbox" th:value="${attachList.attBno}" class="checkBtn" style="display: none" name="attBno">
+                                        <input type="checkbox" name="attBno" th:value="${attachList.getAttBno()}" class="checkBtn" style="display: none">
                                         <p th:text="${attachList.attBno}"></p>
 
                                 </li>
@@ -75,7 +70,6 @@
                         </div>
 
             </div>
-
             <div class="btn-group" role="group" aria-label="Basic example">
                 <button type="button" class="btn btn-primary" id="upd_btn" style="display: inline">수정하기</button>
                 <button type="submit" class="btn btn-primary" id="upd_sub" style="display: none">수정완료</button>
@@ -90,7 +84,25 @@
 </div>
 
 
+<!--타임리프 변수를 자바스크립트에서 쓰기위해서-->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+        let att = /*[[${attachList.attBno}]]*/;
+
+        document.getElementsByClassName('checkBtn').value=att;
+    }
+    /*]]>*/
+</script>
+
+
+
+
+
+
+
 <script>
+
 
         let ul = document.querySelector('ul');
 
@@ -111,8 +123,6 @@
         }
 
         let btnVal = document.getElementsByClassName("delete");
-
-        //제이쿼리 없이 바닐라js로 (부트스트랩5 사용예정)
 
         //수정버튼 클릭시 upd_btnE 함수를 실행해라
         const upd_btn = document.getElementById("upd_btn")
