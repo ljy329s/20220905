@@ -69,7 +69,6 @@
             </tbody>
 
 
-<!--	<tr class="trSt" onclick="location.href='comDetailView.do?compNo=${com.compNo}'">-->
         </table>
             </div>
             <div id="btnBox">
@@ -83,21 +82,21 @@
             <ul id="dyn_ul" class="pagination" style="justify-content: center">
             <!--prev -->
             <th:block th:if ="${ph.showPrev}">
-                <li class="page-item"><a class="page-link" th:href ="@{/main(page=${ph.beginPage}-1,type=${type},search=${search})}"><</a></li>
+                <li class="page-item"><a class="page-link" th:href ="@{/(page=${ph.beginPage}-1,type=${type},search=${search})}"><</a></li>
             </th:block>
 
             <!--         페이징        -->
             <th:block th:with="ph = ${ph}">
                 <th:block th:each="num : ${#numbers.sequence(ph.beginPage,ph.endPage)}">
                     <li class="page-item" th:classappend="${ph.page==num}?'active':''">
-                        <a class="page-link" th:href="@{/main(page=${num},type=${type},search=${search})}"th:text="${num}" ></a>
+                        <a class="page-link" th:href="@{/(page=${num},type=${type},search=${search})}"th:text="${num}" ></a>
                     </li>
                 </th:block>
             </th:block>
 
             <!--next-->
             <th:block th:if ="${ph.showNext}">
-                <li class="page-item"><a class="page-link" th:href ="@{/main(page=${ph.endPage}+1,type=${type},search=${search})}">></a></li>
+                <li class="page-item"><a class="page-link" th:href ="@{/(page=${ph.endPage}+1,type=${type},search=${search})}">></a></li>
             </th:block>
             </ul>
         </nav>

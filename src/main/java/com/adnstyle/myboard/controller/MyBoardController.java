@@ -31,7 +31,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
-//@RestController restapi
 @Controller//타임리프를위해
 @RequiredArgsConstructor
 public class MyBoardController {
@@ -40,11 +39,39 @@ public class MyBoardController {
     private final JyAttachService jyAttachService;
 
     @GetMapping("/")
-    public String myBoardList(Model model, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "type", defaultValue = "A") String type, @RequestParam(value = "search", defaultValue = "") String search) {//required = false
+//    public String myBoardList(Model model, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "type", defaultValue = "A") String type, @RequestParam(value = "search", defaultValue = "") String search) {
+//        Map searchMap = new HashMap();
+//        searchMap.put("type", type);
+//        searchMap.put("search", search);
+//        int totalCnt = myBoardService.countAll(searchMap);//검색조건으로 찾은 총게시물의 수
+//        int pageSize = 10;
+//        int naviSize = 10;
+//
+//        //보고있는 페이지의 시작페이지와 끝페이지 정보를 가져온다
+//        PageHandle ph = new PageHandle(totalCnt, page, pageSize, naviSize);//총게시물의 수,페이지사이즈, 네비사이즈
+//
+//        //검색조건+페이징처리
+//        searchMap.put("offset", ((page - 1) * pageSize));//몇번부터 시작할건지
+//        searchMap.put("pageSize", pageSize);//화면에 몇개씩 보여줄건지
+//
+//        ArrayList<MyBoard> myBoardList = myBoardService.selectList(searchMap);//게시글리스트 조회용
+//
+//        model.addAttribute("myBoardList", myBoardList);//보여질 정보
+//        model.addAttribute("ph", ph);//화면에 보일 페이지네비
+//        model.addAttribute("type", type);//검색조건
+//        model.addAttribute("search", search);//검색내용
+//        System.out.println("myBoardList" + myBoardList);
+//        return "listBoard";
+//    }
+
+    public String myBoardList(Model model, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "type", defaultValue = "A") String type, @RequestParam(value = "search", defaultValue = "") String search) {
+
         Map searchMap = new HashMap();
+
         searchMap.put("type", type);
         searchMap.put("search", search);
         int totalCnt = myBoardService.countAll(searchMap);//검색조건으로 찾은 총게시물의 수
+
         int pageSize = 10;
         int naviSize = 10;
 
@@ -55,6 +82,7 @@ public class MyBoardController {
         searchMap.put("offset", ((page - 1) * pageSize));//몇번부터 시작할건지
         searchMap.put("pageSize", pageSize);//화면에 몇개씩 보여줄건지
 
+
         ArrayList<MyBoard> myBoardList = myBoardService.selectList(searchMap);//게시글리스트 조회용
 
         model.addAttribute("myBoardList", myBoardList);//보여질 정보
@@ -64,7 +92,6 @@ public class MyBoardController {
         System.out.println("myBoardList" + myBoardList);
         return "listBoard";
     }
-
     /*
     해당번호의 게시글 리스트 조회
     */
@@ -108,7 +135,7 @@ public class MyBoardController {
     */
     @GetMapping("/deleteContent")
     public String myBoardContentDelete(long id) {
-        System.out.println("삭제버튼 타고 컨트롤러옴" + id);
+
         int num = myBoardService.deleteContent(id);//게시물 삭제 결과가 있다면
         if (num > 0) {
             ArrayList<JyAttach> attachList = jyAttachService.attachList(id);
@@ -123,6 +150,7 @@ public class MyBoardController {
 
         return "redirect:/";
     }
+
 
     /*
     게시글 작성하기
@@ -249,79 +277,79 @@ public class MyBoardController {
         List attFileList = new ArrayList();
         System.out.println("이프문들어가기전");
 
-        if(attList!=null) {
-        for (Long attBno : attList) {
+        if (attList != null) {
+            for (Long attBno : attList) {
                 attFileList.add(attBno);
             }
 
             System.out.println("attFileList" + attFileList);
             jyAttachService.deleteOnlyAttach(attFileList);
         }
-            System.out.println("board" + board);
-            myBoardService.updateContent(board);//게시글수정
+        System.out.println("board" + board);
+        myBoardService.updateContent(board);//게시글수정
 
-            String originUploadFileName = "";
-            String changeUploadFileName = "";
+        String originUploadFileName = "";
+        String changeUploadFileName = "";
+
+        for (MultipartFile multipartFile : uploadFile) {
+
+            originUploadFileName = multipartFile.getOriginalFilename();//파일원본명
+            System.out.println("multipartFile" + multipartFile);
+        }
+
+        List fileList = new ArrayList();
+        if (originUploadFileName.length() > 0) {
+
+            String uploadFolder = "C:\\upload"; //파일이 저장될 상위경로
+
+            //같은폴더에 파일이 많으면 속도 저하 개수제한 문제등이 생긴다 날짜로 폴더 만들어주기
+            File uploadPath = new File(uploadFolder, getFolder());//File(상위경로,하위경로?)
+
+            if (uploadPath.exists() == false) {
+                uploadPath.mkdirs();//mkdirs(); 폴더 만드는 메서드
+                System.out.println("폴더생성");
+            } else {
+                System.out.println("이미 폴더가 있습니다");
+            }
 
             for (MultipartFile multipartFile : uploadFile) {
 
                 originUploadFileName = multipartFile.getOriginalFilename();//파일원본명
-                System.out.println("multipartFile" + multipartFile);
+                long size = multipartFile.getSize();//파일사이즈
+
+                System.out.println("uploadFileName " + originUploadFileName + "size" + size);
+
+                //동일한 파일명일때 기존파일 덮어버리는 문제 해결위해 UUID
+                UUID UUid = UUID.randomUUID();
+                changeUploadFileName = UUid.toString() + "-" + originUploadFileName;//랜덤uuid+"-"+원본명
+                File saveFile = new File(uploadPath, changeUploadFileName);
+
+                JyAttach attach = new JyAttach();
+                attach.setUuid(changeUploadFileName);
+                attach.setUploadPath(String.valueOf(uploadPath));
+                attach.setOriginName(originUploadFileName);
+                attach.setBno(board.getId());
+
+                System.out.println("attach" + attach);
+
+                fileList.add(attach);
+
+                try {
+                    multipartFile.transferTo(saveFile);//파일에 저장 try Catch해주기
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
-            List fileList = new ArrayList();
-            if (originUploadFileName.length() > 0) {
 
-                String uploadFolder = "C:\\upload"; //파일이 저장될 상위경로
+            System.out.println("입력한값" + board);
 
-                //같은폴더에 파일이 많으면 속도 저하 개수제한 문제등이 생긴다 날짜로 폴더 만들어주기
-                File uploadPath = new File(uploadFolder, getFolder());//File(상위경로,하위경로?)
-
-                if (uploadPath.exists() == false) {
-                    uploadPath.mkdirs();//mkdirs(); 폴더 만드는 메서드
-                    System.out.println("폴더생성");
-                } else {
-                    System.out.println("이미 폴더가 있습니다");
-                }
-
-                for (MultipartFile multipartFile : uploadFile) {
-
-                    originUploadFileName = multipartFile.getOriginalFilename();//파일원본명
-                    long size = multipartFile.getSize();//파일사이즈
-
-                    System.out.println("uploadFileName " + originUploadFileName + "size" + size);
-
-                    //동일한 파일명일때 기존파일 덮어버리는 문제 해결위해 UUID
-                    UUID UUid = UUID.randomUUID();
-                    changeUploadFileName = UUid.toString() + "-" + originUploadFileName;//랜덤uuid+"-"+원본명
-                    File saveFile = new File(uploadPath, changeUploadFileName);
-
-                    JyAttach attach = new JyAttach();
-                    attach.setUuid(changeUploadFileName);
-                    attach.setUploadPath(String.valueOf(uploadPath));
-                    attach.setOriginName(originUploadFileName);
-                    attach.setBno(board.getId());
-
-                    System.out.println("attach" + attach);
-
-                    fileList.add(attach);
-
-                    try {
-                        multipartFile.transferTo(saveFile);//파일에 저장 try Catch해주기
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-
-
-                System.out.println("입력한값" + board);
-
-                jyAttachService.insertFile((ArrayList) fileList);
-            }
-
-            return "redirect:/";
-
+            jyAttachService.insertFile((ArrayList) fileList);
         }
+
+        return "redirect:/";
+
+    }
 
 
 }

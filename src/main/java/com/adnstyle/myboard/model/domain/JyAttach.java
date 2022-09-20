@@ -11,7 +11,7 @@ import org.apache.ibatis.type.Alias;
 @NoArgsConstructor
 @Alias("jyAttach")
 public class JyAttach {
-    private Long attBno;//첨부파일 대표번호
+    private Long attBno;//첨부파일번호
    
     private String uuid;//uuid가 포함된 파일이름(저장될 파일명)
 

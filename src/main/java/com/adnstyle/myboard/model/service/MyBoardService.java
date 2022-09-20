@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.rmi.MarshalledObject;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -15,30 +16,31 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MyBoardService {
 
-  private final MyBoardRepository myBoardRepository;
-
+    private final MyBoardRepository myBoardRepository;
 
     public ArrayList<MyBoard> selectList(Map searchMap) {
 
-    return myBoardRepository.selectList(searchMap);
+        return myBoardRepository.selectList(searchMap);
 
     }
-    public ArrayList<MyBoard> myBoardPage(Map pageMap) {
-        return myBoardRepository.myBoardPage(pageMap);
-    }
-
-    public int countAll(Map searchMap){
+    public int countAll(Map searchMap) {
         return myBoardRepository.countAll(searchMap);
     }
 
+    public ArrayList<MyBoard> myBoardPage(Map pageMap) {
+
+        return myBoardRepository.myBoardPage(pageMap);
+    }
+
+
     public ArrayList<MyBoard> selectContent(Long id) {
         myBoardRepository.updateCount(id);
-        System.out.println("id는"+id);
+        System.out.println("id는" + id);
         return myBoardRepository.selectContent(id);
     }
 
     public int deleteContent(long id) {
-      return myBoardRepository.deleteContent(id);
+        return myBoardRepository.deleteContent(id);
     }
 
     public void insertContent(MyBoard board) {

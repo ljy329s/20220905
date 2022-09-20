@@ -22,11 +22,11 @@ public class PageHandle {
     /*검색용*/
     private String type;
     private String search;
-    
+
 
     //총게시글수, 해당페이지, 페이지당 보일 게시글 수
 
-    public PageHandle(int totalCnt, int page, int pageSize, int naviSize){
+    public PageHandle(int totalCnt, int page, int pageSize, int naviSize) {
 
         this.totalCnt = totalCnt;
         this.page = page;
@@ -36,7 +36,7 @@ public class PageHandle {
             총페이지수
             전체게시글 수/(double)페이지 사이즈 하고 소수점 올림
          */
-        this.totalPage=(int)(Math.ceil(this.totalCnt/(double)pageSize));
+        this.totalPage = (int) (Math.ceil(this.totalCnt / (double) pageSize));
 
 
         /*
@@ -47,9 +47,9 @@ public class PageHandle {
             13 페이지일때
             13/10=1.3->(올림)->2->(*네비사이즈)=20
          */
-        this.endPage= (int)Math.ceil(page/(double)naviSize)*naviSize;
-        if(this.endPage>=this.totalPage){//endPage가 총페이지보다 크다면 총 페이지가 endPage인걸로
-            this.endPage=this.totalPage;
+        this.endPage = (int) Math.ceil(page / (double) naviSize) * naviSize;
+        if (this.endPage >= this.totalPage) {//endPage가 총페이지보다 크다면 총 페이지가 endPage인걸로
+            this.endPage = this.totalPage;
         }
 
 //        현재 네비의 시작페이지
@@ -64,23 +64,23 @@ public class PageHandle {
 			}
         */
 
-       this.beginPage =this.page/this.naviSize * this.naviSize + 1;
-        if(this.page % this.naviSize == 0){
+        this.beginPage = this.page / this.naviSize * this.naviSize + 1;
+        if (this.page % this.naviSize == 0) {
             this.beginPage -= this.naviSize;
         }
         //만약 끝페이지가 시작페이지보다 작거나 같다면 1로!.. 왜냐하믄..ㅠㅠㅠ 아까 시작1 끝페이지0나옴ㅠㅠ
-        if(this.endPage<this.beginPage){
-            this.endPage=1;
+        if (this.endPage < this.beginPage) {
+            this.endPage = 1;
         }
 
-            //이전 버튼이 보이려면 시작페이지가 1이랑 같지 않을때
-        this.showPrev= this.beginPage>1;
+        //이전 버튼이 보이려면 시작페이지가 1이랑 같지 않을때
+        this.showPrev = this.beginPage > 1;
 
         //다음 버튼이 보이려면 끝페이지가 총페이지랑 같지 않을때
-        this.showNext = this.endPage<this.totalPage;
+        this.showNext = this.endPage < this.totalPage;
 
 
     }
-    
+
 
 }

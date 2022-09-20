@@ -10,32 +10,40 @@
 </head>
 <th:block layout:fragment="content">
     <style>
-        form{
+        form {
             text-align: center;
         }
-        textarea{
+
+        textarea {
             resize: none;
         }
-        .btn-group{
+
+        .btn-group {
             float: right;
         }
-        #upd_btn, #del_btn, #upd_sub{
-            background-color:#66b2ff;
+
+        #upd_btn, #del_btn, #upd_sub {
+            background-color: #66b2ff;
         }
-        #main_btn{
+
+        #main_btn {
             background-color: #ffffff;
             color: #000000;
         }
-        label{
+
+        label {
             float: left;
         }
-        .form-control{
+
+        .form-control {
             margin-bottom: 20px;
         }
-        #main{
+
+        #main {
             margin-top: 50px;
         }
-        #mainTitle{
+
+        #mainTitle {
             text-align: center;
         }
     </style>
@@ -45,24 +53,31 @@
 
             <h1 id="mainTitle">게시글읽기</h1>
             <div id="main">
-                <form action="/updateContent" method="post" id="contentForm" enctype="multipart/form-data" th:each="myContent : ${myContent}">
+                <form action="/updateContent" method="post" id="contentForm" enctype="multipart/form-data"
+                      th:each="myContent : ${myContent}">
                     <label for="titleBox" class="form-label fs-5 fw-bold">제목</label>
-                    <input type="text" id="titleBox" class="form-control" name="title" th:value="${myContent.title}" readonly="readonly">
+                    <input type="text" id="titleBox" class="form-control" name="title" th:value="${myContent.title}"
+                           readonly="readonly">
                     <label for="writerBox" class="form-label fs-5 fw-bold">작성자</label>
-                    <input type="text" id="writerBox" class="form-control" name="modifiedBy" th:value="${myContent.modifiedBy}" readonly="readonly">
+                    <input type="text" id="writerBox" class="form-control" name="modifiedBy"
+                           th:value="${myContent.modifiedBy}" readonly="readonly">
                     <label for="contentBox" class="form-label fs-5 fw-bold">내용</label>
-                    <textarea rows="20" name="content" id="contentBox" th:text="${myContent.content}" class="form-control" readonly="readonly"/>
-                    <input type="file" id="onlyAttach" class="form-control" style="display: none" name="uploadFile" multiple>
+                    <textarea rows="20" name="content" id="contentBox" th:text="${myContent.content}"
+                              class="form-control" readonly="readonly"/>
+                    <input type="file" id="onlyAttach" class="form-control" style="display: none" name="uploadFile"
+                           multiple>
 
                     <input type="hidden" name="id" th:value="${myContent.id}">
 
 
                     <div>
                         <div id="attachUl" th:if="${!attachList.isEmpty()}">
-                            <ul th:each="attachList : ${attachList}" style="list-style: none" >
+                            <ul th:each="attachList : ${attachList}" style="list-style: none">
                                 <li>
-                                    <a th:href="@{/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}"><span th:text="${attachList.originName}"/></a>
-                                    <input type="checkbox" name="attBno" th:value="${attachList.attBno}" class="checkBtn" style="display: none">
+                                    <a th:href="@{/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}"><span
+                                            th:text="${attachList.originName}"/></a>
+                                    <input type="checkbox" name="attBno" th:value="${attachList.attBno}"
+                                           class="checkBtn" style="display: none">
 
                                 </li>
                             </ul>
@@ -72,8 +87,12 @@
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <button type="button" class="btn btn-primary" id="upd_btn" style="display: inline">수정하기</button>
                         <button type="submit" class="btn btn-primary" id="upd_sub" style="display: none">수정완료</button>
-                        <button type="button" id="main_btn" class="btn btn-primary" th:onclick="|location.href='@{/(page=${page},type=${type},search=${search})}'|">목록</button>
-                        <button type="button" id="del_btn" class="btn btn-primary" th:onclick="|location.href='@{deleteContent(id=${myContent.id})}'|">삭제</button>
+                        <button type="button" id="main_btn" class="btn btn-primary"
+                                th:onclick="|location.href='@{/(page=${page},type=${type},search=${search})}'|">목록
+                        </button>
+                        <button type="button" id="del_btn" class="btn btn-primary"
+                                th:onclick="|location.href='@{deleteContent(id=${myContent.id})}'|">삭제
+                        </button>
                     </div>
                 </form>
             </div>
@@ -83,28 +102,27 @@
 
 
     <script th:inline="javascript">
-            let msg = [[${attachList}]]
-            console.log(msg)
+        let msg = [[${attachList}]]
+        console.log(msg)
 
-            // 체크박스 클릭시 취소선 생기게하기
-            let ul = document.querySelector('ul');
+        // 체크박스 클릭시 취소선 생기게하기
+        let ul = document.querySelector('ul');
 
-            const checkClick = (i) => {
-                if (ul.children[i].querySelector('span').style.textDecorationLine === "line-through") {
-                    ul.children[i].querySelector('span').style.textDecorationLine = '';
-                } else {
-                    ul.children[i].querySelector('span').style.textDecorationLine = "line-through";
-                }
+        const checkClick = (i) => {
+            if (ul.children[i].querySelector('span').style.textDecorationLine === "line-through") {
+                ul.children[i].querySelector('span').style.textDecorationLine = '';
+            } else {
+                ul.children[i].querySelector('span').style.textDecorationLine = "line-through";
             }
+        }
 
-            if (ul) {
-                for(let i = 0; i < ul.childElementCount; i++){
-                    ul.children[i].querySelector('span').value = i;
-                    ul.children[i].querySelector('input').setAttribute('onClick', `checkClick(${i})`);
+        if (ul) {
+            for (let i = 0; i < ul.childElementCount; i++) {
+                ul.children[i].querySelector('span').value = i;
+                ul.children[i].querySelector('input').setAttribute('onClick', `checkClick(${i})`);
 
-                }
             }
-
+        }
 
 
         //수정버튼 클릭시 upd_btnE 함수를 실행해라
@@ -135,9 +153,6 @@
             }
 
 
-
-
-
             // //삭제버튼 클릭시
             // let remove = document.getElementById("delete");
             // console.log("삭제버튼클릭");
@@ -151,7 +166,7 @@
             // }
         }
 
-</script>
+    </script>
 
     </body>
 </th:block>
