@@ -2,28 +2,47 @@ package com.adnstyle.myboard.model.domain;
 
 
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
 @Data
 @NoArgsConstructor
 @Alias("jyAttach")
 public class JyAttach {
-    private Long attBno;//첨부파일번호
-   
-    private String uuid;//uuid가 포함된 파일이름(저장될 파일명)
+    /**
+     * 첨부파일번호
+     */
+    private Long attBno;
 
-    private String uploadPath;//저장경로
+    /**
+     * uuid가 포함된 파일이름(저장될 파일명)
+     */
+    private String uuid;
 
-    private String originName;//원본 파일명
+    /**
+     * 저장경로
+     */
+    private String uploadPath;
 
-    private boolean fileType;//이미지 존재 여부
+    /**
+     * 원본 파일명
+     */
+    private String originName;
 
-    private Long bno;//게시글 번호
+    /**
+     * 이미지 파일인지 여부
+     */
+    private boolean fileType;
+
+    /**
+     * 게시글 번호
+     */
+    private Long bno;
 }
 
+/**
+ * 첨부파일 테이블 만들때 참고하기
+ */
 /*
     FILE_NO NUMBER,                         --파일 번호
     BNO NUMBER NOT NULL,                    --게시판 번호

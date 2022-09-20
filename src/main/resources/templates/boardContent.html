@@ -74,11 +74,10 @@
                         <div id="attachUl" th:if="${!attachList.isEmpty()}">
                             <ul th:each="attachList : ${attachList}" style="list-style: none">
                                 <li>
-                                    <a th:href="@{/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}"><span
-                                            th:text="${attachList.originName}"/></a>
+                                    <a th:href="@{/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}">
+                                        <span th:text="${attachList.originName}"/></a>
                                     <input type="checkbox" name="attBno" th:value="${attachList.attBno}"
                                            class="checkBtn" style="display: none">
-
                                 </li>
                             </ul>
                         </div>
@@ -105,7 +104,7 @@
         let msg = [[${attachList}]]
         console.log(msg)
 
-        // 체크박스 클릭시 취소선 생기게하기
+        // 체크박스 클릭시 취소선 생기게하기ㅜㅜㅜㅜㅜ
         let ul = document.querySelector('ul');
 
         const checkClick = (i) => {
@@ -118,7 +117,7 @@
 
         if (ul) {
             for (let i = 0; i < ul.childElementCount; i++) {
-                ul.children[i].querySelector('span').value = i;
+                ul.children[i].querySelector('input').value = i;
                 ul.children[i].querySelector('input').setAttribute('onClick', `checkClick(${i})`);
 
             }
@@ -153,17 +152,8 @@
             }
 
 
-            // //삭제버튼 클릭시
-            // let remove = document.getElementById("delete");
-            // console.log("삭제버튼클릭");
-            // remove.addEventListener('click', hideE);
-            //
-            // // 삭제버튼 클릭시 첨부파일 가려지게
-            // function hideE() {
-            //     console.log("hideE 함수실행");
-            //     document.getElementById("delete").style.display = "none";
-            //
-            // }
+
+
         }
 
     </script>

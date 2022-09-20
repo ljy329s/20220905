@@ -31,7 +31,7 @@
     </sql>
 
 
-<!--  게시물 총 내용  -->
+<!--  게시물 총 갯수  -->
     <select id="countAll" resultType="int" parameterType="pageHandle">
     select count(*)
      from my_board
