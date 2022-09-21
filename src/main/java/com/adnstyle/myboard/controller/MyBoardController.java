@@ -103,7 +103,7 @@ public class MyBoardController {
     }
 
     /**
-     * 게시글 등록 + 첨부파일등록 || 답글 + 첨부파일 등록
+     * 게시글 등록 + 첨부파일등록
      */
     @PostMapping("/insertContent")
     public String myBoardInsertContent(MultipartFile[] uploadFile, MyBoard board) {
@@ -125,7 +125,7 @@ public class MyBoardController {
         try {
             headers.add("Content-Disposition", "attachment; " + "fileName=" +
                     new String(resourceName.getBytes("UTF-8"),
-                    "ISO-8859-1"));
+                            "ISO-8859-1"));
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
@@ -139,12 +139,12 @@ public class MyBoardController {
     @PostMapping("/updateContent")
     public String myBoardUpdateContent(MyBoard board, MultipartFile[] uploadFile, @RequestParam(value = "attBno", required = false) List<Long> attList) {// )HttpServletRequest request
         List attFileList = new ArrayList();
-
+        System.out.println("attlist"+attList);
         if (attList != null) {
             for (Long attBno : attList) {
                 attFileList.add(attBno);
             }
-            jyAttachService.deleteOnlyAttach(attFileList);
+            jyAttachService.deleteOnlyAttach(attFileList);//첨부파일삭제
         }
         myBoardService.updateContent(board, uploadFile);//게시글수정
 
@@ -155,30 +155,40 @@ public class MyBoardController {
      * 답변달기 폼으로 이동
      */
     @GetMapping("/answerForm")
-    public String writeForm(Long id, Model model){
-        model.addAttribute("id",id);
+    public String writeForm(Long id, Model model) {
+        model.addAttribute("id", id);
         return "answerForm";
     }
 
-
     /**
-     * 답변 상세조회
+     * 답변등록
      */
-    @GetMapping("/answerContent")
-    public String answerContent(Model model, long id, @RequestParam("page") int page, @RequestParam("type") String type, @RequestParam("search") String search) {
-        System.out.println("답변상세조회 컨트롤러");
-        ArrayList<MyBoard> myAnswerContent = myBoardService.selectContent(id);//게시글 번호로 내용 불러오기
-        ArrayList<JyAttach> attachList = jyAttachService.attachList(id);
-        model.addAttribute("myAnswerContent", myAnswerContent);//게시글내용
-        model.addAttribute("attachList", attachList);//첨부파일
-        model.addAttribute("page", page);//페이지
-        model.addAttribute("type", type);//검색타입
-        model.addAttribute("search", search);//검색내용
-
-        System.out.println("attachList는" + attachList);
-        System.out.println("myBoardContent 컨트롤러 model은" + model);
-
-        return "answerContent";
+    @PostMapping("/insertAnswer")
+    public String insertAnswer(MultipartFile[] uploadFile, MyBoard board) {
+        myBoardService.insertContent(board, uploadFile);{
+            return "redirect:/";
+        }
     }
 
-}
+        /**
+         * 답변 상세조회
+         */
+        @GetMapping("/answerContent")
+        public String answerContent(Model model,long id, @RequestParam("page") int page, @RequestParam("type") String type, @RequestParam("search") String search){
+            System.out.println("답변상세조회 컨트롤러");
+            ArrayList<MyBoard> myAnswerContent = myBoardService.selectContent(id);//게시글 번호로 내용 불러오기
+            ArrayList<JyAttach> attachList = jyAttachService.attachList(id);
+            model.addAttribute("myAnswerContent", myAnswerContent);//게시글내용
+            model.addAttribute("attachList", attachList);//첨부파일
+            model.addAttribute("page", page);//페이지
+            model.addAttribute("type", type);//검색타입
+            model.addAttribute("search", search);//검색내용
+
+            System.out.println("attachList는" + attachList);
+            System.out.println("myBoardContent 컨트롤러 model은" + model);
+
+            return "answerContent";
+        }
+
+    }
+

@@ -73,8 +73,9 @@ public class MyBoardService {
             id = myBoardRepository.selectId();//등록한 게시글 번호 가져오기
             myBoardRepository.updateGroupBno(id);//글 등록후 불러와서 그룹번호 업데이트 해줄예정
         }else{//답글등록시(그룹번호있으니)
-//            String anstitle = "[답글]"+board.getTitle();
-//            board.setTitle(anstitle);
+            String anstitle = "[답글]"+board.getTitle();
+            board.setTitle(anstitle);
+            System.out.println("board"+board);
             myBoardRepository.insertAnswer(board);
         }
         String originUploadFileName = "";
@@ -125,7 +126,6 @@ public class MyBoardService {
             System.out.println("입력한값" + board);
 
             jyAttachService.insertFile((ArrayList) fileList);//첨부파일등록
-
 
         }
     }

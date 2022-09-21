@@ -40,20 +40,21 @@
         <div class="container">
             <h1 id="mainTitle">답변읽기</h1>
             <div id="main">
-                <form action="/updateContent" method="post" enctype="multipart/form-data">
+                <form action="/updateContent" method="post" enctype="multipart/form-data"
+                      th:each="myAnswerContent : ${myAnswerContent}">
                     <label for="titleBox" class="form-label fs-5 fw-bold">제목</label>
                     <input type="text" id="titleBox" class="form-control" name="title" readonly="readonly" th:value="${myAnswerContent.title}">
                     <label for="writerBox" class="form-label fs-5 fw-bold">작성자</label>
-                    <input type="text" id="writerBox" class="form-control" name="createdBy" th:value="${myAnswerContent.modifiedBy}" readonly="readonly">
+                    <input type="text" id="writerBox" class="form-control" name="modifiedBy" th:value="${myAnswerContent.modifiedBy}" readonly="readonly">
                     <label for="contentBox" class="form-label fs-5 fw-bold">내용</label>
                     <textarea rows="10" name="content" id="contentBox" class="form-control" readonly="readonly" th:text="${myAnswerContent.content}"></textarea>
                     <input type="file" id="onlyAttach" class="form-control" name="uploadFile" multiple style="display: none">
 
-                    <input type="hidden" name="groupBno" th:value="${myAnswerContent.id}">
+                    <input type="hidden" name="id" th:value="${myAnswerContent.id}">
 
                     <div class="btn-group" role="group" aria-label="Basic example">
-                        <button type="submit" class="btn btn-primary" id="upd_btn">수정</button>
-                        <button type="button" class="btn btn-primary" id="upd_sub">수정완료</button>
+                        <button type="button" class="btn btn-primary" id="upd_btn">수정</button>
+                        <button type="submit" class="btn btn-primary" id="upd_sub" style="display: none">수정완료</button>
                         <button type="button" class="btn btn-primary" id="del_btn">삭제</button>
                         <button type="button" class="btn btn-primary" id="main_btn" onclick="location.href='/'">목록</button>
                     </div>
@@ -61,6 +62,35 @@
 
             </div>
         </div>
+        <script>
+            //수정버튼 클릭시 upd_btnE 함수를 실행해라
+            const upd_btn = document.getElementById("upd_btn")
+            upd_btn.addEventListener('click', upd_btnE);
+
+            //수정버튼 클릭시 upd_btnE 실행
+            function upd_btnE() {
+                //input의 class이름을 가지고 for문을 돌려서 readOnly를 false로(텍스트 수정가능하게)
+                let formU = document.getElementsByClassName("form-control");
+                for (let i = 0; i < formU.length; i++) {
+                    formU[i].readOnly = false;
+                }
+
+                //기존 수정하기 버튼 가리기
+                document.getElementById("upd_btn").style.display = "none";
+                //수정완료 버튼 보이게 하기
+                document.getElementById("upd_sub").style.display = "inline";
+                let mainTitleU = document.getElementById("mainTitle");//게시글읽기->게시글수정으로 변경
+                mainTitleU.innerText = "답글수정";
+                //파일추가 보이게 하기
+                document.getElementById("onlyAttach").style.display = "inline";
+
+                //첨부파일있을때 체크박스 보이게하기
+                let checkBtn = document.getElementsByClassName("checkBtn")
+                for (let i = 0; i < checkBtn.length; i++) {
+                    checkBtn[i].style.display = "inline";
+                }
+            }
+        </script>
     </body>
 </th:block>
 </html>

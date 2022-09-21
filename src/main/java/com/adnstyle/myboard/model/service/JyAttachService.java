@@ -40,7 +40,7 @@ public class JyAttachService {
 
 @Transactional
     public void insertFile(ArrayList fileList) {
-
+    System.out.println("서비스insertFile"+fileList);
         jyAttachRepository.insertFile(fileList);
     }
 

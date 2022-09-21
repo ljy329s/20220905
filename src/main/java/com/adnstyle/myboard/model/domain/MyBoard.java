@@ -67,6 +67,7 @@ public class MyBoard extends Base{
      */
     private Long groupBno;
 
+
     private List<JyAttach> jyAttachList;
 
 }

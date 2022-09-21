@@ -54,6 +54,7 @@
         order by group_bno desc, id asc
         limit #{offset}, #{pageSize}
     </select>
+
 <!--게시글 상세조회-->
     <select id="selectContent" parameterType="long" resultType="myBoard">
         select title, modified_by,content,modified_date,id
