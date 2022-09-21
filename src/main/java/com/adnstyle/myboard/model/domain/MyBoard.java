@@ -62,6 +62,10 @@ public class MyBoard extends Base{
      */
     private LocalDateTime modifiedDate;
 
+    /**
+     * 그룹번호
+     */
+    private Long groupBno;
 
     private List<JyAttach> jyAttachList;
 

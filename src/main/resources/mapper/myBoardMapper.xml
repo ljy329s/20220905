@@ -48,10 +48,10 @@
     </select>
 
     <select id="selectList"  parameterType="map" resultType="myBoard">
-        select id, title, view_count, modified_date, modified_by,del_yn
+        select id, title, view_count, modified_date, modified_by,del_yn,group_bno
         from my_board
         <include refid="searchContents"></include>
-        order by id desc
+        order by group_bno desc, id asc
         limit #{offset}, #{pageSize}
     </select>
 <!--게시글 상세조회-->
@@ -77,7 +77,7 @@
         ORDER BY ID DESC
         limit 1;
     </select>
-
+<!--게시글등록-->
     <insert id="insertContent" parameterType="myBoard">
         insert into my_board (title, content ,view_count,created_by,modified_by,created_date,modified_date)
         values (#{title},#{content},0,#{createdBy},#{createdBy},NOW(),NOW())
@@ -87,5 +87,17 @@
          update my_board set title = #{title}, content=#{content},modified_by=#{modifiedBy},modified_date=NOW()
          where id=#{id}
      </update>
+
+<!--  게시글 등록시 게시글번호를 그룹번호로 수정  -->
+    <update id="updateGroupBno" parameterType="long">
+        update my_board set group_bno=#{id}
+        where id=#{id}
+    </update>
+
+    <!--답글등록-->
+    <insert id="insertAnswer" parameterType="myBoard">
+        insert into my_board (title, content ,view_count,created_by,modified_by,created_date,modified_date,group_bno)
+        values (#{title},#{content},0,#{createdBy},#{createdBy},NOW(),NOW(),#{groupBno})
+    </insert>
 
 </mapper>

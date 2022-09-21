@@ -44,9 +44,8 @@ public class MyBoardService {
     }
 
     public ArrayList<MyBoard> selectContent(Long id) {
-        myBoardRepository.updateCount(id);
-        System.out.println("id는" + id);
 
+        myBoardRepository.updateCount(id);
         return myBoardRepository.selectContent(id);
     }
 
@@ -66,10 +65,18 @@ public class MyBoardService {
 
     @Transactional
     public void insertContent(MyBoard board, MultipartFile[] uploadFile) {
-        myBoardRepository.insertContent(board);
 
-        Long id = myBoardRepository.selectId();
+        long id = 0;//등록한 글번호
 
+        if(board.getGroupBno()==null){//일반게시글등록시
+            myBoardRepository.insertContent(board);
+            id = myBoardRepository.selectId();//등록한 게시글 번호 가져오기
+            myBoardRepository.updateGroupBno(id);//글 등록후 불러와서 그룹번호 업데이트 해줄예정
+        }else{//답글등록시(그룹번호있으니)
+//            String anstitle = "[답글]"+board.getTitle();
+//            board.setTitle(anstitle);
+            myBoardRepository.insertAnswer(board);
+        }
         String originUploadFileName = "";
         String changeUploadFileName = "";
 
@@ -117,7 +124,9 @@ public class MyBoardService {
             }//end for
             System.out.println("입력한값" + board);
 
-            jyAttachService.insertFile((ArrayList) fileList);
+            jyAttachService.insertFile((ArrayList) fileList);//첨부파일등록
+
+
         }
     }
 
@@ -185,4 +194,5 @@ public class MyBoardService {
             jyAttachService.insertFile((ArrayList) fileList);
         }
     }
+
 }

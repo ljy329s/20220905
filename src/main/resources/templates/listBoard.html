@@ -60,7 +60,13 @@
                 <tr th:each="board : ${myBoardList}">
 
                     <td th:text="${board.id}"></td>
+                    <th:block th:if="${board.id} == ${board.groupBno}">
                     <td><a th:href="@{/boardContent(id=${board.id},page=${ph.page},type=${type},search=${search})}"th:text="${board.title}"/></td>
+                    </th:block>
+                    <th:block th:unless="${board.id} == ${board.groupBno}">
+                        <td><a th:href="@{/answerContent(id=${board.id},page=${ph.page},type=${type},search=${search})}"th:text="${board.title}"/></td>
+                    </th:block>
+
                     <td th:text="${board.modifiedBy}"></td>
                     <td th:text="${#temporals.format(board.modifiedDate,'yyyy-MM-dd HH:mm')}"></td>
                     <td th:text="${board.viewCount}"></td>

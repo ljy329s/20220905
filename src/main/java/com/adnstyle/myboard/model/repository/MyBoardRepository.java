@@ -54,5 +54,15 @@ public interface MyBoardRepository {
      * 최신 게시글 번호 가져오기
      */
     Long selectId();
+
+    /**
+     * 게시글 등록시 그룹번호 업데이트해주기 (기본값null)
+     */
+    void updateGroupBno(Long id);
+
+    /**
+     * 답글 등록
+     */
+    void insertAnswer(MyBoard board);
 }
   

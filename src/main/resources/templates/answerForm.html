@@ -1,0 +1,69 @@
+<!doctype html>
+<html xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default_layout}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>게시글 답변 폼</title>
+</head>
+<th:block layout:fragment="content">
+    <style>
+        form{
+            text-align: center;
+        }
+        textarea{
+            resize: none;
+        }
+        .btn-group{
+            float: right;
+        }
+        #sub_btn{
+            background-color:#66b2ff;
+        }
+        #main_btn{
+            background-color: #ffffff;
+            color: #000000;
+        }
+        label{
+            float: left;
+        }
+        .form-control{
+            margin-bottom: 20px;
+        }
+        #main{
+            margin-top: 50px;
+        }
+        #mainTitle{
+            text-align: center;
+        }
+    </style>
+    <body>
+    <div>
+        <div class="container">
+
+            <h1 id="mainTitle">답변작성</h1>
+            <div id="main">
+                <form action="/insertContent" method="post" enctype="multipart/form-data">
+                    <label for="titleBox" class="form-label fs-5 fw-bold">제목</label>
+                    <input type="text" id="titleBox" class="form-control" name="title">
+                    <label for="writerBox" class="form-label fs-5 fw-bold">작성자</label>
+                    <input type="text" id="writerBox" class="form-control" name="createdBy">
+                    <label for="contentBox" class="form-label fs-5 fw-bold">내용</label>
+                    <textarea rows="10" name="content" id="contentBox" class="form-control"></textarea>
+                    <input type="file" id="onlyAttach" class="form-control" name="uploadFile" multiple>
+
+                    <input type="hidden" name="groupBno" th:value="${id}">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="submit" class="btn btn-primary" id="sub_btn">등록</button>
+                        <button type="button" class="btn btn-primary" id="main_btn" onclick="location.href='/'">목록</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    </body>
+</th:block>
+</html>
