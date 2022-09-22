@@ -23,6 +23,9 @@
     #write_btn{
         float: right;
     }
+    a{
+        text-decoration: none;
+    }
 
 </style>
 <body>
@@ -61,12 +64,14 @@
 
                     <td th:text="${board.id}"></td>
                     <th:block th:if="${board.id} == ${board.groupBno}">
-                    <td><a th:href="@{/boardContent(id=${board.id},page=${ph.page},type=${type},search=${search})}"th:text="${board.title}"/></td>
+                        <td><a th:href="@{/boardContent(id=${board.id},page=${ph.page},type=${type},search=${search})}"
+                               th:text="${board.title}"/></td>
                     </th:block>
                     <th:block th:unless="${board.id} == ${board.groupBno}">
-                        <td><a th:href="@{/answerContent(id=${board.id},page=${ph.page},type=${type},search=${search})}"th:text="${board.title}"/></td>
+                        <td><a th:href="@{/answerContent(id=${board.id},page=${ph.page},type=${type},search=${search})}"
+                                 th:text="'&nbsp&nbsp&nbsp'+'[L답글]'+${board.title}"/>
+                        </td>
                     </th:block>
-
                     <td th:text="${board.modifiedBy}"></td>
                     <td th:text="${#temporals.format(board.modifiedDate,'yyyy-MM-dd HH:mm')}"></td>
                     <td th:text="${board.viewCount}"></td>
@@ -75,7 +80,7 @@
             </tbody>
 
 
-        </table>
+                </table>
             </div>
             <div id="btnBox">
                 <button type="button" id="write_btn" class="btn btn-outline-primary" onclick="location.href='writeForm'">글 작성</button>

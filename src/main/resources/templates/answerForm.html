@@ -54,8 +54,8 @@
                     <textarea rows="10" name="content" id="contentBox" class="form-control"></textarea>
                     <input type="file" id="onlyAttach" class="form-control" name="uploadFile" multiple>
 
-                    <input type="text" name="groupBno" th:value="${id}">
-                    <input type="text" name="bno" th:value="${id}">
+                    <!--     답글인지 게시글인지 구분하는 용도 groupBno      -->
+                    <input type="hidden" name="groupBno" th:value="${id}">
 
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <button type="submit" class="btn btn-primary" id="sub_btn">등록</button>

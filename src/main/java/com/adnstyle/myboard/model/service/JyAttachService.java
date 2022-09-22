@@ -34,7 +34,6 @@ public class JyAttachService {
         //format패턴의 "-"를 os의 구분자로 바꾸겠다 os마다 구분자가 달라서 File.separator 적어줘야함
         return str.replace("-", File.separator);
 
-
     }
 
 
@@ -72,11 +71,13 @@ public class JyAttachService {
 @Transactional
     public void deleteAttach (Long id){
         jyAttachRepository.deleteAll(id);
+
     }
 
     @Transactional
     public void deleteOnlyAttach (List<Long> attlist){
         jyAttachRepository.deleteOnlyAttach(attlist);
+
     }
 
 

@@ -23,6 +23,13 @@
             background-color: #ffffff;
             color: #000000;
         }
+        #del_btn{
+            background-color: #66b2ff;
+        }
+        #upd_btn, #upd_sub {
+            background-color: white;
+            color: black;
+        }
         label{
             float: left;
         }
@@ -35,6 +42,7 @@
         #mainTitle{
             text-align: center;
         }
+
     </style>
     <body>
         <div class="container">
@@ -52,17 +60,53 @@
 
                     <input type="hidden" name="id" th:value="${myAnswerContent.id}">
 
+                    <div>
+                        <div id="attachUl" th:if="${!attachList.isEmpty()}">
+                            <ul th:each="attachList : ${attachList}" style="list-style: none">
+                                <li>
+                                    <a th:href="@{/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}">
+                                        <span th:text="${attachList.originName}"/></a>
+                                    <input type="checkbox" name="attBno" th:value="${attachList.attBno}"
+                                           class="checkBtn" style="display: none">
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <button type="button" class="btn btn-primary" id="upd_btn">수정</button>
                         <button type="submit" class="btn btn-primary" id="upd_sub" style="display: none">수정완료</button>
                         <button type="button" class="btn btn-primary" id="del_btn">삭제</button>
                         <button type="button" class="btn btn-primary" id="main_btn" onclick="location.href='/'">목록</button>
                     </div>
+
                 </form>
 
             </div>
         </div>
         <script>
+
+            // 체크박스 클릭시 취소선 생기게하기ㅜㅜㅜㅜㅜ
+            let ul = document.querySelector('ul');
+
+            const checkClick = (i) => {
+                if (ul.children[i].querySelector('span').style.textDecorationLine === "line-through") {
+                    ul.children[i].querySelector('span').style.textDecorationLine = '';
+                } else {
+                    ul.children[i].querySelector('span').style.textDecorationLine = "line-through";
+                }
+            }
+
+            if (ul) {
+                for (let i = 0; i < ul.childElementCount; i++) {
+                    //  ul.children[i].querySelector('input').value = i;
+                    ul.children[i].querySelector('input').setAttribute('onClick', `checkClick(${i})`);
+
+                }
+            }
+
+
             //수정버튼 클릭시 upd_btnE 함수를 실행해라
             const upd_btn = document.getElementById("upd_btn")
             upd_btn.addEventListener('click', upd_btnE);

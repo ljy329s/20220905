@@ -69,14 +69,12 @@ public class MyBoardService {
         long id = 0;//등록한 글번호
 
         if(board.getGroupBno()==null){//일반게시글등록시
-            myBoardRepository.insertContent(board);
+            myBoardRepository.insertContent(board);//게시글등록
             id = myBoardRepository.selectId();//등록한 게시글 번호 가져오기
             myBoardRepository.updateGroupBno(id);//글 등록후 불러와서 그룹번호 업데이트 해줄예정
         }else{//답글등록시(그룹번호있으니)
-            String anstitle = "[답글]"+board.getTitle();
-            board.setTitle(anstitle);
-            System.out.println("board"+board);
-            myBoardRepository.insertAnswer(board);
+            myBoardRepository.insertAnswer(board);//답글등록
+            id = myBoardRepository.selectId();//등록한 게시글 번호 가져오기 첨부파일등록할때..
         }
         String originUploadFileName = "";
         String changeUploadFileName = "";
@@ -125,7 +123,7 @@ public class MyBoardService {
             }//end for
             System.out.println("입력한값" + board);
 
-            jyAttachService.insertFile((ArrayList) fileList);//첨부파일등록
+            jyAttachService.insertFile((ArrayList) fileList);//게시글 첨부파일등록
 
         }
     }
