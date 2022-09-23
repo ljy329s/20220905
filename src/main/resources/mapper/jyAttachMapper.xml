@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.adnstyle.myboard.model.repository.JyAttachRepository">
-
     <insert id="insertFile" parameterType="java.util.List" >
        INSERT INTO jy_attach(
         uuid,
@@ -18,11 +17,11 @@
         </foreach>
     </insert>
 
-        <select id="attachList" resultType="jyAttach">
-            select attBno,originName,uuid,uploadPath
-            from jy_attach
-            where bno=#{id}
-        </select>
+    <select id="attachList" resultType="jyAttach">
+        select attBno,originName,uuid,uploadPath
+        from jy_attach
+        where bno=#{id}
+    </select>
 
 <!--    게시글 삭제시 첨부파일도 함께 삭제-->
     <delete id="deleteAll">

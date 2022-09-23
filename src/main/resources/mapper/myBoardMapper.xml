@@ -57,9 +57,9 @@
 
 <!--게시글 상세조회-->
     <select id="selectContent" parameterType="long" resultType="myBoard">
-        select title, modified_by,content,modified_date,id
+        select title, modified_by,content,modified_date,id,group_bno
         from my_board
-        where id=#{id};
+        where id=#{id}
     </select>
 
     <update id="updateCount" parameterType="long">
@@ -69,7 +69,12 @@
 
     <update id="deleteContent" parameterType="long">
         update my_board set del_yn = 'Y'
-        where id=#{id}
+       where
+        <choose>
+            <when test="group_bno==id"><!--게시글+답글삭제-->
+                group_bno=#{id}
+            </when>
+        </choose>
     </update>
 
     <select id="selectId" resultType="long">
@@ -100,5 +105,11 @@
         insert into my_board (title, content ,view_count,created_by,modified_by,created_date,modified_date,group_bno)
         values (#{title},#{content},0,#{createdBy},#{createdBy},NOW(),NOW(),#{groupBno})
     </insert>
+
+    <!--답글삭제-->
+    <update id="deleteAnswer" parameterType="long">
+        update my_board set del_yn = 'Y'
+        where id=#{id}
+    </update>
 
 </mapper>

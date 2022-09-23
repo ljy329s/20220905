@@ -64,5 +64,10 @@ public interface MyBoardRepository {
      * 답글 등록
      */
     void insertAnswer(MyBoard board);
+
+    /**
+     * 답글삭제
+     */
+    int deleteAnswer(Long id);
 }
   

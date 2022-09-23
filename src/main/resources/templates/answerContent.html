@@ -77,7 +77,9 @@
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <button type="button" class="btn btn-primary" id="upd_btn">수정</button>
                         <button type="submit" class="btn btn-primary" id="upd_sub" style="display: none">수정완료</button>
-                        <button type="button" class="btn btn-primary" id="del_btn">삭제</button>
+                        <button type="button" id="del_btn" class="btn btn-primary"
+                                th:onclick="|location.href='@{/deleteAnswer(id=${myAnswerContent.id})}'|">삭제
+                        </button>
                         <button type="button" class="btn btn-primary" id="main_btn" onclick="location.href='/'">목록</button>
                     </div>
 

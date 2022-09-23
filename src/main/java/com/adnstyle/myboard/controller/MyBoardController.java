@@ -44,13 +44,10 @@ public class MyBoardController {
         searchMap.put("type", type);
         searchMap.put("search", search);
         int totalCnt = myBoardService.countAll(searchMap);
-        int pageSize = 10;
-        int naviSize = 10;
-        PageHandle ph = new PageHandle(totalCnt, page, pageSize, naviSize);
+        PageHandle ph = new PageHandle(totalCnt, page);
 
-        //검색조건+페이징처리
-        searchMap.put("offset", ((page - 1) * pageSize));
-        searchMap.put("pageSize", pageSize);
+        searchMap.put("offset", ((page - 1) * ph.getPageSize()));
+        searchMap.put("pageSize",ph.getPageSize());
 
         ArrayList<MyBoard> myBoardList = myBoardService.selectList(searchMap);//게시글리스트 조회용
 
@@ -170,9 +167,9 @@ public class MyBoardController {
         }
     }
 
-        /**
-         * 답변 상세조회
-         */
+    /**
+    * 답변 상세조회
+    */
         @GetMapping("/answerContent")
         public String answerContent(Model model,long id, @RequestParam("page") int page, @RequestParam("type") String type, @RequestParam("search") String search){
             System.out.println("답변상세조회 컨트롤러");
@@ -190,5 +187,16 @@ public class MyBoardController {
             return "answerContent";
         }
 
+    /**
+     * 답변삭제
+     */
+    @GetMapping("/deleteAnswer")
+    public String deleteAnswer(Long id){
+        myBoardService.deleteAnswer(id);
+
+        return "redirect:/";
+
     }
+
+}
 

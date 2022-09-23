@@ -193,4 +193,18 @@ public class MyBoardService {
         }
     }
 
-}
+
+    @Transactional
+    public void deleteAnswer(Long id) {
+        int num = myBoardRepository.deleteAnswer(id);
+
+            if (num > 0) {
+                ArrayList<JyAttach> attachList = jyAttachService.attachList(id);
+                int no = jyAttachService.deleteFiles(attachList);//실제파일 삭제
+                if (no > 0) {
+                    jyAttachService.deleteAttach(id);
+                    System.out.println("게시글 삭제처리후 첨부파일 삭제됨");
+                }
+            }
+        }
+    }
