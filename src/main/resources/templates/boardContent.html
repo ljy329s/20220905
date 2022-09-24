@@ -54,6 +54,14 @@
         #btnBox{
             display: flex;
         }
+
+        #replyBox{
+            display: flex;
+            border-radius: 10px;
+        }
+        #replySub{
+            width: 100px;
+        }
     </style>
     <body>
     <div>
@@ -80,7 +88,7 @@
 
                     <div>
                         <div id="attachUl" th:if="${!attachList.isEmpty()}">
-                            <ul th:each="attachList : ${attachList}" style="list-style: none">
+                            <ul th:each="attachList : ${attachList}" class="checkboxList" style="list-style: none">
                                 <li>
                                     <a th:href="@{/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}">
                                         <span th:text="${attachList.originName}"/></a>
@@ -109,13 +117,30 @@
                 </form>
             </div>
             <div>
-                <p>리플구현할곳</p>
-                <table class="table">
+                <label>댓글작성</label>
+                <div id="replyBox">
+                <form id="reply_box" method="post" action="/insertReply">
+                <!--댓글내용-->
+                <input type="text" name="reContent" class="form-control">
+                <!--댓글작성자-->
+                <input type="text" name="reCreatedBy">
+                <!--원글게시글 번호-->
+                    <th:block th:each="myContent : ${myContent}">
+                <input type="hidden" name="boardBno" th:value="${myContent.id}">
+                    </th:block>
+                <input type="submit" id="replySub" value="댓글작성"></input>
+
+                </form>
+                </div>
+                <label>댓글목록</label>
+                    <table class="table">
                     <tr>
-                        <td>이름</td>
-                        <td>댓글내용ㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹㄹ</td>
-                        <td>작성일자</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><button type="button" class="reply_up_btn">수정</button><button type="button" class="reply_del_btn">삭제</button></td>
                     </tr>
+
                 </table>
             </div>
         </div>
@@ -123,9 +148,11 @@
     </div>
 
 
-    <script th:inline="javascript">
-        let msg = [[${attachList}]]
-        console.log(msg)
+<!--    <script th:inline="javascript">-->
+<!--     let msg = [[${attachList}]]-->
+<!--     console.log(msg)-->
+    <script>
+
 
         // 체크박스 클릭시 취소선 생기게하기ㅜㅜㅜㅜㅜ
         let ul = document.querySelector('ul');
@@ -145,6 +172,7 @@
 
             }
         }
+
 
 
         //수정버튼 클릭시 upd_btnE 함수를 실행해라
@@ -173,11 +201,7 @@
             for (let i = 0; i < checkBtn.length; i++) {
                 checkBtn[i].style.display = "inline";
             }
-
-
-
-
-        }
+         }
 
     </script>
 

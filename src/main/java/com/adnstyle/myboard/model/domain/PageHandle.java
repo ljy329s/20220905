@@ -110,8 +110,5 @@ public class PageHandle {
          */
         this.showNext = this.endPage < this.totalPage;
 
-
     }
-
-
 }

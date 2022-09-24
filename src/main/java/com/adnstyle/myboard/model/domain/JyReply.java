@@ -1,10 +1,12 @@
 package com.adnstyle.myboard.model.domain;
 
 import lombok.Data;
+import org.apache.ibatis.type.Alias;
 
 import java.time.LocalDateTime;
 
 @Data
+@Alias("jyReply")
 public class JyReply {
 
     /**
@@ -50,7 +52,7 @@ public class JyReply {
     /**
      * 댓글그룹번호
      */
-    private int reDrder;
+    private int reOrder;
 
     /**
      * 댓글정렬

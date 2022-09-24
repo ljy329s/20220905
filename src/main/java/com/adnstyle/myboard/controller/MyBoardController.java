@@ -1,9 +1,11 @@
 package com.adnstyle.myboard.controller;
 
 import com.adnstyle.myboard.model.domain.JyAttach;
+import com.adnstyle.myboard.model.domain.JyReply;
 import com.adnstyle.myboard.model.domain.MyBoard;
 import com.adnstyle.myboard.model.domain.PageHandle;
 import com.adnstyle.myboard.model.service.JyAttachService;
+import com.adnstyle.myboard.model.service.JyReplyService;
 import com.adnstyle.myboard.model.service.MyBoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +35,10 @@ import java.util.Map;
 public class MyBoardController {
 
     private final MyBoardService myBoardService;
+
     private final JyAttachService jyAttachService;
+
+    private final JyReplyService jyReplyService;
 
     /**
      * 전체 게시글 리스트+페이징처리+검색처리
@@ -195,6 +200,16 @@ public class MyBoardController {
         myBoardService.deleteAnswer(id);
 
         return "redirect:/";
+
+    }
+
+    /**
+     * 댓글작성
+     */
+    @PostMapping("/insertReply")
+    public String replySub(JyReply jyReply){
+        jyReplyService.insertReply(jyReply);
+       return "redirect:/";
 
     }
 

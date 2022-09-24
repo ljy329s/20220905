@@ -1,7 +1,9 @@
 package com.adnstyle.myboard.model.service;
 
 import com.adnstyle.myboard.model.domain.JyAttach;
+import com.adnstyle.myboard.model.domain.JyReply;
 import com.adnstyle.myboard.model.repository.JyAttachRepository;
+import com.adnstyle.myboard.model.repository.JyReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,7 @@ import java.util.List;
 public class JyAttachService {
     private final JyAttachRepository jyAttachRepository;
 
+    private final JyReplyRepository jyReplyRepository;
 
 //년/월/일 폴더 생성 메서드
 
@@ -79,6 +82,4 @@ public class JyAttachService {
         jyAttachRepository.deleteOnlyAttach(attlist);
 
     }
-
-
- }
+}
