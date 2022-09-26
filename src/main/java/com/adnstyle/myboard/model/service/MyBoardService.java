@@ -197,7 +197,6 @@ public class MyBoardService {
     @Transactional
     public void deleteAnswer(Long id) {
         int num = myBoardRepository.deleteAnswer(id);
-
             if (num > 0) {
                 ArrayList<JyAttach> attachList = jyAttachService.attachList(id);
                 int no = jyAttachService.deleteFiles(attachList);//실제파일 삭제

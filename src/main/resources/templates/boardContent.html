@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <script src="../js/jquery-3.6.1.min.js"></script>
     <title>게시글 읽기</title>
 </head>
 <th:block layout:fragment="content">
@@ -56,11 +56,15 @@
         }
 
         #replyBox{
-            display: flex;
+            display: inline;
             border-radius: 10px;
         }
         #replySub{
             width: 100px;
+        }
+
+        #childReply{
+         display: none;
         }
     </style>
     <body>
@@ -116,30 +120,42 @@
                     </div>
                 </form>
             </div>
+
             <div>
                 <label>댓글작성</label>
                 <div id="replyBox">
                 <form id="reply_box" method="post" action="/insertReply">
                 <!--댓글내용-->
-                <input type="text" name="reContent" class="form-control">
+                <input type="text" name="reContent" id="reContent" class="form-control">
                 <!--댓글작성자-->
-                <input type="text" name="reCreatedBy">
+                <input type="text" name="reCreatedBy" id="reCreatedBy" value="작성자명자리" readonly="readonly">
                 <!--원글게시글 번호-->
                     <th:block th:each="myContent : ${myContent}">
-                <input type="hidden" name="boardBno" th:value="${myContent.id}">
+                <input type="hidden" name="boardBno" id="boardBno" th:value="${myContent.id}">
                     </th:block>
-                <input type="submit" id="replySub" value="댓글작성"></input>
+                <input type="button" id="replySub" value="댓글작성"/>
+
 
                 </form>
                 </div>
                 <label>댓글목록</label>
                     <table class="table">
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td><button type="button" class="reply_up_btn">수정</button><button type="button" class="reply_del_btn">삭제</button></td>
+                    <tr th:each="replyList : ${replyList}">
+                        <td th:text="${replyList.reCreatedBy}"/></td>
+                        <td th:text="${replyList.reContent}"/></td>
+                        <td th:text="${#temporals.format(replyList.reModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
+                        <td>
+                        <button type="button" class="reply_up_btn" th:value="${replyList.reBno}">수정</button>
+                        <button type="button" class="reply_del_btn">삭제</button>
+                        <button type="button" class="child_reply_btn"
+                                th:onclick="|location.href='@{/insertChildReply(reOrder=${replyList.reOrder},reDepth=${replyList.reDepth},reGroupBno=${replyList.reGroupBno},boardBno=${replyList.boardBno})}'|"
+                        >하위댓글달기</button>
+<!--                            <button type="button" class="child_reply_btn" id="childReply()">하위댓글달기</button>-->
+                        </td>
                     </tr>
+<!--                        <tr id="childReply">-->
+
+<!--                        </tr>-->
 
                 </table>
             </div>
@@ -147,11 +163,36 @@
     </div>
     </div>
 
-
-<!--    <script th:inline="javascript">-->
-<!--     let msg = [[${attachList}]]-->
-<!--     console.log(msg)-->
     <script>
+
+        let replySub = document.getElementById("replySub");//댓글작성버튼 클릭시 실행
+
+        replySub.addEventListener('click',function(){
+            console.log("버튼누름");
+            let reContent = $("#reContent").val();
+            let reCreatedBy = $("#reCreatedBy").val();
+            let boardBno = $("#boardBno").val();
+
+            let jyReply={reContent:reContent,
+                       reCreatedBy:reCreatedBy,
+                       boardBno:boardBno
+                    }
+                $.ajax({
+                    url: "/insertReply",
+                    type: 'POST',
+                    dataType: 'JSON',
+                    contentType: "application/json; charset=utf-8",
+                     data: JSON.stringify(jyReply),
+                    success: function() {
+                        alert("댓글이 등록되었습니다.");
+                    },
+                    error: function () {
+                        alert("에러발생")
+                    }
+
+            });
+        });
+
 
 
         // 체크박스 클릭시 취소선 생기게하기ㅜㅜㅜㅜㅜ

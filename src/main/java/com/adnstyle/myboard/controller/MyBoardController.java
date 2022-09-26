@@ -17,10 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.UnsupportedEncodingException;
@@ -72,8 +69,11 @@ public class MyBoardController {
     public String myBoardContent(Model model, long id, @RequestParam("page") int page, @RequestParam("type") String type, @RequestParam("search") String search) {
         ArrayList<MyBoard> myContent = myBoardService.selectContent(id);//게시글 번호로 내용 불러오기
         ArrayList<JyAttach> attachList = jyAttachService.attachList(id);
+        List replyList = jyReplyService.selectReplyList(id);
+        System.out.println("replyList"+replyList);
         model.addAttribute("myContent", myContent);//게시글내용
         model.addAttribute("attachList", attachList);//첨부파일
+        model.addAttribute("replyList",replyList);//댓글리스트
         model.addAttribute("page", page);//페이지
         model.addAttribute("type", type);//검색타입
         model.addAttribute("search", search);//검색내용
@@ -82,6 +82,10 @@ public class MyBoardController {
         System.out.println("myBoardContent 컨트롤러 model은" + model);
 
         return "boardContent";
+
+//
+//
+//
     }
 
     /**
@@ -207,11 +211,21 @@ public class MyBoardController {
      * 댓글작성
      */
     @PostMapping("/insertReply")
-    public String replySub(JyReply jyReply){
-        jyReplyService.insertReply(jyReply);
-       return "redirect:/";
+    @ResponseBody
+    public void replySub(@RequestBody JyReply jyReply){
+       jyReplyService.insertReply(jyReply);
+//        return "redirect:/";
 
     }
 
+    /**
+     * 하위댓글작성
+     */
+    @GetMapping("insertChildReply")
+    public String insertChildReply(JyReply jyReply){
+        System.out.println(jyReply);
+        jyReplyService.insertChildReply(jyReply);
+        return "redirect:/";
+    }
 }
 

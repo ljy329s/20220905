@@ -5,4 +5,41 @@
         insert into jy_reply(re_content,re_created_by,re_created_date,re_modified_date,board_bno)
         values(#{reContent},#{reCreatedBy},NOW(),NOW(),#{boardBno})
     </insert>
+
+    <select id="selectMaxReBno" resultType="long">
+        select re_bno
+        from jy_reply
+        order by re_bno desc
+        limit 1
+    </select>
+
+    <update id="updateGroupBno" parameterType="long">
+        update jy_reply
+        set re_group_bno=#{bno}
+        where re_bno=#{bno}
+    </update>
+
+    <select id="selectReplyList" resultType="jyReply" parameterType="long">
+        SELECT *
+        from jy_reply
+        where board_bno=#{id}
+        order by re_group_bno desc,re_depth asc,re_order desc
+    </select>
+
+<!--    댓글 정렬번호 업데이트-->
+    <update id="updateOrderBno">
+        <![CDATA[
+        update jy_reply
+        set re_order = re_order+1
+        where re_order>#{reOrder}
+          and re_group_bno=#{reGroupBno}
+          and board_bno=#{boardBno};
+        ]]>
+    </update>
+
+<!--    하위댓글 등록-->
+    <insert id="insertChildReply">
+        INSERT INTO jy_reply(re_content,re_created_by,re_created_date,re_modified_date,board_bno,re_depth,re_order,re_group_bno)
+        VALUES("하위댓글등록","db작성자",NOW(),NOW(),#{boardBno},#{reDepth}+1,#{reOrder}+1,#{reGroupBno});
+    </insert>
 </mapper>

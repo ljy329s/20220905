@@ -50,12 +50,12 @@ public class JyReply {
     private int reDepth;
 
     /**
-     * 댓글그룹번호
+     * 댓글정렬
      */
     private int reOrder;
 
     /**
-     * 댓글정렬
+     * 댓글그룹번호
      */
     private Long reGroupBno;
 
