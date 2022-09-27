@@ -29,6 +29,8 @@ public class MyBoardService {
     private final JyAttachService jyAttachService;
 
 
+
+
     public ArrayList<MyBoard> selectList(Map searchMap) {
 
         return myBoardRepository.selectList(searchMap);

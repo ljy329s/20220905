@@ -3,7 +3,6 @@ package com.adnstyle.myboard.model.repository;
 import com.adnstyle.myboard.model.domain.JyReply;
 import org.apache.ibatis.annotations.Mapper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
@@ -20,4 +19,6 @@ public interface JyReplyRepository {
     void updateOrderBno(JyReply jyReply);
 
     void insertChildReply(JyReply jyReply);
+
+    void deleteReply(Long delReBno);
 }

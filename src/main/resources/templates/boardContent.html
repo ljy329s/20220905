@@ -128,7 +128,7 @@
                 <!--댓글내용-->
                 <input type="text" name="reContent" id="reContent" class="form-control">
                 <!--댓글작성자-->
-                <input type="text" name="reCreatedBy" id="reCreatedBy" value="작성자명자리" readonly="readonly">
+                <input type="text" name="reCreatedBy" id="reCreatedBy" value="작성자명" readonly="readonly">
                 <!--원글게시글 번호-->
                     <th:block th:each="myContent : ${myContent}">
                 <input type="hidden" name="boardBno" id="boardBno" th:value="${myContent.id}">
@@ -142,20 +142,32 @@
                     <table class="table">
                     <tr th:each="replyList : ${replyList}">
                         <td th:text="${replyList.reCreatedBy}"/></td>
+
+                        <th:block th:if="${replyList.reDepth}==0">
                         <td th:text="${replyList.reContent}"/></td>
+                        </th:block>
+                        <th:block th:if="${replyList.reDepth}==1">
+                            <td th:text="'&nbsp&nbsp'+'L'+${replyList.reContent}"/></td>
+                        </th:block>
+                        <th:block th:if="${replyList.reDepth}==2">
+                            <td th:text="'&nbsp&nbsp&nbsp&nbsp'+'L'+${replyList.reContent}"/></td>
+                        </th:block>
+                        <th:block th:if="${replyList.reDepth} > 2">
+                            <td th:text="'&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'+'L'+${replyList.reContent}"/></td>
+                        </th:block>
                         <td th:text="${#temporals.format(replyList.reModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                         <td>
-                        <button type="button" class="reply_up_btn" th:value="${replyList.reBno}">수정</button>
-                        <button type="button" class="reply_del_btn">삭제</button>
+                         <input type="hidden" th:value="${replyList.reBno}" id="reBno">
+<!--                        <button type="button" class="reply_up_btn" th:value="${replyList.reBno}" id="reply_up_btn">수정</button>-->
+                        <button type="button" class="reply_del_btn" th:value="${replyList.reBno}" id="reply_del_btn">삭제</button>
+
                         <button type="button" class="child_reply_btn"
-                                th:onclick="|location.href='@{/insertChildReply(reOrder=${replyList.reOrder},reDepth=${replyList.reDepth},reGroupBno=${replyList.reGroupBno},boardBno=${replyList.boardBno})}'|"
-                        >하위댓글달기</button>
+                           th:onclick="|location.href='@{/insertChildReply(reOrder=${replyList.reOrder},reDepth=${replyList.reDepth},reGroupBno=${replyList.reGroupBno},boardBno=${replyList.boardBno})}'|"
+                           >하위댓글달기</button>
+
 <!--                            <button type="button" class="child_reply_btn" id="childReply()">하위댓글달기</button>-->
                         </td>
                     </tr>
-<!--                        <tr id="childReply">-->
-
-<!--                        </tr>-->
 
                 </table>
             </div>
@@ -165,6 +177,39 @@
 
     <script>
 
+       // 댓글 삭제
+        let reply_del_btn = document.getElementById("reply_del_btn");//댓글삭제버튼 클릭시 실행
+
+        reply_del_btn.addEventListener('click',function(){
+            console.log("삭제버튼누름");
+            let delReBno=[];
+            let reBno = $("#reBno").val();
+            delReBno.push(reBno);
+            //delReBno.push($(this).data());
+
+            $.ajax({
+                url: '/deleteReply',
+                type: 'GET',
+                dataType: 'JSON',
+                contentType: "application/json; charset=utf-8",
+                data: {'delReBno':delReBno},
+                success: function(data) {
+                    if (data.result == 'success'){
+                        alert("댓글이 등록되었습니다.");
+                        location.reload();
+                    }
+                },
+                error: function() {
+                    alert("에러발생")
+                }
+            });
+        });
+
+
+
+
+
+        //댓글 작성
         let replySub = document.getElementById("replySub");//댓글작성버튼 클릭시 실행
 
         replySub.addEventListener('click',function(){
@@ -183,15 +228,20 @@
                     dataType: 'JSON',
                     contentType: "application/json; charset=utf-8",
                      data: JSON.stringify(jyReply),
-                    success: function() {
-                        alert("댓글이 등록되었습니다.");
+                    success: function(data) {
+                        if (data.result == 'success'){
+                            alert("댓글이 등록되었습니다.");
+                            location.reload();
+
+                        }
                     },
                     error: function () {
                         alert("에러발생")
                     }
-
             });
         });
+
+
 
 
 
@@ -243,6 +293,7 @@
                 checkBtn[i].style.display = "inline";
             }
          }
+
 
     </script>
 

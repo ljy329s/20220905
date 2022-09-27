@@ -212,9 +212,11 @@ public class MyBoardController {
      */
     @PostMapping("/insertReply")
     @ResponseBody
-    public void replySub(@RequestBody JyReply jyReply){
+    public Map<String,String> replySub(@RequestBody JyReply jyReply){
+        Map <String,String> map = new HashMap<>();
        jyReplyService.insertReply(jyReply);
-//        return "redirect:/";
+       map.put("result","success");
+        return map;
 
     }
 
@@ -227,5 +229,20 @@ public class MyBoardController {
         jyReplyService.insertChildReply(jyReply);
         return "redirect:/";
     }
+
+    /**
+     * 댓글삭제
+     */
+    @GetMapping("/deleteReply")
+    @ResponseBody
+    public Map deleteReply(@RequestBody Long delReBno){
+        Map <String,String> map = new HashMap<>();
+        System.out.println(delReBno+"delReBno");
+        jyReplyService.deleteReply(delReBno);
+        map.put("result","success");
+        return map;
+
+    }
 }
+
 

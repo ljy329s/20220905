@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,5 +33,9 @@ public class JyReplyService {
     public void insertChildReply(JyReply jyReply) {
         jyReplyRepository.updateOrderBno(jyReply);//1.order업데이트 해주기
         jyReplyRepository.insertChildReply(jyReply);//2.하위댓글 insert해주기
+    }
+
+    public void deleteReply(Long delReBno) {
+        jyReplyRepository.deleteReply(delReBno);
     }
 }

@@ -42,4 +42,11 @@
         INSERT INTO jy_reply(re_content,re_created_by,re_created_date,re_modified_date,board_bno,re_depth,re_order,re_group_bno)
         VALUES("하위댓글등록","db작성자",NOW(),NOW(),#{boardBno},#{reDepth}+1,#{reOrder}+1,#{reGroupBno});
     </insert>
+
+<!--    댓글삭제 -->
+    <update id="deleteReply" parameterType="long">
+        update jy_reply
+        set re_del_yn ='Y'
+        where re_bno=#{delReBno}
+    </update>
 </mapper>
