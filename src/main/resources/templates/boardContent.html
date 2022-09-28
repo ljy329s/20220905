@@ -169,7 +169,7 @@
                         <td>
                             <div>
                          <input type="hidden" th:value="${replyList.reBno}" id="reBno" class="reBno">
-                       <button type="button" class="reply_del_btn" id="reply_del_btn" th:value="${replyList.reBno}">삭제</button><!--th:value="${replyList.reBno}"-->
+                       <button type="button" class="reply_del_btn" id="reply_del_btn" th:value="${replyList.reBno}">삭제</button>
 
                                 <button type="button" class="btn btn-primary" onclick="childReV()">
                                     대댓글작성
@@ -181,26 +181,37 @@
 <!--                            <button type="button" class="child_reply_btn" id="childReply"-->
 <!--                           th:onclick="|location.href='@{/insertChildReply(reOrder=${replyList.reOrder},reDepth=${replyList.reDepth},reGroupBno=${replyList.reGroupBno},boardBno=${replyList.boardBno})}'|">하위댓글달기</button>-->
                             </div>
+                            <div id="chileReplyBox" class="form-control">
+                                <p>몇번(혹은 제목) 댓글의 댓글</p>
+<!--                                <input type="text" th:value="${replyList.reBno}" name="reBno">-->
+<!--                                <input type="text" th:value="${replyList.reOrder}" name="reOrder">-->
+<!--                                <input type="text" th:value="${replyList.reDepth}" name="reDepth">-->
+<!--                                <input type="text" th:value="${replyList.reGroupBno}" name="reGroupBno">-->
+<!--                                <input type="text" th:value="${replyList.boardBno}" name="boardBno">-->
+                                <input type="text" class="form-control">
+                                <input type="text" class="form-control">
+                                <div>
+                                    <button type="button" onclick="childReH()">취소</button>
+                                    <button type="button" id="childReSub">등록</button>
+                                </div>
+                            </div>
                         </td>
                     </tr>
-                        <div id="chileReplyBox" class="form-control">
-                            <p>몇번(혹은 제목) 댓글의 댓글</p>
-                            <input type="text" class="form-control">
-                            <input type="text" class="form-control">
-                            <div>
-                            <button type="button" onclick="childReH()">취소</button>
-                            <button type="button">등록</button>
-                            </div>
-                        </div>
+
                 </table>
                     <script>
                         function childReV(){
                             $("#chileReplyBox").css('display','inline');
                         }
+                        // $(document).on("click","#reply_del_btn",function(e) {//동적으로 생성된 버튼에 이벤트를 적용하려면 이 방식으로
+                        //     e.target()
+                        // }
 
                         function childReH(){
                             $("#chileReplyBox").css('display','none');
+
                         }
+
                     </script>
                 </div>
             </div>
@@ -231,10 +242,6 @@
 
 
     <script>
-        $(".btn-modal").click(function(){
-            let data = $(this).data('id');
-            $("#modal_reBno.bno").html(data);
-        });
 
         // $(document).on("click","#reply_del_btn",function(e) {//동적으로 생성된 버튼에 이벤트를 적용하려면 이 방식으로
         //     e.target()
