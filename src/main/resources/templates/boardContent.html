@@ -63,9 +63,18 @@
             width: 100px;
         }
 
-        #childReply{
-         display: none;
-        }
+       #chileReplyBox{
+           display: none;
+           margin: auto;
+           width: 400px;
+           border: solid 1px black;
+           position: fixed;
+           left: 50%;
+           top: 50%;
+           background-color: white;
+           z-index: 100;
+       }
+
     </style>
     <body>
     <div>
@@ -139,6 +148,7 @@
                 </form>
                 </div>
                 <label>댓글목록</label>
+                <div id="replyList">
                     <table class="table">
                     <tr th:each="replyList : ${replyList}">
                         <td th:text="${replyList.reCreatedBy}"/></td>
@@ -157,56 +167,135 @@
                         </th:block>
                         <td th:text="${#temporals.format(replyList.reModifiedDate,'yyyy-MM-dd HH:mm')}"/></td>
                         <td>
-                         <input type="hidden" th:value="${replyList.reBno}" id="reBno">
-<!--                        <button type="button" class="reply_up_btn" th:value="${replyList.reBno}" id="reply_up_btn">수정</button>-->
-                        <button type="button" class="reply_del_btn" th:value="${replyList.reBno}" id="reply_del_btn">삭제</button>
+                            <div>
+                         <input type="hidden" th:value="${replyList.reBno}" id="reBno" class="reBno">
+                       <button type="button" class="reply_del_btn" id="reply_del_btn" th:value="${replyList.reBno}">삭제</button><!--th:value="${replyList.reBno}"-->
 
-                        <button type="button" class="child_reply_btn"
-                           th:onclick="|location.href='@{/insertChildReply(reOrder=${replyList.reOrder},reDepth=${replyList.reDepth},reGroupBno=${replyList.reGroupBno},boardBno=${replyList.boardBno})}'|"
-                           >하위댓글달기</button>
+                                <button type="button" class="btn btn-primary" onclick="childReV()">
+                                    대댓글작성
+                                </button>
 
-<!--                            <button type="button" class="child_reply_btn" id="childReply()">하위댓글달기</button>-->
+<!--                            <button type="button" class="btn btn-primary btn-modal" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-id="[[${replyList.reBno}]]">-->
+<!--                                대댓글작성-->
+<!--                            </button>-->
+<!--                            <button type="button" class="child_reply_btn" id="childReply"-->
+<!--                           th:onclick="|location.href='@{/insertChildReply(reOrder=${replyList.reOrder},reDepth=${replyList.reDepth},reGroupBno=${replyList.reGroupBno},boardBno=${replyList.boardBno})}'|">하위댓글달기</button>-->
+                            </div>
                         </td>
                     </tr>
-
+                        <div id="chileReplyBox" class="form-control">
+                            <p>몇번(혹은 제목) 댓글의 댓글</p>
+                            <input type="text" class="form-control">
+                            <input type="text" class="form-control">
+                            <div>
+                            <button type="button" onclick="childReH()">취소</button>
+                            <button type="button">등록</button>
+                            </div>
+                        </div>
                 </table>
+                    <script>
+                        function childReV(){
+                            $("#chileReplyBox").css('display','inline');
+                        }
+
+                        function childReH(){
+                            $("#chileReplyBox").css('display','none');
+                        }
+                    </script>
+                </div>
             </div>
         </div>
     </div>
+<!--    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">-->
+<!--        <div class="modal-dialog">-->
+<!--            <div class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <h5 class="modal-title">대댓글을 작성해주세요</h5>-->
+<!--                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>-->
+<!--                </div>-->
+<!--                <div class="modal-body">-->
+<!--                    <form action="/insertChildReply" method="post">-->
+<!--                    <input type="text" name="reContent">-->
+<!--                        <textarea name="reBno" claas="bno" id="modal_reBno"></textarea>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--                <div class="modal-footer">-->
+<!--                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>-->
+<!--                    <button type="submit" class="btn btn-primary">작성완료</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
     </div>
 
+
+
     <script>
+        $(".btn-modal").click(function(){
+            let data = $(this).data('id');
+            $("#modal_reBno.bno").html(data);
+        });
 
-       // 댓글 삭제
-        let reply_del_btn = document.getElementById("reply_del_btn");//댓글삭제버튼 클릭시 실행
+        // $(document).on("click","#reply_del_btn",function(e) {//동적으로 생성된 버튼에 이벤트를 적용하려면 이 방식으로
+        //     e.target()
+        // }
+            // //대댓글 작성(하위댓글)
+        // $(document).on("click","#childReply",function(e){//하위댓글작성버튼 클릭시
+        //     console.log("버튼누름");
+        //     let reContent = $("#reContent").val();//
+        //     let reCreatedBy = $("#reCreatedBy").val();
+        //     let boardBno = $("#boardBno").val();
+        //
+        //     let jyReply={reContent:reContent,
+        //         reCreatedBy:reCreatedBy,
+        //         boardBno:boardBno
+        //     }
+        //     $.ajax({
+        //         url: "/insertReply",
+        //         type: 'POST',
+        //         dataType: 'JSON',
+        //         contentType: "application/json; charset=utf-8",
+        //         data: JSON.stringify(jyReply),
+        //         success: function(data) {
+        //             if (data.result == 'success'){
+        //                 alert("댓글이 등록되었습니다.");
+        //                 location.reload();
+        //             }
+        //         },
+        //         error: function () {
+        //             alert("에러발생")
+        //         }
+        //     });
+        // });
 
-        reply_del_btn.addEventListener('click',function(){
+
+        // 댓글 삭제
+          $(document).on("click","#reply_del_btn",function(e){//동적으로 생성된 버튼에 이벤트를 적용하려면 이 방식으로
             console.log("삭제버튼누름");
-            let delReBno=[];
-            let reBno = $("#reBno").val();
-            delReBno.push(reBno);
-            //delReBno.push($(this).data());
+            console.log(e.target.value);
+
+            let delReBno = e.target.value;
+
+            console.log("delReBno"+delReBno);
+            alert(delReBno);
 
             $.ajax({
                 url: '/deleteReply',
-                type: 'GET',
-                dataType: 'JSON',
-                contentType: "application/json; charset=utf-8",
-                data: {'delReBno':delReBno},
+                type: 'POST',
+                // dataType: 'JSON',
+                // contentType: "application/json; charset=utf-8",
+                data: {delReBno:delReBno},
                 success: function(data) {
                     if (data.result == 'success'){
-                        alert("댓글이 등록되었습니다.");
+                        alert("댓글이 삭제되었습니다.");
                         location.reload();
                     }
                 },
                 error: function() {
                     alert("에러발생")
                 }
-            });
+            })
         });
-
-
-
 
 
         //댓글 작성
@@ -232,7 +321,6 @@
                         if (data.result == 'success'){
                             alert("댓글이 등록되었습니다.");
                             location.reload();
-
                         }
                     },
                     error: function () {
@@ -240,10 +328,6 @@
                     }
             });
         });
-
-
-
-
 
         // 체크박스 클릭시 취소선 생기게하기ㅜㅜㅜㅜㅜ
         let ul = document.querySelector('ul');

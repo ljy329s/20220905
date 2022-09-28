@@ -230,12 +230,17 @@ public class MyBoardController {
         return "redirect:/";
     }
 
+    @PostMapping("insertChildReply")
+    public String insertChildReply(String content){
+        System.out.println("content"+content);
+        return "redirect:/";
+    }
     /**
      * 댓글삭제
      */
-    @GetMapping("/deleteReply")
+    @PostMapping("/deleteReply")
     @ResponseBody
-    public Map deleteReply(@RequestBody Long delReBno){
+    public Map deleteReply(@RequestParam(value = "delReBno") Long delReBno){
         Map <String,String> map = new HashMap<>();
         System.out.println(delReBno+"delReBno");
         jyReplyService.deleteReply(delReBno);
