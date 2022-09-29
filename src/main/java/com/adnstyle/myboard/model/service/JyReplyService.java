@@ -30,12 +30,26 @@ public class JyReplyService {
     }
 
     @Transactional
-    public void insertChildReply(JyReply jyReply) {
-        jyReplyRepository.updateOrderBno(jyReply);//1.order업데이트 해주기
-        jyReplyRepository.insertChildReply(jyReply);//2.하위댓글 insert해주기
+    public void insertChildReply(JyReply childReply) {
+        Long reBno = childReply.getReBno();
+        JyReply reply = new JyReply();
+        reply = jyReplyRepository.selectReply(reBno);//0.reBno로 먼저 정보 가져오기
+        System.out.println("reply"+reply);
+        Long boardBno=reply.getBoardBno();
+        Long reGroupBno=reply.getReGroupBno();
+        int reOrder=reply.getReOrder();
+        int reDepth=reply.getReDepth();
+        jyReplyRepository.updateOrderBno(reply);//1.order업데이트 해주기
+
+        childReply.setBoardBno(boardBno);
+        childReply.setReGroupBno(reGroupBno);
+        childReply.setReOrder(reOrder);
+        childReply.setReDepth(reDepth);
+        jyReplyRepository.insertChildReply(childReply);//2.하위댓글 insert해주기
     }
 
     public void deleteReply(Long delReBno) {
         jyReplyRepository.deleteReply(delReBno);
+
     }
 }

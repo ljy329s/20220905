@@ -16,9 +16,11 @@ public interface JyReplyRepository {
     List<JyReply> selectReplyList(Long id);
 
 
-    void updateOrderBno(JyReply jyReply);
+    void updateOrderBno(JyReply reply);
 
     void insertChildReply(JyReply jyReply);
 
     void deleteReply(Long delReBno);
+
+    JyReply selectReply(Long reBno);
 }

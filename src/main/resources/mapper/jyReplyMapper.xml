@@ -20,7 +20,7 @@
     </update>
 
     <select id="selectReplyList" resultType="jyReply" parameterType="long">
-        SELECT *
+        select *
         from jy_reply
         where board_bno=#{id}
         order by re_group_bno desc,re_depth asc,re_order desc
@@ -40,7 +40,7 @@
 <!--    하위댓글 등록-->
     <insert id="insertChildReply">
         INSERT INTO jy_reply(re_content,re_created_by,re_created_date,re_modified_date,board_bno,re_depth,re_order,re_group_bno)
-        VALUES("하위댓글등록","db작성자",NOW(),NOW(),#{boardBno},#{reDepth}+1,#{reOrder}+1,#{reGroupBno});
+        VALUES(#{reContent},"로그인전",NOW(),NOW(),#{boardBno},#{reDepth}+1,#{reOrder}+1,#{reGroupBno});
     </insert>
 
 <!--    댓글삭제 -->
@@ -49,4 +49,11 @@
         set re_del_yn ='Y'
         where re_bno=#{delReBno}
     </update>
+
+    <!-- 대댓글달기-부모 댓글정보 불러오기-->
+    <select id="selectReply" parameterType="long" resultType="jyReply">
+        select *
+        from jy_reply
+        where re_bno=#{reBno}
+    </select>
 </mapper>
