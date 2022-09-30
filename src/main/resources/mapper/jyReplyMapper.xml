@@ -23,7 +23,7 @@
         select *
         from jy_reply
         where board_bno=#{id}
-        order by re_group_bno desc,re_depth asc,re_order desc
+        order by re_group_bno desc,re_order asc,re_depth asc
     </select>
 
 <!--    댓글 정렬번호 업데이트-->

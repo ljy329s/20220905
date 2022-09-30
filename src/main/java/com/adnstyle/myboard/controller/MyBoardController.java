@@ -223,24 +223,10 @@ public class MyBoardController {
     /**
      * 하위댓글작성
      */
-//    @GetMapping("insertChildReply")
-//    public String insertChildReply(JyReply jyReply){
-//        System.out.println(jyReply);
-//        jyReplyService.insertChildReply(jyReply);
-//        return "redirect:/";
-//    }
-
-//    @PostMapping("/insertChildReply")
-//    @ResponseBody
-//    public String insertChildReply(@RequestParam("jyReply") JyReply jyReply){
-//        System.out.println("컨트롤러도착");
-//        System.out.println("content"+jyReply);
-//        return "redirect:/";
-//    }
 
     @PostMapping("/insertChildReply")
     @ResponseBody
-    public Map insertChildReply(@RequestBody JyReply childReply ){
+    public Map insertChildReply(@RequestBody JyReply childReply){
         Map<String,String> map = new HashMap<>();
         System.out.println("컨트롤러도착");
         System.out.println("ajax에서 넘어온값"+childReply);

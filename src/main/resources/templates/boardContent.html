@@ -75,6 +75,9 @@
             background-color: white;
             z-index: 100;
         }
+        #childReplyContent{
+        width: 400px;
+        }
 
     </style>
     <body>
@@ -181,27 +184,42 @@
                                             th:value="${replyList.reBno}">삭제
                                     </button>
 
-                                    <button type="button" th:value="${replyList.reBno}" th:attr="data-reBno=${replyList.reBno}, data-reOrder=${replyList.reOrder}, data-reDepth=${replyList.reDepth}, data-reCreatedBy=${replyList.reCreatedBy}, data-reGroupBno=${replyList.reGroupBno}, data-boardBno=${replyList.boardBno}"
-                                            id="childReV"
-                                            class="btn btn-primary childReV">
-                                        대댓글작성
+                                    <button type="button" id="childReV" class="btn btn-primary childReV"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#staticBackdrop"
+                                            th:attr="data-rebno=${replyList.reBno}, data-reOrder=${replyList.reOrder},
+                                            data-reDepth=${replyList.reDepth}, data-reCreatedBy=${replyList.reCreatedBy},
+                                            data-reGroupBno=${replyList.reGroupBno}, data-boardBno=${replyList.boardBno}">
+                                        대댓글달기
                                     </button>
-
-                                </div>
-                                <div id="chileReplyBox" class="form-control chileReplyBox">
-                                    <h5>대댓글을 작성해주세요</h5>
-                                    <p>댓글작성</p>
-                                    <input type="text" class="form-control" id="childReplyContent" name="reContent"
-                                           required>
-                                    <button type="button" id="childReSub" class="childReSub">등록</button>
-                                    <div>
-                                        <button type="button" onclick="childReH()">취소</button>
-                                    </div>
                                 </div>
                             </td>
                         </tr>
-
                     </table>
+
+                    <!--대댓글달기 버튼 클릭시 나올 Modal -->
+                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="staticBackdropLabel">대댓글 작성</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="childReH()"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+<!--                                    <input type="text" name="reContent" id="childReplyContent" placeholder="대댓글을 작성해주세요">-->
+                                    <textarea name="reContent" id="childReplyContent" placeholder="대댓글을 작성해주세요" rows="10"></textarea>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" id="childReSub" class="childReSub btn btn-primary">등록</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="childReH()">닫기</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--모달끝-->
 
                 </div>
             </div>
@@ -211,88 +229,61 @@
 
     <script>
 
-        $(document).on("click", ".childReV", function (e){
-
-            let bno = $(this).val();
-
-            //th:attr="data-test01=${replyList.reBno}
-            let reBno = $(this).data('reBno');
-            let reOrder = $(this).data('reOrder');
-            let reDepth = $(this).data('reDepth');
-            let reCreatedBy = $(this).data('reCreatedBy');
-            let reGroupBno=$(this).data('reGroupBno');
-            let boardBno=$(this).data('boardBno');
-            alert('bno: ' +bno+",  and test01: "+ rebno+content+depth+test04);
-
+        $(document).on("click", "#childReV", function () {//동적으로 생성된 버튼에 이벤트를 적용하려면 이 방식으로 대댓글달기버튼 클릭시
             $("#chileReplyBox").css('display', 'inline');
 
-            $(document).on("click", ".childReSub", function (e) {
+            let reBno = $(this).data('rebno');
+            let reOrder = $(this).data('reorder');
+            let reDepth = $(this).data('redepth');
+            let reCreatedBy = $(this).data('recreatedby');
+            let reGroupBno = $(this).data('regroupbno');
+            let boardBno = $(this).data('boardbno');
 
-                let content2 = $(this).prev().val();
+            $(document).on("click", ".childReSub", function () {
+                let reContent = $("#childReplyContent").val();
+                if (reContent.length > 0) {
+                    let childReply = {
+                        "reBno"      : reBno,
+                        "reContent"  : reContent,
+                        "reOrder"    : reOrder,
+                        "reDepth"    : reDepth,
+                        "reCreatedBy": reCreatedBy,
+                        "reGroupBno" : reGroupBno,
+                        "boardBno"   : boardBno
+                    }
+                    $.ajax({
+                        url        : "/insertChildReply",
+                        type       : 'POST',
+                        dataType   : 'json',
+                        contentType: "application/json; charset=utf-8",
+                        data       : JSON.stringify(childReply),
+                        success    : function (data) {
+                            if (data.result == "success") {
+                                alert("댓글이 등록되었습니다." + childReply);
+                                location.reload();
+                                childReH();
 
-                alert(content2+ rebno);
+                            } else {
+                                alert("댓글등록 실패")
+                            }
+                        },
 
+                        error: function () {
+                            alert("에러발생")
+                        }
 
-            })
+                    })
+                } else {
+                    alert("내용을 입력해주세요")
+                }
 
-
-        })
-
-        //대댓글 구현
-        // $(document).on("click", "#childReV", function (e) {//동적으로 생성된 버튼에 이벤트를 적용하려면 이 방식으로 대댓글달기버튼 클릭시
-        //     $("#chileReplyBox").css('display', 'inline');
-        //     const reBno = e.target.value;//선택한 버튼의 리플번호가져오기
-        //     console.log("reBno" + reBno);
-        //
-        //
-        //     $(document).on("click", "#childReSub", function (e) {
-        //         let reContent = $("#childReplyContent").val();
-        //         console.log("작성한 내용 " + reContent);
-        //         // var blank_pattern = /^\s+|\s+$/g;//공백만있는채로 등록할수 없게하는 정규식
-        //
-        //         if (reContent.length > 0) {// && reContent.value().replace(blank_pattern, '' ) != ""
-        //             let childReply = {
-        //                 reBno    : reBno,
-        //                 reContent: reContent
-        //             }
-        //             $.ajax({
-        //                 url        : "/insertChildReply",
-        //                 type       : 'POST',
-        //                 dataType   : 'json',
-        //                 contentType: "application/json; charset=utf-8",
-        //                 data       : JSON.stringify(childReply),
-        //                 success    : function (data) {
-        //                     if (data.result == "success") {
-        //                         alert("댓글이 등록되었습니다." + childReply);
-        //                         // location.reload();
-        //                         showReply();
-        //                         childReH();
-        //
-        //                     } else {
-        //                         alert("댓글등록 실패")
-        //                     }
-        //                 },
-        //
-        //                 error: function () {
-        //                     alert("에러발생")
-        //                 }
-        //
-        //             })
-        //         } else {
-        //             alert("내용을 입력해주세요")
-        //         }
-        //
-        //     });
-        // });
+            });
+        });
 
         function childReH() {//댓글작성박스 안보이게
             $("#childReplyContent").val('');
             $("#chileReplyBox").css('display', 'none');
 
-        }
-
-        function showReply() {
-            alert("hi")
         }
 
 
