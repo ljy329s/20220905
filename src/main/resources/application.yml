@@ -4,6 +4,7 @@ spring:
     url: jdbc:mariadb://192.168.1.84:3306/a_ljy_db
     username: a_ljy_user
     password: '!adnstyleDB'
+
   file-upload:
     save-dir: C:\\upload
 
@@ -11,11 +12,12 @@ spring:
     multipart:
       max-file-size: 50MB
       max-request-size: 50MB
-#      location: C:\\upload
+
   thymeleaf:
     cache: false
     prefix: classpath:templates/
     suffix: .html
+
 mybatis:
   type-aliases-package: com.adnstyle.myboard.model.domain
   mapper-locations: mapper/*.xml
@@ -29,6 +31,10 @@ mybatis:
 #    url: jdbc:mariadb://localhost:3306/ljy329s
 #    username: root
 #    password: '1234'
+
+#  file-upload:
+#    save-dir: C:\\upload
+
 #  servlet:
 #    multipart:
 #      max-file-size: 50MB
@@ -37,6 +43,7 @@ mybatis:
 #    cache: false
 #    prefix: classpath:templates/
 #    suffix: .html
+
 #mybatis:
 #  type-aliases-package: com.adnstyle.myboard.model.domain
 #  mapper-locations: mapper/*.xml

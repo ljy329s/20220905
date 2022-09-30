@@ -75,8 +75,9 @@
             background-color: white;
             z-index: 100;
         }
-        #childReplyContent{
-        width: 400px;
+
+        #childReplyContent {
+            width: 400px;
         }
 
     </style>
@@ -208,13 +209,16 @@
                                             aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-<!--                                    <input type="text" name="reContent" id="childReplyContent" placeholder="대댓글을 작성해주세요">-->
-                                    <textarea name="reContent" id="childReplyContent" placeholder="대댓글을 작성해주세요" rows="10"></textarea>
+                                    <!--                                    <input type="text" name="reContent" id="childReplyContent" placeholder="대댓글을 작성해주세요">-->
+                                    <textarea name="reContent" id="childReplyContent" placeholder="대댓글을 작성해주세요"
+                                              rows="10"></textarea>
 
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" id="childReSub" class="childReSub btn btn-primary">등록</button>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="childReH()">닫기</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                            onclick="childReH()">닫기
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -316,6 +320,38 @@
         });
 
 
+        // //댓글 작성 원본 건들지 말기
+        // let replySub = document.getElementById("replySub");//댓글작성버튼 클릭시 실행
+        //
+        // replySub.addEventListener('click', function () {
+        //     console.log("버튼누름");
+        //     let reContent = $("#reContent").val();
+        //     let reCreatedBy = $("#reCreatedBy").val();
+        //     let boardBno = $("#boardBno").val();
+        //
+        //     let jyReply = {
+        //         reContent  : reContent,
+        //         reCreatedBy: reCreatedBy,
+        //         boardBno   : boardBno
+        //     }
+        //     $.ajax({
+        //         url        : "/insertReply",
+        //         type       : 'POST',
+        //         dataType   : 'JSON',
+        //         contentType: "application/json; charset=utf-8",
+        //         data       : JSON.stringify(jyReply),
+        //         success    : function (data) {
+        //             if (data.result == 'success') {
+        //                 alert("댓글이 등록되었습니다.");
+        //                 location.reload();
+        //             }
+        //         },
+        //         error      : function () {
+        //             alert("에러발생")
+        //         }
+        //     });
+        // });
+
         //댓글 작성
         let replySub = document.getElementById("replySub");//댓글작성버튼 클릭시 실행
 
@@ -339,7 +375,7 @@
                 success    : function (data) {
                     if (data.result == 'success') {
                         alert("댓글이 등록되었습니다.");
-                        location.reload();
+                        selectReplyList(boardBno);
                     }
                 },
                 error      : function () {
@@ -397,6 +433,54 @@
             }
         }
 
+        //댓글조회 함수
+        function selectReplyList(boardBno) {
+            alert("이제 조회 화면 뜰예정");
+            console.log("boardBno : " + boardBno);
+            $.ajax({
+                url     : "/selectReplyList",
+                type    : 'POST',
+                dataType: 'JSON',
+                // contentType: "application/json; charset=utf-8",
+                data   : {"boardBno": boardBno},
+                success: function (data) {
+                    if (data) {
+
+                        alert("댓글 등록 성공 후히히")
+                        $("#replyList").html('');//기존목록 가리기
+
+                        let newReplyList= "<table class='table'>"
+                        $.each(data,function (index,reply){
+                            console.log("reBno"+reply.reBno);
+                            console.log("reContent"+reply.reContent);
+                            console.log("reOrder"+reply.reOrder);
+
+                            newReplyList+="<tr><td>"+reply.reCreatedBy+"</td>";
+                            newReplyList+="<td>"+reply.reContent+"</td>";
+                            newReplyList+="<td>"+reply.reCreatedDate+"</td>"
+                            newReplyList+="<td><div><input type='hidden' value=";
+                            newReplyList+='reply.reBno'+"id='reBno' class='reBno'>";
+                            newReplyList+="<button type='button' class='reply_del_btn' id='reply_del_btn'";
+                            newReplyList+="value='${reply.reBno}'";
+                            newReplyList+="삭제</button>";
+                            newReplyList+="<button type='button' id='childReV' class='btn btn-primary childReV' data-bs-toggle='modal'";
+                            newReplyList+="data-bs-target='#staticBackdrop'";
+                            newReplyList+="data-rebno='reply.reBno', data-reOrder='reply.reOrder', data-reDepth='reply.reDepth', data-reCreatedBy='reply.reCreatedBy'";
+                            newReplyList+="data-reGroupBno='reply.reGroupBno', data-boardBno=reply.boardBno' 대댓글달기";
+                            newReplyList+="</button></div></td></tr>";
+                        })
+                        newReplyList +="</table>";
+                        $("#replyList").html(newReplyList);
+
+                    } else {
+                        alert("댓글조회 실패 흐그극")
+                    }
+                },
+                error  : function () {
+
+                }
+            })
+        }
 
     </script>
 

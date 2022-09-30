@@ -68,7 +68,7 @@ public class MyBoardController {
     @GetMapping("/boardContent")
     public String myBoardContent(Model model, long id, @RequestParam("page") int page, @RequestParam("type") String type, @RequestParam("search") String search) {
         ArrayList<MyBoard> myContent = myBoardService.selectContent(id);//게시글 번호로 내용 불러오기
-        ArrayList<JyAttach> attachList = jyAttachService.attachList(id);
+        ArrayList<JyAttach> attachList = jyAttachService.attachList(id);//리플리스트 조회하기
         List replyList = jyReplyService.selectReplyList(id);
         System.out.println("replyList"+replyList);
         model.addAttribute("myContent", myContent);//게시글내용
@@ -83,9 +83,8 @@ public class MyBoardController {
 
         return "boardContent";
 
-//
-//
-//
+
+
     }
 
     /**
@@ -246,6 +245,19 @@ public class MyBoardController {
         jyReplyService.deleteReply(delReBno);
         map.put("result","success");
         return map;
+
+    }
+
+    /**
+     * 댓글조회
+     */
+    @PostMapping("/selectReplyList")
+    @ResponseBody
+    public List<JyReply> selectReplyList(@RequestParam(value = "boardBno") Long boardBno){
+
+        List replyList = jyReplyService.selectReplyList(boardBno);
+
+        return replyList;
 
     }
 }

@@ -1,5 +1,6 @@
 package com.adnstyle.myboard.model.service;
 
+import com.adnstyle.myboard.model.common.FileUploadYml;
 import com.adnstyle.myboard.model.domain.JyAttach;
 import com.adnstyle.myboard.model.domain.MyBoard;
 import com.adnstyle.myboard.model.repository.MyBoardRepository;
@@ -21,14 +22,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MyBoardService {
 
-//    @Value("${servlet.multipart.location}")
-//    private String fileRealPath;
+
 
     private final MyBoardRepository myBoardRepository;
 
     private final JyAttachService jyAttachService;
 
-
+    private final FileUploadYml fileUploadYml;
 
 
     public ArrayList<MyBoard> selectList(Map searchMap) {
@@ -86,8 +86,8 @@ public class MyBoardService {
         }
         if (originUploadFileName.length() > 0) {
             List fileList = new ArrayList();
-           String uploadFolder = "C:\\upload"; //파일이 저장될 상위경로
-
+            String uploadFolder;
+            uploadFolder = fileUploadYml.getSaveDir();
 
             //같은폴더에 파일이 많으면 속도 저하 개수제한 문제등이 생긴다 날짜로 폴더 만들어주기
             File uploadPath = new File(uploadFolder, jyAttachService.getFolder());//File(상위경로,하위경로?)
@@ -150,7 +150,7 @@ public class MyBoardService {
 
         if (originUploadFileName.length() > 0) {
 
-            String uploadFolder = "C:\\upload"; //파일이 저장될 상위경로
+            String uploadFolder = fileUploadYml.getSaveDir();
 
             //같은폴더에 파일이 많으면 속도 저하 개수제한 문제등이 생긴다 날짜로 폴더 만들어주기
             File uploadPath = new File(uploadFolder, jyAttachService.getFolder());//File(상위경로,하위경로?)

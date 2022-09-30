@@ -1,7 +1,6 @@
 package com.adnstyle.myboard.model.service;
 
 import com.adnstyle.myboard.model.domain.JyAttach;
-import com.adnstyle.myboard.model.domain.JyReply;
 import com.adnstyle.myboard.model.repository.JyAttachRepository;
 import com.adnstyle.myboard.model.repository.JyReplyRepository;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +46,7 @@ public class JyAttachService {
     }
 
     public ArrayList<JyAttach> attachList(long id) {
+
         return jyAttachRepository.attachList(id);
     }
 

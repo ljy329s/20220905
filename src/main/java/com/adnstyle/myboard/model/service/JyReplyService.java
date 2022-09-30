@@ -26,6 +26,7 @@ public class JyReplyService {
     }
 
     public List selectReplyList(long id) {
+
         return jyReplyRepository.selectReplyList(id);//게시글 번호로 조회해서 화면에 보여주기
     }
 
