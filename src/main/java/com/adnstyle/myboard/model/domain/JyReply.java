@@ -1,7 +1,9 @@
 package com.adnstyle.myboard.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.apache.ibatis.type.Alias;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -27,6 +29,8 @@ public class JyReply {
     /**
      * 댓글작성일
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")//Get으로 날짜 받을때 날짜 포맷
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")//Post로 날짜 받을때 포맷
     private LocalDateTime reCreatedDate;
 
     /**

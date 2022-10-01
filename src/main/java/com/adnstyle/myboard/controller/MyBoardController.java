@@ -68,12 +68,12 @@ public class MyBoardController {
     @GetMapping("/boardContent")
     public String myBoardContent(Model model, long id, @RequestParam("page") int page, @RequestParam("type") String type, @RequestParam("search") String search) {
         ArrayList<MyBoard> myContent = myBoardService.selectContent(id);//게시글 번호로 내용 불러오기
-        ArrayList<JyAttach> attachList = jyAttachService.attachList(id);//리플리스트 조회하기
-        List replyList = jyReplyService.selectReplyList(id);
-        System.out.println("replyList"+replyList);
+        ArrayList<JyAttach> attachList = jyAttachService.attachList(id);//첨부파일리스트 조회하기
+        //List replyList = jyReplyService.selectReplyList(id);
+        //System.out.println("replyList"+replyList);
         model.addAttribute("myContent", myContent);//게시글내용
         model.addAttribute("attachList", attachList);//첨부파일
-        model.addAttribute("replyList",replyList);//댓글리스트
+        //model.addAttribute("replyList",replyList);//댓글리스트
         model.addAttribute("page", page);//페이지
         model.addAttribute("type", type);//검색타입
         model.addAttribute("search", search);//검색내용
