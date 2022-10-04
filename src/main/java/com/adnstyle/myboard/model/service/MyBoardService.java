@@ -3,6 +3,7 @@ package com.adnstyle.myboard.model.service;
 import com.adnstyle.myboard.model.common.FileUploadYml;
 import com.adnstyle.myboard.model.domain.JyAttach;
 import com.adnstyle.myboard.model.domain.MyBoard;
+import com.adnstyle.myboard.model.repository.JyAttachRepository;
 import com.adnstyle.myboard.model.repository.MyBoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,10 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -26,10 +24,10 @@ public class MyBoardService {
 
     private final MyBoardRepository myBoardRepository;
 
+    private final JyAttachRepository jyAttachRepository;
     private final JyAttachService jyAttachService;
 
     private final FileUploadYml fileUploadYml;
-
 
     public ArrayList<MyBoard> selectList(Map searchMap) {
 
@@ -46,8 +44,7 @@ public class MyBoardService {
     }
 
     public ArrayList<MyBoard> selectContent(Long id) {
-
-        myBoardRepository.updateCount(id);
+         myBoardRepository.updateCount(id);
         return myBoardRepository.selectContent(id);
     }
 

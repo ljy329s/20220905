@@ -440,9 +440,8 @@
        //  }
 
     // 댓글조회 함수 페이징
-    function selectReplyList() {
+    function selectReplyList(page) {
         let boardBno = $("#boardBno").val();
-        let page = 1;//임의의 숫자 넣어주기
 
         $.ajax({
             url     : "/selectReplyList",
@@ -520,19 +519,22 @@
 
                         if (ph.showPrev) {
                             replyPaging += "<li class='page-item'>";
-                            replyPaging += "<button > < </button></li>";
+                            replyPaging += "<button class='page-link' onclick='selectReplyList(" + (ph.beginPage-1) + ")'> < </button></li>";
+
                         }
 
                         for(var i = ph.beginPage; i <= ph.endPage; i++){
 
-
+                        if(i==ph.page) {
+                        replyPaging += "<li class='page-item active'>";
+                        }else{
                         replyPaging += "<li class='page-item'>";
-                        replyPaging += "<button class='page-link' onclick='selectReplyList("+i+")'>"+ i +"</button>";
+                        }replyPaging += "<button class='page-link' onclick='selectReplyList("+i+")'>"+ i +"</button>";
                         replyPaging += "</li>";
                     }
                         if (ph.showNext) {
                             replyPaging += "<li class='page-item'>";
-                            replyPaging += "<button > > </button></li>";
+                            replyPaging += "<button class='page-link' onclick='selectReplyList(" + (ph.endPage+1) +")'> > </button></li>";
                         }
 
                         replyPaging += "</ul>";
