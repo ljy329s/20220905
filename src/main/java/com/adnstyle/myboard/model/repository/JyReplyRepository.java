@@ -4,6 +4,7 @@ import com.adnstyle.myboard.model.domain.JyReply;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface JyReplyRepository {
@@ -13,7 +14,7 @@ public interface JyReplyRepository {
 
     Long updateGroupBno(Long bno);
 
-    List<JyReply> selectReplyList(Long id);
+    List<JyReply> selectReplyList(Map pageMap);
 
 
     void updateOrderBno(JyReply reply);
@@ -23,4 +24,6 @@ public interface JyReplyRepository {
     void deleteReply(Long delReBno);
 
     JyReply selectReply(Long reBno);
+
+    int selectReplyCountAll(long id);
 }

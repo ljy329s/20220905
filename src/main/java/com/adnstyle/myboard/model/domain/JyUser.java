@@ -1,9 +1,13 @@
 package com.adnstyle.myboard.model.domain;
 
 import lombok.Data;
+import org.apache.ibatis.type.Alias;
+
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
+@Alias("jyUser")
 @Data
 public class JyUser {
     /**
@@ -39,7 +43,7 @@ public class JyUser {
     /**
      * 고객생년월일
      */
-    private LocalDateTime userBirth;
+    private Date userBirth;
 
     /**
      * 탈퇴여부

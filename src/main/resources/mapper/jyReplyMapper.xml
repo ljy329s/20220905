@@ -17,17 +17,31 @@
         set re_group_bno=#{bno}
         where re_bno = #{bno}
     </update>
+<!--댓글 조회 원본-->
+<!--    <select id="selectReplyList" resultType="jyReply" parameterType="long">-->
+<!-- <![CDATA[-->
+<!--        select re_bno, re_group_bno,-->
+<!--            re_content, re_created_by,-->
+<!--        re_created_date,-->
+<!--        re_modified_date,-->
+<!--        board_bno, re_del_yn, re_depth, re_order-->
+<!--        from jy_reply-->
+<!--        where board_bno=#{id}-->
+<!--        order by re_group_bno desc,re_order asc,re_depth asc-->
+<!--        ]]>-->
+<!--    </select>-->
 
-    <select id="selectReplyList" resultType="jyReply" parameterType="long">
+    <select id="selectReplyList" resultType="jyReply" parameterType="map">
  <![CDATA[
         select re_bno, re_group_bno,
-            re_content, re_created_by,
-        re_created_date,
-        re_modified_date,
-        board_bno, re_del_yn, re_depth, re_order
+               re_content, re_created_by,
+               re_created_date,
+               re_modified_date,
+               board_bno, re_del_yn, re_depth, re_order
         from jy_reply
         where board_bno=#{id}
         order by re_group_bno desc,re_order asc,re_depth asc
+        limit #{offset},#{pageSize}
         ]]>
     </select>
 
@@ -61,5 +75,12 @@
         select *
         from jy_reply
         where re_bno = #{reBno}
+    </select>
+
+<!--    해당 게시물의 댓글갯수-->
+    <select id="selectReplyCountAll" parameterType="long" resultType="int">
+        select count(*)
+        from jy_reply
+        where board_bno = #{id}
     </select>
 </mapper>

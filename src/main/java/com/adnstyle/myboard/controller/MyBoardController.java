@@ -21,10 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Controller
@@ -247,17 +244,28 @@ public class MyBoardController {
         return map;
 
     }
+//
+//    /**
+//     * 댓글조회 원본
+//     */
+//    @GetMapping("/selectReplyList")
+//    @ResponseBody
+//    public List<JyReply> selectReplyList(@RequestParam(value = "boardBno") Long boardBno){
+//
+//        List replyList = jyReplyService.selectReplyList(boardBno);
+//
+//        return replyList;
+//
+//    }
+
 
     /**
      * 댓글조회
      */
-    @PostMapping("/selectReplyList")
+    @GetMapping("/selectReplyList")
     @ResponseBody
-    public List<JyReply> selectReplyList(@RequestParam(value = "boardBno") Long boardBno){
-
-        List replyList = jyReplyService.selectReplyList(boardBno);
-
-        return replyList;
+    public Map<String,Object> selectReplyList(@RequestParam(value = "boardBno") Long boardBno, @RequestParam(value = "page", defaultValue = "1") int page){
+      return jyReplyService.selectReplyList(boardBno ,page);
 
     }
 }
