@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+  <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <script src="../js/jquery-3.6.1.min.js"></script>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>회원가입</title>
+</head>
+<body>
+<div class="container">
+  <form method="post" id="newMember" action="/newUserInsert">
+    <div class="form-group">
+      <label for="userId">아이디</label>
+      <input type="text" class="form-control" name="userId" id="userId" placeholder="사용자 아이디">
+    </div>
+    <div class="form-group">
+      <label for="userPw">비밀번호</label>
+      <input type="password" class="form-control" name="userPw" id="userPw" placeholder="사용자 비밀번호">
+    </div>
+    <div class="form-group">
+      <label for="userName">이름</label>
+      <input type="text" class="form-control" name="userName" id="userName" placeholder="사용자 이름">
+    </div>
+    <div class="form-group">
+      <label for="userPhone">휴대전화</label>
+      <input type="text" class="form-control" name="userPhone" id="userPhone" placeholder="사용자 휴대전화">
+    </div>
+    <div class="form-group">
+      <label for="userEmail">이메일</label>
+      <input type="text" class="form-control" name="userEmail" id="userEmail" placeholder="사용자 이메일">
+    </div>
+    <div class="form-group">
+      <label for="userBirth">생년월일</label>
+      <input type="text" class="form-control" name="userBirth" id="userBirth" placeholder="사용자 생년월일">
+    </div>
+    <button type="submit" class="btn btn-primary">가입하기</button>
+  </form>
+</div>
+</body>
+</html>
