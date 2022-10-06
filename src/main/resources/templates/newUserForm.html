@@ -1,41 +1,133 @@
 <!DOCTYPE html>
-<html xmlns:th="http://thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/html">
 <head>
-  <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-  <script src="../js/jquery-3.6.1.min.js"></script>
-  <meta charset="UTF-8">
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <script src="../js/jquery-3.6.1.min.js"></script>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>회원가입</title>
 </head>
 <body>
 <div class="container">
-  <form method="post" id="newMember" action="/insertNewUser">
-    <div class="form-group">
-      <label for="userId">아이디</label>
-      <input type="text" class="form-control" name="userId" id="userId" placeholder="사용자 아이디">
-    </div>
-    <div class="form-group">
-      <label for="userPw">비밀번호</label>
-      <input type="password" class="form-control" name="userPw" id="userPw" placeholder="사용자 비밀번호">
-    </div>
-    <div class="form-group">
-      <label for="userName">이름</label>
-      <input type="text" class="form-control" name="userName" id="userName" placeholder="사용자 이름">
-    </div>
-    <div class="form-group">
-      <label for="userPhone">휴대전화</label>
-      <input type="text" class="form-control" name="userPhone" id="userPhone" placeholder="사용자 휴대전화">
-    </div>
-    <div class="form-group">
-      <label for="userEmail">이메일</label>
-      <input type="text" class="form-control" name="userEmail" id="userEmail" placeholder="사용자 이메일">
-    </div>
-    <div class="form-group">
-      <label for="userBirth">생년월일</label>
-      <input type="text" class="form-control" name="userBirth" id="userBirth" placeholder="사용자 생년월일">
-    </div>
-    <button type="submit" class="btn btn-primary">가입하기</button>
-  </form>
+    <form method="post" id="newMember" action="/insertNewUser">
+        <div class="form-group">
+            <label for="userId">아이디</label>
+            <input type="text" class="form-control" name="userId" id="userId" placeholder="사용자 아이디 10자리 이내" minlength="5" maxlength="10">
+            <button type="button" id="checkId">중복확인</button>
+        </div>
+
+        <div class="form-group">
+            <label for="userPw">비밀번호</label>
+            <input type="password" class="form-control" name="userPw" id="userPw" placeholder="사용자 비밀번호 20자리 이내" minlength="8" maxlength="20">
+        </div>
+        <span id="pwSpan" > </span>
+        <div class="form-group">
+            <label for="userPw">비밀번호 재확인</label>
+            <input type="password" class="form-control" name="userPw" id="userPwCk" placeholder="사용자 비밀번호 재확인" minlength="8" maxlength="20">
+        </div>
+        <span id="pwCkSpan" > </span>
+        <div class="form-group">
+            <label for="userName">이름</label>
+            <input type="text" class="form-control" name="userName" id="userName" placeholder="사용자 이름" maxlength="20">
+        </div>
+        <div class="form-group">
+            <label for="userPhone">휴대전화</label>
+            <input type="text" class="form-control" name="userPhone" id="userPhone" placeholder="사용자 휴대전화">
+        </div>
+        <div class="form-group">
+            <label for="userEmail">이메일</label>
+            <input type="email" class="form-control" name="userEmail" id="userEmail" placeholder="사용자 이메일">
+        </div>
+        <div class="form-group">
+            <label for="userBirth">생년월일</label>
+            <input type="date" class="form-control" name="userBirth" id="userBirth" placeholder="사용자 생년월일">
+        </div>
+        <button type="submit" class="btn btn-primary" id="newUserSub">회원가입</button>
+    </form>
 </div>
+
+<!--아이디 중복체크 ajax-->
 </body>
+<script>
+<!--전역변수-->
+    // let Id = $("#userId").val();
+    // let userPw_ = $("#userPw_").val();
+    // let userPwck_ = $("#userPwck_").val();
+    // let userEmail_ = $("#userEmail").val();
+
+    $("#checkId").click(function () {//중복확인
+         let userId = $("#userId").val();
+         alert("버튼클릭");
+         checkId(userId);
+     });
+
+    function checkId(userId) {
+        if (5 > userId.length) {
+            alert("아이디는 5글자이상 작성해주세요")
+            return;
+        } else {//아이디 5글자 넘을때 중복확인
+            $.ajax({
+                url    : "/checkId",
+                data   : {"userId": userId},
+                type   : "post",
+                success: function (no) {
+                    if (no > 0) {
+                        alert("중복된 아이디입니다.")
+                        $("#newUserSub").attr("disabled", true)
+
+                    } else {
+                        alert("사용가능한 아이디입니다.")
+                        $("#newUserSub").attr("disabled", false)
+                    }
+
+                }, error() {
+                    alert("아이디 중복체크 통신 에러")
+                }
+            });
+        };
+    }
+
+
+
+//비밀번호 정규식 확인 함수
+   $("#userPw").focusout(function(){
+       //비밀번호 정규식 최소8글자, 하나이상의 문자, 하나이상의 숫자, 하나의 특수문자
+       let reg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/ ;
+
+       let userPw = $("#userPw").val();
+       if(!userPw.match(reg)){//정규식여부와 일치하지 않는다면
+           $("#pwSpan").html("비밀번호 조건을 다시 확인해주세요 (8글자이상 +문자하나이상, 숫자하나이상, 특수문자 하나이상)");
+           $("#pwSpan").css('color','red');
+
+       }else if(userPw.match(reg)){
+           $("#pwSpan").html("비밀번호 조건 확인");
+           $("#pwSpan").css('color','black')
+
+       }
+   });
+
+    $("#userPwCk").focusout(function() {
+    let userPwCk = $("#userPwCk").val();
+    let userPw =$("#userPw").val();
+
+    if(userPw != userPwCk){//비밀번호 재확인시 다르다면
+    $("#pwCkSpan").html("다시 재확인 해주세요")
+    }
+
+    });
+    // $("#newUserSub").click(function (){//회원가입버튼 클릭시
+    //     let userId = $("#userId").val();
+    //     alert("버튼클릭");
+    //     checkId(userId);
+    // });
+
+
+
+
+
+
+
+
+
+</script>
 </html>

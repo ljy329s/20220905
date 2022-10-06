@@ -4,8 +4,8 @@ import lombok.Data;
 import org.apache.ibatis.type.Alias;
 
 
+import java.sql.Date;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Alias("jyUser")
 @Data

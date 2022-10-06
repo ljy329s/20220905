@@ -244,20 +244,6 @@ public class MyBoardController {
         return map;
 
     }
-//
-//    /**
-//     * 댓글조회 원본
-//     */
-//    @GetMapping("/selectReplyList")
-//    @ResponseBody
-//    public List<JyReply> selectReplyList(@RequestParam(value = "boardBno") Long boardBno){
-//
-//        List replyList = jyReplyService.selectReplyList(boardBno);
-//
-//        return replyList;
-//
-//    }
-
 
     /**
      * 댓글조회
@@ -265,6 +251,7 @@ public class MyBoardController {
     @GetMapping("/selectReplyList")
     @ResponseBody
     public Map<String,Object> selectReplyList(@RequestParam(value = "boardBno") Long boardBno, @RequestParam(value = "page", defaultValue = "1") int page){
+
       return jyReplyService.selectReplyList(boardBno ,page);
 
     }
