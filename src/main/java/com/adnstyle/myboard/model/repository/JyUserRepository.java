@@ -8,4 +8,8 @@ public interface JyUserRepository {
        void insertNewUser(JyUser jyUser);
 
        int checkId(String userId);
+
+       int checkEmail(String userEmail);
+
+       String selectUser(String userId);
 }

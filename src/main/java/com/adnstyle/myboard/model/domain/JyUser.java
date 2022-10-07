@@ -3,8 +3,6 @@ package com.adnstyle.myboard.model.domain;
 import lombok.Data;
 import org.apache.ibatis.type.Alias;
 
-
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Alias("jyUser")
@@ -43,7 +41,7 @@ public class JyUser {
     /**
      * 고객생년월일
      */
-    private Date userBirth;
+    private LocalDateTime userBirth;
 
     /**
      * 탈퇴여부

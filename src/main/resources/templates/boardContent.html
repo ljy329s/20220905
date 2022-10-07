@@ -82,6 +82,7 @@
         .delReplyTr{
             text-align: center;
         }
+
     </style>
     <body>
     <div>
@@ -163,7 +164,7 @@
 <!--                            </td>-->
 
 <!--                            <th:block th:if="${replyList.reDepth}==0">-->
-<!--                                <td th:text="${replyList.reContent}"/>-->
+<!--                                <td th:text="${replyList.reContent}" />-->
 <!--                                </td>-->
 <!--                            </th:block>-->
 <!--                            <th:block th:if="${replyList.reDepth}==1">-->
@@ -390,7 +391,14 @@
 
                         $("#replyList").html('');//기존목록 가리기
 
-                    let newReplyList= "<table class= ' table '>"
+                    let newReplyList= "<table class= ' table ' style='table-layout: fixed'>"
+                    newReplyList+="<tr>";
+                    newReplyList+="<th style = 'width: 20%'>작성자</th>";
+                    newReplyList+="<th style = 'width: 40%'>댓글</th>";
+                    newReplyList+="<th style = 'width: 20%'>작성일</th>";
+                    newReplyList+="<th style = 'width: 20%'></th>";
+                    newReplyList+="</tr>";
+
                     $.each(replyList,function (index,reply){
                         console.log("reBno"+reply.reBno);
                         console.log("reContent"+reply.reContent);

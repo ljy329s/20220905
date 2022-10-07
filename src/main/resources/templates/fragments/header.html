@@ -3,12 +3,30 @@
 <th:block th:fragment="headerFragment">
 <style>
     #header{
-        height: 150px;
+        height: 120px;
         background-color: #85cdff;
     }
 </style>
     <header>
-    <div id="header"/>
+    <div id="header">
+        <div id="logo">
+            <h2>제목혹은 아이콘이 들어갈곳</h2>
+        </div>
+     </div>
+        <ul class="nav nav-pills nav-fill">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">미정</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">문의하기</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">자유게시판</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">마이페이지</a>
+            </li>
+        </ul>
   </header>
 </th:block>
 </html>
