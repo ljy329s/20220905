@@ -9,38 +9,38 @@
 </head>
 <body>
 <div class="container">
-    <form method="post" id="newMember" action="/insertNewUser">
+    <form method="post" id="newMember" action="/join">
         <div class="form-group">
-            <label for="userId">아이디</label>
+            <label for="userId">* 아이디</label>
             <input type="text" class="form-control" name="userId" id="userId" placeholder="사용자 아이디 10자리 이내"
-                   minlength="5" maxlength="10">
+                   minlength="5" maxlength="10" required="required">
             <button type="button" id="checkId">중복확인</button>
         </div>
         <span id="idSpan"> </span>
 
         <div class="form-group">
-            <label for="userPw">비밀번호</label>
+            <label for="userPw">* 비밀번호</label>
             <input type="password" class="form-control" name="userPw" id="userPw" placeholder="사용자 비밀번호 20자리 이내"
-                   minlength="8" maxlength="20">
+                   minlength="8" maxlength="20" required="required">
         </div>
         <span id="pwSpan"> </span>
         <div class="form-group">
-            <label for="userPwCk">비밀번호 재확인</label>
+            <label for="userPwCk">* 비밀번호 재확인</label>
             <input type="password" class="form-control" id="userPwCk" placeholder="사용자 비밀번호 재확인"
-                   minlength="8" maxlength="20">
+                   minlength="8" maxlength="20" required="required">
         </div>
         <span id="pwCkSpan"> </span>
         <div class="form-group">
-            <label for="userName">이름</label>
-            <input type="text" class="form-control" name="userName" id="userName" placeholder="사용자 이름" maxlength="20">
+            <label for="userName">* 이름</label>
+            <input type="text" class="form-control" name="userName" id="userName" placeholder="사용자 이름" maxlength="20" required="required">
         </div>
         <div class="form-group">
             <label for="userPhone">휴대전화</label>
             <input type="text" class="form-control" name="userPhone" id="userPhone" placeholder="사용자 휴대전화">
         </div>
         <div class="form-group">
-            <label for="userEmail">이메일</label>
-            <input type="text" class="form-control" name="userEmail" id="userEmail" placeholder="사용자 이메일">
+            <label for="userEmail">* 이메일</label>
+            <input type="text" class="form-control" name="userEmail" id="userEmail" placeholder="사용자 이메일" required="required">
         </div>
         <span id="emailSpan"> </span>
         <div class="form-group">
@@ -67,9 +67,9 @@
             return;
         } else {//아이디 5글자 넘을때 중복확인
             $.ajax({
-                url    : "/checkId",
-                data   : {"userId": userId},
-                type   : "post",
+                url: "/checkId",
+                data: {"userId": userId},
+                type: "post",
                 success: function (no) {
                     if (no > 0) {
                         alert("중복된 아이디입니다.")
@@ -99,44 +99,45 @@
         let userPw = $("#userPw").val();
         checkPw(userPw);
     });
-        function checkPw(userPw) {
 
-            //비밀번호 정규식 최소8글자, 하나이상의 문자, 하나이상의 숫자, 하나의 특수문자
-            let regPw = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
+    function checkPw(userPw) {
 
-            if (!userPw.match(regPw)) {//정규식여부와 일치하지 않는다면
-                $("#pwSpan").html("비밀번호 조건을 다시 확인해주세요 (8글자이상 +문자하나이상, 숫자하나이상, 특수문자 하나이상)");
-                $("#pwSpan").css('color', 'red');
-                $("#newUserSub").attr("disabled", true)
-                let pwCk = 1;
-                return pwCk;
+        //비밀번호 정규식 최소8글자, 하나이상의 문자, 하나이상의 숫자, 하나의 특수문자
+        let regPw = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
 
-            } else if (userPw.match(regPw)) {
-                $("#pwSpan").html("사용가능한 비밀번호");
-                $("#pwSpan").css('color', 'black')
-                $("#newUserSub").attr("disabled", false)
+        if (!userPw.match(regPw)) {//정규식여부와 일치하지 않는다면
+            $("#pwSpan").html("비밀번호 조건을 다시 확인해주세요 (8글자이상 +문자하나이상, 숫자하나이상, 특수문자 하나이상)");
+            $("#pwSpan").css('color', 'red');
+            $("#newUserSub").attr("disabled", true)
+            return;
 
-            }
+        } else if (userPw.match(regPw)) {
+            $("#pwSpan").html("사용가능한 비밀번호");
+            $("#pwSpan").css('color', 'black')
+            $("#newUserSub").attr("disabled", false)
+
         }
+    }
 
+    $("#userPwCk").keyup(function () {
+        let userPwCk = $("#userPwCk").val();
+        let userPw = $("#userPw").val();
+        matchPw(userPw, userPwCk)
+    });
 
     function matchPw(userPw, userPwCk) {
-        $("#userPwCk").keyup(function () {
-            let userPwCk = $("#userPwCk").val();
-            let userPw = $("#userPw").val();
 
-            if (userPw != userPwCk) {//비밀번호 재확인시 다르다면
-                $("#pwCkSpan").html("비밀번호 불일치")
-                $("#pwCkSpan").css('color', 'red');
-                $("#newUserSub").attr("disabled", true)
-                return;
-            } else {
-                $("#pwCkSpan").html("비밀번호 일치")
-                $("#pwCkSpan").css('color', 'black');
-                $("#newUserSub").attr("disabled", false)
+        if (userPw != userPwCk) {//비밀번호 재확인시 다르다면
+            $("#pwCkSpan").html("비밀번호 불일치")
+            $("#pwCkSpan").css('color', 'red');
+            $("#newUserSub").attr("disabled", true)
+            return;
+        } else {
+            $("#pwCkSpan").html("비밀번호 일치")
+            $("#pwCkSpan").css('color', 'black');
+            $("#newUserSub").attr("disabled", false)
 
-            }
-        });
+        }
     };
 
 
@@ -154,53 +155,54 @@
             $("#newUserSub").attr("disabled", true);
             return;
         }
-            $.ajax({
-                url    : "/checkEmail",
-                type   : "post",
-                data   : {"userEmail": userEmail},
-                success: function (no) {
-                    if (no > 0) {
-                        $("#emailSpan").html("이미 사용중인 이메일 입니다.");
-                        $("#emailSpan").css('color', 'red');
-                        $("#newUserSub").attr("disabled", true);
-                        return;
-                    } else {
-                        $("#emailSpan").html("사용 가능한 이메일 입니다.");
-                        $("#emailSpan").css('color', 'black');
-                        $("#newUserSub").attr("disabled", false);
-                    }
+        $.ajax({
+            url: "/checkEmail",
+            type: "post",
+            data: {"userEmail": userEmail},
+            success: function (no) {
+                if (no > 0) {
+                    $("#emailSpan").html("이미 사용중인 이메일 입니다.");
+                    $("#emailSpan").css('color', 'red');
+                    $("#newUserSub").attr("disabled", true);
+                    return;
+                } else {
+                    $("#emailSpan").html("사용 가능한 이메일 입니다.");
+                    $("#emailSpan").css('color', 'black');
+                    $("#newUserSub").attr("disabled", false);
                 }
-            })
+            }
+        })
     };
 
 
-    $("#newUserSub").click(function() {//회원가입버튼 클릭시 모든 조건 확인후 전송
+    $("#newUserSub").click(function () {//회원가입버튼 클릭시 모든 조건 확인후 전송
+
         let userId = $("#userId").val();
         let userPw = $("#userPw").val();
         let userPwCk = $("#userPwCk").val();
         let userEmail = $("#userEmail").val();
 
-        check(userId,userPw,userPwCk,userEmail)
+        check(userId, userPw, userPwCk, userEmail)
 
 //값 다 적혀있는지 확인
-        function check(userId,userPw,userPwCk,userEmail) {
+        function check(userId, userPw, userPwCk, userEmail) {
             if (userId == "" || userId == null) {
-                alert("아이디를 입력해주세요1");
+                alert("아이디를 입력해주세요");
                 $("#userId").focus();
                 return;
             }
             if (userPw == "" || userPw == null) {
-                alert("비밀번호를 입력해주세요1");
+                alert("비밀번호를 입력해주세요");
                 $("#userPw").focus();
                 return;
             }
             if (userPwCk == null || userPwCk == '' || userPw != userPwCk) {
-                alert("비밀번호를 재확인해주세요!");
+                alert("비밀번호를 재확인해주세요");
                 $("#userPwCk").focus();
                 return;
             }
             if (userEmail == null || userEmail == '') {
-                alert("이메일을 입력해주세요1");
+                alert("이메일을 입력해주세요");
                 $("#userEmail").focus();
                 return;
             }
@@ -211,13 +213,18 @@
             checkPw(userPw);
             matchPw(userPw, userPwCk);
             checkEmail(userEmail);
-        }
-        let newUserSub = $("#newUserSub");
-        if (newUserSub.disabled != true){//전송버튼이 잠기지 않았다면
-            $("#newUserSub").submit();//전송하겠다.
+
+            let newUserSub = $("#newUserSub");
+            if (!newUserSub.disabled) {//전송버튼이 잠기지 않았다면
+                alert("전송버튼 안잠겼으면 전송되라 제발ㅠ");
+                $("#newMember").submit();
+
+            } else {
+                alert("회원가입정보를 다시 확인 해주세요");
+                return;
+            }
         }
     });
-
 
 </script>
 </html>

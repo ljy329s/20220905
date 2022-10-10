@@ -2,8 +2,10 @@ package com.adnstyle.myboard.model.domain;
 
 import lombok.Data;
 import org.apache.ibatis.type.Alias;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Alias("jyUser")
 @Data
@@ -41,7 +43,10 @@ public class JyUser {
     /**
      * 고객생년월일
      */
-    private LocalDateTime userBirth;
+    //input type date로 넘어온값은 string이라 date로 저장하려니 에러남
+            //데이트타입포맷 꼭 해주장..  vo date, db date로 해줌
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date userBirth;
 
     /**
      * 탈퇴여부

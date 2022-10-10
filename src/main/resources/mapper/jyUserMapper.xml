@@ -3,8 +3,8 @@
 <mapper namespace="com.adnstyle.myboard.model.repository.JyUserRepository">
 
     <insert id="insertNewUser" parameterType="jyUser">
-        insert into jy_user( user_id , user_pw, user_name , user_phone, user_email, user_birth, reg_date)
-        values (#{userId},#{userPw},#{userName},#{userPhone},#{userEmail},#{userBirth}, NOW())
+        insert into jy_user( user_id , user_pw, user_name , user_phone, user_email, user_birth,role,reg_date)
+        values (#{userId},#{userPw},#{userName},#{userPhone},#{userEmail},#{userBirth},#{role}, NOW())
     </insert>
 
     <select id="checkId" parameterType="string" resultType="int">
@@ -19,8 +19,8 @@
         where user_email = #{userEmail}
     </select>
 
-    <select id="selectUser" parameterType="string" resultType="String">
-        select user_pw
+    <select id="selectUser" parameterType="string" resultType="jyUser">
+        select *
         from jy_user
         where user_id = #{userId}
         and del_yn ='N'

@@ -11,5 +11,5 @@ public interface JyUserRepository {
 
        int checkEmail(String userEmail);
 
-       String selectUser(String userId);
+       JyUser selectUser(String userId);
 }
