@@ -4,7 +4,7 @@ import com.adnstyle.myboard.model.common.FileUploadYml;
 import com.adnstyle.myboard.model.domain.JyAttach;
 import com.adnstyle.myboard.model.domain.MyBoard;
 import com.adnstyle.myboard.model.repository.JyAttachRepository;
-import com.adnstyle.myboard.model.repository.MyBoardRepository;
+import com.adnstyle.myboard.model.repository.JyBoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,11 +18,11 @@ import java.util.*;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class MyBoardService {
+public class JyBoardService {
 
 
 
-    private final MyBoardRepository myBoardRepository;
+    private final JyBoardRepository jyBoardRepository;
 
     private final JyAttachRepository jyAttachRepository;
     private final JyAttachService jyAttachService;
@@ -31,26 +31,26 @@ public class MyBoardService {
 
     public ArrayList<MyBoard> selectList(Map searchMap) {
 
-        return myBoardRepository.selectList(searchMap);
+        return jyBoardRepository.selectList(searchMap);
 
     }
 
     public int countAll(Map searchMap) {
-        return myBoardRepository.countAll(searchMap);
+        return jyBoardRepository.countAll(searchMap);
     }
 
     public ArrayList<MyBoard> myBoardPage(Map pageMap) {
-        return myBoardRepository.myBoardPage(pageMap);
+        return jyBoardRepository.myBoardPage(pageMap);
     }
 
     public ArrayList<MyBoard> selectContent(Long id) {
-         myBoardRepository.updateCount(id);
-        return myBoardRepository.selectContent(id);
+         jyBoardRepository.updateCount(id);
+        return jyBoardRepository.selectContent(id);
     }
 
     @Transactional
     public void deleteContent(long id) {
-        int num = myBoardRepository.deleteContent(id);
+        int num = jyBoardRepository.deleteContent(id);
 
         if (num > 0) {
             ArrayList<JyAttach> attachList = jyAttachService.attachList(id);
@@ -68,12 +68,12 @@ public class MyBoardService {
         long id = 0;//등록한 글번호
 
         if(board.getGroupBno()==null){//일반게시글등록시
-            myBoardRepository.insertContent(board);//게시글등록
-            id = myBoardRepository.selectId();//등록한 게시글 번호 가져오기
-            myBoardRepository.updateGroupBno(id);//글 등록후 불러와서 그룹번호 업데이트 해줄예정
+            jyBoardRepository.insertContent(board);//게시글등록
+            id = jyBoardRepository.selectId();//등록한 게시글 번호 가져오기
+            jyBoardRepository.updateGroupBno(id);//글 등록후 불러와서 그룹번호 업데이트 해줄예정
         }else{//답글등록시(그룹번호있으니)
-            myBoardRepository.insertAnswer(board);//답글등록
-            id = myBoardRepository.selectId();//등록한 게시글 번호 가져오기 첨부파일등록할때..
+            jyBoardRepository.insertAnswer(board);//답글등록
+            id = jyBoardRepository.selectId();//등록한 게시글 번호 가져오기 첨부파일등록할때..
         }
         String originUploadFileName = "";
         String changeUploadFileName = "";
@@ -132,7 +132,7 @@ public class MyBoardService {
     @Transactional
     public void updateContent(MyBoard board, MultipartFile[] uploadFile) {
 
-        myBoardRepository.updateContent(board);
+        jyBoardRepository.updateContent(board);
 
         String originUploadFileName = "";
         String changeUploadFileName = "";
@@ -195,7 +195,7 @@ public class MyBoardService {
 
     @Transactional
     public void deleteAnswer(Long id) {
-        int num = myBoardRepository.deleteAnswer(id);
+        int num = jyBoardRepository.deleteAnswer(id);
             if (num > 0) {
                 ArrayList<JyAttach> attachList = jyAttachService.attachList(id);
                 int no = jyAttachService.deleteFiles(attachList);//실제파일 삭제

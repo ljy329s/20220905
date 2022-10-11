@@ -4,6 +4,7 @@
       layout:decorate="~{layout/default_layout}">
 <head>
     <meta charset="utf-8">
+    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="../js/jquery-3.6.1.min.js"></script>
     <title>게시글 읽기</title>
@@ -125,7 +126,7 @@
                         <button type="submit" class="btn btn-primary" id="upd_sub" style="display: none">수정완료</button>
                         <!--                        관리자일 경우에만 답변달기 버튼이 보이도록 수정하기! 게시글 번호 가지고 이동-->
                         <button type="button" id="main_btn" class="btn btn-primary"
-                                th:onclick="|location.href='@{/(page=${page},type=${type},search=${search})}'|">목록
+                                th:onclick="|location.href='@{/user/list(page=${page},type=${type},search=${search})}'|">목록
                         </button>
                         <button type="button" id="del_btn" class="btn btn-primary"
                                 th:onclick="|location.href='@{deleteContent(id=${myContent.id})}'|">삭제
@@ -158,52 +159,7 @@
                 </div>
                 <label>댓글목록</label>
                 <div id="replyList">
-<!--                    <table class="table">-->
-<!--                        <tr th:each="replyList : ${replyList}">-->
-<!--                            <td th:text="${replyList.reCreatedBy}"/>-->
-<!--                            </td>-->
 
-<!--                            <th:block th:if="${replyList.reDepth}==0">-->
-<!--                                <td th:text="${replyList.reContent}" />-->
-<!--                                </td>-->
-<!--                            </th:block>-->
-<!--                            <th:block th:if="${replyList.reDepth}==1">-->
-<!--                                <td th:text="'&nbsp&nbsp'+'L'+${replyList.reContent}"/>-->
-<!--                                </td>-->
-<!--                            </th:block>-->
-<!--                            <th:block th:if="${replyList.reDepth}==2">-->
-<!--                                <td th:text="'&nbsp&nbsp&nbsp&nbsp'+'L'+${replyList.reContent}"/>-->
-<!--                                </td>-->
-<!--                            </th:block>-->
-<!--                            <th:block th:if="${replyList.reDepth}==3">-->
-<!--                                <td th:text="'&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'+'L'+${replyList.reContent}"/>-->
-<!--                                </td>-->
-<!--                            </th:block>-->
-<!--                            <th:block th:if="${replyList.reDepth} > 3">-->
-<!--                                <td th:text="'&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp'+'L'+${replyList.reContent}"/>-->
-<!--                                </td>-->
-<!--                            </th:block>-->
-<!--                            <td th:text="${#temporals.format(replyList.reModifiedDate,'yyyy-MM-dd HH:mm')}"/>-->
-<!--                            </td>-->
-<!--                            <td>-->
-<!--                                <div>-->
-<!--                                    <input type="hidden" th:value="${replyList.reBno}" id="reBno" class="reBno">-->
-<!--                                    <button type="button" class="reply_del_btn btn btn-primary" id="reply_del_btn"-->
-<!--                                            th:value="${replyList.reBno}">삭제-->
-<!--                                    </button>-->
-
-<!--                                    <button type="button" id="childReV" class="btn btn-primary childReV"-->
-<!--                                            data-bs-toggle="modal"-->
-<!--                                            data-bs-target="#staticBackdrop"-->
-<!--                                            th:attr="data-rebno=${replyList.reBno}, data-reOrder=${replyList.reOrder},-->
-<!--                                            data-reDepth=${replyList.reDepth}, data-reCreatedBy=${replyList.reCreatedBy},-->
-<!--                                            data-reGroupBno=${replyList.reGroupBno}, data-boardBno=${replyList.boardBno}">-->
-<!--                                        대댓글달기-->
-<!--                                    </button>-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                        </tr>-->
-<!--                    </table>-->
                 </div>
 
                 <div id="replyPaging">
@@ -366,11 +322,15 @@
             });
         });
 
+        /*beforeSend : function(xhr)
+    {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+      /*  xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
+    },
+    */
 
     // 댓글조회 함수 페이징
     function selectReplyList(page) {
         let boardBno = $("#boardBno").val();
-
         $.ajax({
             url     : "/selectReplyList",
             type    : 'GET',
@@ -489,24 +449,24 @@
 
 
         // 체크박스 클릭시 취소선 생기게하기ㅜㅜㅜㅜㅜ
-        let ul = document.querySelector('ul');
-
-        const checkClick = (i) => {
-
-            if (ul.children[i].querySelector('span').style.textDecorationLine === "line-through") {
-                ul.children[i].querySelector('span').style.textDecorationLine = '';
-            } else {
-                ul.children[i].querySelector('span').style.textDecorationLine = "line-through";
-            }
-        }
-
-        if (ul) {
-            for (let i = 0; i < ul.childElementCount; i++) {
-                //  ul.children[i].querySelector('input').value = i;
-                ul.children[i].querySelector('input').setAttribute('onClick', `checkClick(${i})`);
-
-            }
-        }
+        // let ul = document.querySelector('ul');
+        //
+        // const checkClick = (i) => {
+        //
+        //     if (ul.children[i].querySelector('span').style.textDecorationLine === "line-through") {
+        //         ul.children[i].querySelector('span').style.textDecorationLine = '';
+        //     } else {
+        //         ul.children[i].querySelector('span').style.textDecorationLine = "line-through";
+        //     }
+        // }
+        //
+        // if (ul) {
+        //     for (let i = 0; i < ul.childElementCount; i++) {
+        //         //  ul.children[i].querySelector('input').value = i;
+        //         ul.children[i].querySelector('input').setAttribute('onClick', 'checkClick(${i})');
+        //
+        //     }
+        // }
 
 
         //수정버튼 클릭시 upd_btnE 함수를 실행해라

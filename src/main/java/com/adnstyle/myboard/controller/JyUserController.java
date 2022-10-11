@@ -84,7 +84,7 @@ public class JyUserController {
 
     //시큐리티연습
     //@Secured 한개의 권한줄때 사용
-    @Secured("ROLE_ADMIN")//간단하게 권한걸수있다.
+    @Secured("ROLE_USER")//간단하게 권한걸수있다.
     @GetMapping("/info")
     public @ResponseBody String info(){
         return "개인정보:";

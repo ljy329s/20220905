@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 @Mapper
-public interface MyBoardRepository {
+public interface JyBoardRepository {
 
     /**
      * 관리자가 볼 게시판 리스트

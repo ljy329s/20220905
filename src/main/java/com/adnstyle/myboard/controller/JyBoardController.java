@@ -5,8 +5,8 @@ import com.adnstyle.myboard.model.domain.JyReply;
 import com.adnstyle.myboard.model.domain.MyBoard;
 import com.adnstyle.myboard.model.domain.PageHandle;
 import com.adnstyle.myboard.model.service.JyAttachService;
+import com.adnstyle.myboard.model.service.JyBoardService;
 import com.adnstyle.myboard.model.service.JyReplyService;
-import com.adnstyle.myboard.model.service.MyBoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResource;
@@ -21,14 +21,18 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.UnsupportedEncodingException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-public class MyBoardController {
+@RequestMapping("/user")//로그인한 사람들만 접근할수있게
+public class JyBoardController {
 
-    private final MyBoardService myBoardService;
+    private final JyBoardService jyBoardService;
 
     private final JyAttachService jyAttachService;
 
@@ -37,18 +41,18 @@ public class MyBoardController {
     /**
      * 전체 게시글 리스트+페이징처리+검색처리
      */
-    @GetMapping("/")
+    @GetMapping("/list")
     public String myBoardList(Model model, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "type", defaultValue = "A") String type, @RequestParam(value = "search", defaultValue = "") String search) {
         Map searchMap = new HashMap();
         searchMap.put("type", type);
         searchMap.put("search", search);
-        int totalCnt = myBoardService.countAll(searchMap);
+        int totalCnt = jyBoardService.countAll(searchMap);
         PageHandle ph = new PageHandle(totalCnt, page);
 
         searchMap.put("offset", ((page - 1) * ph.getPageSize()));
         searchMap.put("pageSize",ph.getPageSize());
 
-        ArrayList<MyBoard> myBoardList = myBoardService.selectList(searchMap);//게시글리스트 조회용
+        ArrayList<MyBoard> myBoardList = jyBoardService.selectList(searchMap);//게시글리스트 조회용
 
         model.addAttribute("myBoardList", myBoardList);
         model.addAttribute("ph", ph);
@@ -64,13 +68,12 @@ public class MyBoardController {
      */
     @GetMapping("/boardContent")
     public String myBoardContent(Model model, long id, @RequestParam("page") int page, @RequestParam("type") String type, @RequestParam("search") String search) {
-        ArrayList<MyBoard> myContent = myBoardService.selectContent(id);//게시글 번호로 내용 불러오기
+        ArrayList<MyBoard> myContent = jyBoardService.selectContent(id);//게시글 번호로 내용 불러오기
         ArrayList<JyAttach> attachList = jyAttachService.attachList(id);//첨부파일리스트 조회하기
-        //List replyList = jyReplyService.selectReplyList(id);
-        //System.out.println("replyList"+replyList);
+
         model.addAttribute("myContent", myContent);//게시글내용
         model.addAttribute("attachList", attachList);//첨부파일
-        //model.addAttribute("replyList",replyList);//댓글리스트
+
         model.addAttribute("page", page);//페이지
         model.addAttribute("type", type);//검색타입
         model.addAttribute("search", search);//검색내용
@@ -90,7 +93,7 @@ public class MyBoardController {
      */
     @GetMapping("/deleteContent")
     public String myBoardContentDelete(long id) {
-        myBoardService.deleteContent(id);//게시물 삭제 결과가 있다면
+        jyBoardService.deleteContent(id);//게시물 삭제 결과가 있다면
 
         return "redirect:/";
     }
@@ -109,7 +112,7 @@ public class MyBoardController {
      */
     @PostMapping("/insertContent")
     public String myBoardInsertContent(MultipartFile[] uploadFile, MyBoard board) {
-        myBoardService.insertContent(board, uploadFile);
+        jyBoardService.insertContent(board, uploadFile);
 
         return "redirect:/";
     }
@@ -148,7 +151,7 @@ public class MyBoardController {
             }
             jyAttachService.deleteOnlyAttach(attFileList);//첨부파일삭제
         }
-        myBoardService.updateContent(board, uploadFile);//게시글수정
+        jyBoardService.updateContent(board, uploadFile);//게시글수정
 
         return "redirect:/";
     }
@@ -167,7 +170,7 @@ public class MyBoardController {
      */
     @PostMapping("/insertAnswer")
     public String insertAnswer(MultipartFile[] uploadFile, MyBoard board) {
-        myBoardService.insertContent(board, uploadFile);{
+        jyBoardService.insertContent(board, uploadFile);{
             return "redirect:/";
         }
     }
@@ -178,7 +181,7 @@ public class MyBoardController {
         @GetMapping("/answerContent")
         public String answerContent(Model model,long id, @RequestParam("page") int page, @RequestParam("type") String type, @RequestParam("search") String search){
             System.out.println("답변상세조회 컨트롤러");
-            ArrayList<MyBoard> myAnswerContent = myBoardService.selectContent(id);//게시글 번호로 내용 불러오기
+            ArrayList<MyBoard> myAnswerContent = jyBoardService.selectContent(id);//게시글 번호로 내용 불러오기
             ArrayList<JyAttach> attachList = jyAttachService.attachList(id);
             model.addAttribute("myAnswerContent", myAnswerContent);//게시글내용
             model.addAttribute("attachList", attachList);//첨부파일
@@ -197,7 +200,7 @@ public class MyBoardController {
      */
     @GetMapping("/deleteAnswer")
     public String deleteAnswer(Long id){
-        myBoardService.deleteAnswer(id);
+        jyBoardService.deleteAnswer(id);
 
         return "redirect:/";
 
