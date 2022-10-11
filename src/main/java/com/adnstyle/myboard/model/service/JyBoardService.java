@@ -2,7 +2,7 @@ package com.adnstyle.myboard.model.service;
 
 import com.adnstyle.myboard.model.common.FileUploadYml;
 import com.adnstyle.myboard.model.domain.JyAttach;
-import com.adnstyle.myboard.model.domain.MyBoard;
+import com.adnstyle.myboard.model.domain.JyBoard;
 import com.adnstyle.myboard.model.repository.JyAttachRepository;
 import com.adnstyle.myboard.model.repository.JyBoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class JyBoardService {
 
     private final FileUploadYml fileUploadYml;
 
-    public ArrayList<MyBoard> selectList(Map searchMap) {
+    public ArrayList<JyBoard> selectList(Map searchMap) {
 
         return jyBoardRepository.selectList(searchMap);
 
@@ -39,11 +39,11 @@ public class JyBoardService {
         return jyBoardRepository.countAll(searchMap);
     }
 
-    public ArrayList<MyBoard> myBoardPage(Map pageMap) {
+    public ArrayList<JyBoard> myBoardPage(Map pageMap) {
         return jyBoardRepository.myBoardPage(pageMap);
     }
 
-    public ArrayList<MyBoard> selectContent(Long id) {
+    public ArrayList<JyBoard> selectContent(Long id) {
          jyBoardRepository.updateCount(id);
         return jyBoardRepository.selectContent(id);
     }
@@ -63,7 +63,7 @@ public class JyBoardService {
     }
 
     @Transactional
-    public void insertContent(MyBoard board, MultipartFile[] uploadFile) {
+    public void insertContent(JyBoard board, MultipartFile[] uploadFile) {
 
         long id = 0;//등록한 글번호
 
@@ -130,7 +130,7 @@ public class JyBoardService {
     //게시글 수정하기
 
     @Transactional
-    public void updateContent(MyBoard board, MultipartFile[] uploadFile) {
+    public void updateContent(JyBoard board, MultipartFile[] uploadFile) {
 
         jyBoardRepository.updateContent(board);
 
@@ -205,4 +205,21 @@ public class JyBoardService {
                 }
             }
         }
+
+    /**
+     * 게시글상세조회
+     * @param id
+     * @return
+     */
+    @Transactional
+    public Map<String,Object> selectBoardContent(long id) {
+       jyBoardRepository.updateCount(id);
+       ArrayList ContentList = jyBoardRepository.selectContent(id);
+       ArrayList AttachList =jyAttachRepository.attachList(id);
+       Map<String,Object> contentBoardMap = new HashMap<>();
+       contentBoardMap.put("ContentList",ContentList);
+       contentBoardMap.put("AttachList",AttachList);
+
+        return contentBoardMap;
     }
+}

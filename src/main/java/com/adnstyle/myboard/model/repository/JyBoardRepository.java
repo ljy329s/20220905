@@ -1,6 +1,6 @@
 package com.adnstyle.myboard.model.repository;
 
-import com.adnstyle.myboard.model.domain.MyBoard;
+import com.adnstyle.myboard.model.domain.JyBoard;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.ArrayList;
@@ -12,12 +12,12 @@ public interface JyBoardRepository {
     /**
      * 관리자가 볼 게시판 리스트
      */
-    ArrayList<MyBoard> selectList(Map searchMap);
+    ArrayList<JyBoard> selectList(Map searchMap);
 
     /**
      * 고객들이 볼 게시판 리스트
      */
-    ArrayList<MyBoard> myBoardPage(Map pageMap);
+    ArrayList<JyBoard> myBoardPage(Map pageMap);
 
     /**
      * 게시글 총 갯수
@@ -27,7 +27,7 @@ public interface JyBoardRepository {
     /**
      * 게시글 상세조회
      */
-    ArrayList<MyBoard> selectContent(Long id);
+    ArrayList<JyBoard> selectContent(Long id);
 
     /**
      * 게시글 클릭시 조회수 증가
@@ -42,12 +42,12 @@ public interface JyBoardRepository {
     /**
      * 게시글 등록
      */
-    void insertContent(MyBoard board);
+    void insertContent(JyBoard board);
 
     /**
      * 게시글 수정
      */
-    void updateContent(MyBoard board);
+    void updateContent(JyBoard board);
 
 
     /**
@@ -63,7 +63,7 @@ public interface JyBoardRepository {
     /**
      * 답글 등록
      */
-    void insertAnswer(MyBoard board);
+    void insertAnswer(JyBoard board);
 
     /**
      * 답글삭제

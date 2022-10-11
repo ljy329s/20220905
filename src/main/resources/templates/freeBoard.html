@@ -7,7 +7,7 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="../js/jquery-3.6.1.min.js"></script>
-    <title>게시글 읽기</title>
+    <title>자유게시판</title>
 </head>
 <th:block layout:fragment="content">
     <style>
@@ -124,17 +124,11 @@
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <button type="button" class="btn btn-primary" id="upd_btn" style="display: inline">수정하기</button>
                         <button type="submit" class="btn btn-primary" id="upd_sub" style="display: none">수정완료</button>
-                        <!--                        관리자일 경우에만 답변달기 버튼이 보이도록 수정하기! 게시글 번호 가지고 이동-->
                         <button type="button" id="main_btn" class="btn btn-primary"
                                 th:onclick="|location.href='@{/user/list(page=${page},type=${type},search=${search})}'|">목록
                         </button>
                         <button type="button" id="del_btn" class="btn btn-primary"
                                 th:onclick="|location.href='@{deleteContent(id=${myContent.id})}'|">삭제
-                        </button>
-                    </div>
-                    <div id="btnBox">
-                        <button type="button" class="btn btn-primary" id="answer_btn" style="display: inline"
-                                th:onclick="|location.href='@{/answerForm(id=${myContent.id})}'|">답글달기
                         </button>
                     </div>
                 </form>

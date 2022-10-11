@@ -92,9 +92,9 @@
             <h1 id="mainTitle">게시글읽기</h1>
             <div id="main">
                 <form action="/updateContent" method="post" id="contentForm" enctype="multipart/form-data"
-                      th:each="myContent : ${myContent}">
+                      th:each="ContentList : ${ContentList}">
                     <label for="titleBox" class="form-label fs-5 fw-bold">제목</label>
-                    <input type="text" id="titleBox" class="form-control" name="title" th:value="${myContent.title}"
+                    <input type="text" id="titleBox" class="form-control" name="title" th:value="ContentList.title}"/>
                            readonly="readonly">
                     <label for="writerBox" class="form-label fs-5 fw-bold">작성자</label>
                     <input type="text" id="writerBox" class="form-control" name="modifiedBy"
