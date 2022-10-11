@@ -38,8 +38,33 @@ public class JyBoardController {
     /**
      * 전체 게시글 리스트+페이징처리+검색처리
      */
-    @GetMapping("/list")
-    public String myBoardList(Model model, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "type", defaultValue = "A") String type, @RequestParam(value = "search", defaultValue = "") String search) {
+//    @GetMapping("/list")
+//    public String myBoardList(Model model, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "type", defaultValue = "A") String type, @RequestParam(value = "search", defaultValue = "") String search) {
+//        Map searchMap = new HashMap();
+//        searchMap.put("type", type);
+//        searchMap.put("search", search);
+//        int totalCnt = jyBoardService.countAll(searchMap);
+//        PageHandle ph = new PageHandle(totalCnt, page);
+//
+//        searchMap.put("offset", ((page - 1) * ph.getPageSize()));
+//        searchMap.put("pageSize",ph.getPageSize());
+//
+//        ArrayList<JyBoard> myBoardList = jyBoardService.selectList(searchMap);//게시글리스트 조회용
+//
+//        model.addAttribute("myBoardList", myBoardList);
+//        model.addAttribute("ph", ph);
+//        model.addAttribute("type", type);
+//        model.addAttribute("search", search);
+//        System.out.println("myBoardList" + myBoardList);
+//
+//        return "listBoard";
+//    }
+
+    /**
+     * 답변게시글 리스트+페이징처리+검색처리
+     */
+    @GetMapping("/qnaBoardList")
+    public String qnaBoardList(Model model, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "type", defaultValue = "A") String type, @RequestParam(value = "search", defaultValue = "") String search) {
         Map searchMap = new HashMap();
         searchMap.put("type", type);
         searchMap.put("search", search);
@@ -49,7 +74,7 @@ public class JyBoardController {
         searchMap.put("offset", ((page - 1) * ph.getPageSize()));
         searchMap.put("pageSize",ph.getPageSize());
 
-        ArrayList<JyBoard> myBoardList = jyBoardService.selectList(searchMap);//게시글리스트 조회용
+        List<JyBoard> myBoardList = jyBoardService.selectList(searchMap);//게시글리스트 조회용
 
         model.addAttribute("myBoardList", myBoardList);
         model.addAttribute("ph", ph);
@@ -57,7 +82,7 @@ public class JyBoardController {
         model.addAttribute("search", search);
         System.out.println("myBoardList" + myBoardList);
 
-        return "listBoard";
+        return "qnaList";
     }
 
 
@@ -88,7 +113,7 @@ public class JyBoardController {
     /**
      * 답변글 상세조회
      */
-    @GetMapping("/qusetionContent")
+    @GetMapping("/questionContent")
     public String qnaBoardContent(Model model, long id, @RequestParam("page") int page, @RequestParam("type") String type, @RequestParam("search") String search) {
         Map<String, Object> contentBoardMap = jyBoardService.selectBoardContent(id);
 
@@ -140,9 +165,10 @@ public class JyBoardController {
     @PostMapping("/insertContent")
     public String myBoardInsertContent(MultipartFile[] uploadFile, JyBoard board) {
         jyBoardService.insertContent(board, uploadFile);
+        System.out.println("board"+board);
         String type = board.getBoardType();
         if (type.equals("QnA_Board")) {
-            return "redirect:/user/qnaList";
+            return "redirect:/user/qnaBoardList";
         }else if(type.equals("Free_Board")) {
             return "redirect:/user/FreeBoard";
         }return null;

@@ -85,7 +85,7 @@
     </select>
 <!--게시글등록-->
     <insert id="insertContent" parameterType="jyBoard">
-        insert into jy_board (title, content ,view_count,created_by,modified_by,created_date,modified_date,board_type)
+        insert into jy_board(title, content ,view_count,created_by,modified_by,created_date,modified_date,board_type)
         values (#{title},#{content},0,#{createdBy},#{createdBy},NOW(),NOW(),#{boardType})
     </insert>
 

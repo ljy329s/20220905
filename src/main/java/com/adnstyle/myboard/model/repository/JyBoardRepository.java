@@ -4,6 +4,7 @@ import com.adnstyle.myboard.model.domain.JyBoard;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Mapper
@@ -12,7 +13,7 @@ public interface JyBoardRepository {
     /**
      * 관리자가 볼 게시판 리스트
      */
-    ArrayList<JyBoard> selectList(Map searchMap);
+    List<JyBoard> selectList(Map searchMap);
 
     /**
      * 고객들이 볼 게시판 리스트

@@ -29,7 +29,7 @@ public class JyBoardService {
 
     private final FileUploadYml fileUploadYml;
 
-    public ArrayList<JyBoard> selectList(Map searchMap) {
+    public List<JyBoard> selectList(Map searchMap) {
 
         return jyBoardRepository.selectList(searchMap);
 
@@ -222,4 +222,5 @@ public class JyBoardService {
 
         return contentBoardMap;
     }
+
 }
