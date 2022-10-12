@@ -4,10 +4,11 @@
       layout:decorate="~{layout/default_layout}">
 <head>
     <meta charset="utf-8">
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery-3.6.1.min.js"></script>
     <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="/js/jquery-3.6.1.min.js"></script>
-    <title>답글 읽기</title>
+    <title>답변 읽기</title>
 </head>
 <th:block layout:fragment="content">
     <style>
@@ -49,7 +50,7 @@
         <div class="container">
             <h1 id="mainTitle">답변읽기</h1>
             <div id="main">
-                <form action="/updateContent" method="post" enctype="multipart/form-data"
+                <form action="/user/updateContent" method="post" enctype="multipart/form-data"
                       th:each="myAnswerContent : ${myAnswerContent}">
                     <label for="titleBox" class="form-label fs-5 fw-bold">제목</label>
                     <input type="text" id="titleBox" class="form-control" name="title" readonly="readonly" th:value="${myAnswerContent.title}">
@@ -79,9 +80,9 @@
                         <button type="button" class="btn btn-primary" id="upd_btn">수정</button>
                         <button type="submit" class="btn btn-primary" id="upd_sub" style="display: none">수정완료</button>
                         <button type="button" id="del_btn" class="btn btn-primary"
-                                th:onclick="|location.href='@{/deleteAnswer(id=${myAnswerContent.id})}'|">삭제
+                                th:onclick="|location.href='@{/user/deleteAnswer(id=${myAnswerContent.id})}'|">삭제
                         </button>
-                        <button type="button" class="btn btn-primary" id="main_btn" onclick="location.href='/'">목록</button>
+                        <button type="button" class="btn btn-primary" id="main_btn" onclick="location.href='/user/boardList?boardType=QnA_Board'">목록</button>
                     </div>
 
                 </form>
@@ -90,24 +91,24 @@
         </div>
         <script>
 
-            // 체크박스 클릭시 취소선 생기게하기ㅜㅜㅜㅜㅜ
-            let ul = document.querySelector('ul');
-
-            const checkClick = (i) => {
-                if (ul.children[i].querySelector('span').style.textDecorationLine === "line-through") {
-                    ul.children[i].querySelector('span').style.textDecorationLine = '';
-                } else {
-                    ul.children[i].querySelector('span').style.textDecorationLine = "line-through";
-                }
-            }
-
-            if (ul) {
-                for (let i = 0; i < ul.childElementCount; i++) {
-                    //  ul.children[i].querySelector('input').value = i;
-                    ul.children[i].querySelector('input').setAttribute('onClick', `checkClick(${i})`);
-
-                }
-            }
+            // // 체크박스 클릭시 취소선 생기게하기ㅜㅜㅜㅜㅜ
+            // let ul = document.querySelector('ul');
+            //
+            // const checkClick = (i) => {
+            //     if (ul.children[i].querySelector('span').style.textDecorationLine === "line-through") {
+            //         ul.children[i].querySelector('span').style.textDecorationLine = '';
+            //     } else {
+            //         ul.children[i].querySelector('span').style.textDecorationLine = "line-through";
+            //     }
+            // }
+            //
+            // if (ul) {
+            //     for (let i = 0; i < ul.childElementCount; i++) {
+            //         //  ul.children[i].querySelector('input').value = i;
+            //         ul.children[i].querySelector('input').setAttribute('onClick', `checkClick(${i})`);
+            //
+            //     }
+            // }
 
 
             //수정버튼 클릭시 upd_btnE 함수를 실행해라
