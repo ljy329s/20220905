@@ -4,9 +4,10 @@
       layout:decorate="~{layout/default_layout}">
 <head>
     <meta charset="utf-8">
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery-3.6.1.min.js"></script>
     <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="/js/jquery-3.6.1.min.js"></script>
     <title>자유게시판</title>
 </head>
 <th:block layout:fragment="content">
@@ -63,18 +64,6 @@
 
         #replySub {
             width: 100px;
-        }
-
-        #chileReplyBox {
-            display: none;
-            margin: auto;
-            width: 400px;
-            border: solid 1px black;
-            position: fixed;
-            left: 50%;
-            top: 50%;
-            background-color: white;
-            z-index: 100;
         }
 
         #childReplyContent {
@@ -161,40 +150,40 @@
 <!--                여기에 총 카운트수로 page가져오기-->
                 </div>
 
-                <div id="chileReplyBox">
-                    <!--대댓글달기 버튼 클릭시 나올 Modal -->
-                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
-                         tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="staticBackdropLabel">대댓글 작성</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="childReH()"
-                                            aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <textarea name="reContent" id="childReplyContent" placeholder="대댓글을 작성해주세요"
-                                              rows="10"></textarea>
 
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" id="childReSub" class="childReSub btn btn-primary" data-bs-dismiss="modal">등록</button>
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                            onclick="childReH()">닫기
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                    <!--모달끝-->
 
 
             </div>
         </div>
     </div>
     </div>
+    <div id="chileReplyBox">
+        <!--대댓글달기 버튼 클릭시 나올 Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">대댓글 작성</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="childReH()"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                                    <textarea name="reContent" id="childReplyContent" placeholder="대댓글을 작성해주세요"
+                                              rows="10"></textarea>
 
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="childReSub" class="childReSub btn btn-primary" data-bs-dismiss="modal">등록</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                onclick="childReH()">닫기
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--모달끝-->
     <script>
     //대댓글등록
         $(document).on("click", "#childReV", function () {//동적으로 생성된 버튼에 이벤트를 적용하려면 이 방식으로! 대댓글달기버튼 클릭시
