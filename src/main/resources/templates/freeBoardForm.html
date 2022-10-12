@@ -7,7 +7,7 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>문의글 작성</title>
+    <title>자유게시글 작성</title>
 </head>
 <th:block layout:fragment="content">
     <style>
@@ -52,7 +52,7 @@
     <div>
         <div class="container">
 
-            <h1 id="mainTitle">문의글쓰기</h1>
+            <h1 id="mainTitle">자유게시글 작성</h1>
             <div id="main">
                 <form action="/user/insertContent" method="post" enctype="multipart/form-data">
 
@@ -63,13 +63,13 @@
                     <label for="contentBox" class="form-label fs-5 fw-bold">내용</label>
                         <textarea rows="20" name="content" id="contentBox" class="form-control"></textarea>
 
-                    <input type="hidden" name="boardType" value="QnA_Board">
+                    <input type="hidden" name="boardType" value="Free_Board">
                     <input type="file" id="onlyAttach" class="form-control" name="uploadFile" multiple>
 
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <button type="submit" class="btn btn-primary" id="sub_btn">등록</button>
                         <button type="button" class="btn btn-primary" id="main_btn"
-                                onclick="location.href='/user/boardList?boardType=QnA_Board'">목록
+                                onclick="location.href='/user/boardList?boardType=Free_Board'">목록
                         </button>
                     </div>
                 </form>

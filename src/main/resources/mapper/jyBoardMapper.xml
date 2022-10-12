@@ -2,17 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.adnstyle.myboard.model.repository.JyBoardRepository">
 
-<!--    검색-->
+<!--    게시글리스트검색-->
     <sql id ="searchContents">
+    <if test='boardType.equals("Free_Board")'>
         <choose>
             <when test='type.equals("A")'>
-                <if test='search==""'></if>
+                <if test='search==""'>
+                    where 1=1
+                </if>
                 <if test='search!=""'>
-                    where title like concat('%',#{search},'%')
+                    where (title like concat('%',#{search},'%')
                     or
                     created_by like concat('%',#{search},'%')
                     or
                     content like concat('%',#{search},'%')
+                    )
                 </if>
             </when>
             <when test='type.equals("T")'>
@@ -27,12 +31,19 @@
             <when test='type.equals("TC")'>
                 where title like concat('%',#{search},'%') or content concat(like'%',#{search},'%')
             </when>
+
         </choose>
+        and board_type = "Free_Board"
+        </if>
+        <if test='boardType.equals("QnA_Board")'>
+        where 1 = 1
+        and board_type=#{boardType}
+        </if>
     </sql>
 
 
 <!--  게시물 총 갯수  -->
-    <select id="countAll" resultType="int" parameterType="pageHandle">
+    <select id="countAll" resultType="int" parameterType="map">
     select count(*)
      from jy_board
     <include refid="searchContents"></include>
@@ -57,7 +68,7 @@
 
 <!--게시글 상세조회-->
     <select id="selectContent" parameterType="long" resultType="jyBoard">
-        select title, modified_by,content,modified_date,id,group_bno
+        select title, modified_by, content, modified_date ,id, group_bno, board_type
         from jy_board
         where id=#{id}
     </select>
@@ -102,8 +113,8 @@
 
     <!--답글등록-->
     <insert id="insertAnswer" parameterType="jyBoard">
-        insert into jy_board (title, content ,view_count,created_by,modified_by,created_date,modified_date,group_bno)
-        values (#{title},#{content},0,#{createdBy},#{createdBy},NOW(),NOW(),#{groupBno})
+        insert into jy_board (title, content ,view_count,created_by,modified_by,created_date,modified_date,group_bno,board_type)
+        values (#{title},#{content},0,#{createdBy},#{createdBy},NOW(),NOW(),#{groupBno},#{boardType})
     </insert>
 
     <!--답글삭제-->

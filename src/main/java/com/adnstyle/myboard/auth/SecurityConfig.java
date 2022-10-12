@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .formLogin()//권한이 필요한 경로에 접근했으면 로그인페이지로 이동시키겠다 스프링시큐리티에서 제공하는 인증방식
                 .loginPage("/loginForm")//사용자정의 로그인페이지 적어줌
                 .loginProcessingUrl("/login")// /login 주소로 호출하면 시큐리티가 낚아채서 대신 로그인을 진행해준다.
-                .defaultSuccessUrl("/user/list");//로그인이 성공하면 갈 경로
+                .defaultSuccessUrl("/user/jyHome");//로그인이 성공하면 갈 경로
 
         return http.build();
     }

@@ -1,6 +1,9 @@
 package com.adnstyle.myboard.controller;
 
-import com.adnstyle.myboard.model.domain.*;
+import com.adnstyle.myboard.model.domain.JyAttach;
+import com.adnstyle.myboard.model.domain.JyBoard;
+import com.adnstyle.myboard.model.domain.JyReply;
+import com.adnstyle.myboard.model.domain.PageHandle;
 import com.adnstyle.myboard.model.service.JyAttachService;
 import com.adnstyle.myboard.model.service.JyBoardService;
 import com.adnstyle.myboard.model.service.JyReplyService;
@@ -61,14 +64,24 @@ public class JyBoardController {
 //    }
 
     /**
-     * 답변게시글 리스트+페이징처리+검색처리
+     * 사이트메인화면(로그인후 뜰 화면)
      */
-    @GetMapping("/qnaBoardList")
-    public String qnaBoardList(Model model, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "type", defaultValue = "A") String type, @RequestParam(value = "search", defaultValue = "") String search) {
+    @GetMapping("/jyHome")
+    public String jyHome(){
+        return "jyHome";
+    }
+    
+    /**
+     * 게시글 리스트(자유,답변)+페이징처리+검색처리
+     */
+    @GetMapping("/boardList")
+    public String qnaBoardList(Model model, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "type", defaultValue = "A") String type, @RequestParam(value = "search", defaultValue = "") String search, @RequestParam("boardType") String boardType){
         Map searchMap = new HashMap();
         searchMap.put("type", type);
         searchMap.put("search", search);
+        searchMap.put("boardType", boardType);
         int totalCnt = jyBoardService.countAll(searchMap);
+        System.out.println("searchMap"+searchMap);
         PageHandle ph = new PageHandle(totalCnt, page);
 
         searchMap.put("offset", ((page - 1) * ph.getPageSize()));
@@ -82,7 +95,12 @@ public class JyBoardController {
         model.addAttribute("search", search);
         System.out.println("myBoardList" + myBoardList);
 
-        return "qnaList";
+        if(boardType.equals("QnA_Board")){
+            return "qnaBoardList";
+        } else if (boardType.equals("Free_Board")) {
+            return "freeBoardList";
+        }
+        return null;
     }
 
 
@@ -91,7 +109,7 @@ public class JyBoardController {
      */
     @GetMapping("/boardContent")
     public String myBoardContent(Model model, long id, @RequestParam("page") int page, @RequestParam("type") String type, @RequestParam("search") String search) {
-        ArrayList<JyBoard> myContent = jyBoardService.selectContent(id);//게시글 번호로 내용 불러오기
+        List<JyBoard> myContent = jyBoardService.selectContent(id);//게시글 번호로 내용 불러오기
         ArrayList<JyAttach> attachList = jyAttachService.attachList(id);//첨부파일리스트 조회하기
 
         model.addAttribute("myContent", myContent);//게시글내용
@@ -104,29 +122,7 @@ public class JyBoardController {
         System.out.println("attachList는" + attachList);
         System.out.println("myBoardContent 컨트롤러 model은" + model);
 
-        return "boardContent";
-
-
-
-    }
-
-    /**
-     * 답변글 상세조회
-     */
-    @GetMapping("/questionContent")
-    public String qnaBoardContent(Model model, long id, @RequestParam("page") int page, @RequestParam("type") String type, @RequestParam("search") String search) {
-        Map<String, Object> contentBoardMap = jyBoardService.selectBoardContent(id);
-
-
-        model.addAttribute("page", page);//페이지
-        model.addAttribute("type", type);//검색타입
-        model.addAttribute("search", search);//검색내용
-        System.out.println("contentBoardMap"+contentBoardMap);
-        model.addAttribute("contentBoardMap",contentBoardMap);
-
-        return "questionContent";
-
-
+        return "freeBoardContent";
 
     }
 
@@ -141,14 +137,14 @@ public class JyBoardController {
         return "redirect:/";
     }
 
-//    /**
-//     * 게시글 작성폼으로 이동
-//     */
-//    @GetMapping("/writeForm")
-//    public String Write() {
-//        log.debug(" 게시글 작성폼으로 이동");
-//        return "writeForm";
-//    }
+    /**
+     * 자유게시글 작성폼으로 이동
+     */
+    @GetMapping("/freeBoardForm")
+    public String freeBoardForm() {
+        log.debug("게시글 작성폼으로 이동");
+        return "freeBoardForm";
+    }
 
     /**
      * 문의글 작성폼으로 이동
@@ -165,14 +161,16 @@ public class JyBoardController {
     @PostMapping("/insertContent")
     public String myBoardInsertContent(MultipartFile[] uploadFile, JyBoard board) {
         jyBoardService.insertContent(board, uploadFile);
-        System.out.println("board"+board);
-        String type = board.getBoardType();
-        if (type.equals("QnA_Board")) {
-            return "redirect:/user/qnaBoardList";
-        }else if(type.equals("Free_Board")) {
-            return "redirect:/user/FreeBoard";
-        }return null;
+        System.out.println("board" + board);
+        String boardType = board.getBoardType();
+        if (boardType.equals("Free_Board")) {
+            return "redirect:/user/boardList?boardType=Free_Board";
+        } else if (boardType.equals("QnA_Board")) {
+            return "redirect:/user/boardList?boardType=QnA_Board";
+        }
+        return null;
     }
+
 
     /**
      * 첨부파일 다운로드
@@ -210,7 +208,7 @@ public class JyBoardController {
         }
         jyBoardService.updateContent(board, uploadFile);//게시글수정
 
-        return "redirect:/";
+        return "redirect:/user/jyHome";
     }
 
     /**
@@ -219,7 +217,7 @@ public class JyBoardController {
     @GetMapping("/answerForm")
     public String writeForm(Long id, Model model) {
         model.addAttribute("id", id);
-        return "questionForm";
+        return "answerForm";
     }
 
     /**
@@ -228,29 +226,70 @@ public class JyBoardController {
     @PostMapping("/insertAnswer")
     public String insertAnswer(MultipartFile[] uploadFile, JyBoard board) {
         jyBoardService.insertContent(board, uploadFile);{
-            return "redirect:/";
+            return "redirect:/user/boardList?boardType=QnA_Board";
         }
     }
 
+//    /**
+//     * 문의글 상세조회
+//     */
+//    @GetMapping("/questionContent")
+//    public String qnaBoardContent(Model model, long id, @RequestParam("page") int page, @RequestParam("type") String type, @RequestParam("search") String search) {
+//        ArrayList<JyBoard> myContent = jyBoardService.selectContent(id);//게시글 번호로 내용 불러오기
+//        ArrayList<JyAttach> attachList = jyAttachService.attachList(id);//첨부파일리스트 조회하기
+//
+//        model.addAttribute("myContent", myContent);//게시글내용
+//        model.addAttribute("attachList", attachList);//첨부파일
+//
+//        model.addAttribute("page", page);//페이지
+//        model.addAttribute("type", type);//검색타입
+//        model.addAttribute("search", search);//검색내용
+//
+//        System.out.println("attachList는" + attachList);
+//        System.out.println("myBoardContent 컨트롤러 model은" + model);
+//
+//        return "questionContent";
+//
+//
+//
+//    }
+
     /**
-    * 답변 상세조회
+    * 답변글 상세조회
     */
         @GetMapping("/answerContent")
-        public String answerContent(Model model,long id, @RequestParam("page") int page, @RequestParam("type") String type, @RequestParam("search") String search){
+        public String answerContent(Model model,long id, @RequestParam("page") int page){
             System.out.println("답변상세조회 컨트롤러");
-            ArrayList<JyBoard> myAnswerContent = jyBoardService.selectContent(id);//게시글 번호로 내용 불러오기
+            List<JyBoard> myAnswerContent = jyBoardService.selectContent(id);//게시글 번호로 내용 불러오기
             ArrayList<JyAttach> attachList = jyAttachService.attachList(id);
             model.addAttribute("myAnswerContent", myAnswerContent);//게시글내용
             model.addAttribute("attachList", attachList);//첨부파일
             model.addAttribute("page", page);//페이지
-            model.addAttribute("type", type);//검색타입
-            model.addAttribute("search", search);//검색내용
 
             System.out.println("attachList는" + attachList);
             System.out.println("myBoardContent 컨트롤러 model은" + model);
 
-            return "answer";
+            return "answerContent";
         }
+
+    /**
+     * 문의글 상세조회
+     */
+    @GetMapping("/qnaContent")
+    public String qnaContent(Model model,long id, @RequestParam("page") int page){
+        System.out.println("답변상세조회 컨트롤러");
+        List<JyBoard> myQnAContent = jyBoardService.selectContent(id);//게시글 번호로 내용 불러오기
+        ArrayList<JyAttach> attachList = jyAttachService.attachList(id);
+        System.out.println("myQnAContent"+myQnAContent);
+        model.addAttribute("myQnAContent", myQnAContent);//게시글내용
+        model.addAttribute("attachList", attachList);//첨부파일
+        model.addAttribute("page", page);//페이지
+
+        System.out.println("attachList는" + attachList);
+        System.out.println("myBoardContent 컨트롤러 model은" + model);
+        return "questionContent";
+
+    }
 
     /**
      * 답변삭제
@@ -277,7 +316,7 @@ public class JyBoardController {
     }
 
     /**
-     * 하위댓글작성
+     * 대댓글작성
      */
 
     @PostMapping("/insertChildReply")

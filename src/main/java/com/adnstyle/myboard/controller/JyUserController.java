@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequiredArgsConstructor
 
-
 public class JyUserController {
 
     private final JyUserService jyUserService;
@@ -81,12 +80,17 @@ public class JyUserController {
 //            System.out.println("실패");
 //            return "loginForm";
 //        }
+    @GetMapping("/myPage")
+    public String myPage() {
+
+        return "myPage";
+    }
 
     //시큐리티연습
     //@Secured 한개의 권한줄때 사용
     @Secured("ROLE_USER")//간단하게 권한걸수있다.
     @GetMapping("/info")
-    public @ResponseBody String info(){
+    public @ResponseBody String info() {
         return "개인정보:";
     }
 
@@ -94,7 +98,7 @@ public class JyUserController {
     //hasRole부터 시작해서 적어줘야한다. 두개이상의 권한을 줄때 사용
     @PreAuthorize("hasRole('ROLE_ADMIN')or hasRole('ROLE_MANAGER')")//data메소드가 실행되기 직전에 실행된다.
     @GetMapping("/data")
-    public @ResponseBody String data(){
+    public @ResponseBody String data() {
         return "데이터정보:";
     }
 }

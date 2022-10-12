@@ -28,7 +28,7 @@ public interface JyBoardRepository {
     /**
      * 게시글 상세조회
      */
-    ArrayList<JyBoard> selectContent(Long id);
+    List<JyBoard> selectContent(Long id);
 
     /**
      * 게시글 클릭시 조회수 증가

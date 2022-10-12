@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-   <title>QnA 게시판 리스트</title>
+   <title>게시판 접속시 리스트</title>
   </head>
 <th:block layout:fragment="content">
 <style>
@@ -32,7 +32,7 @@
             <div id="main">
             <div id="content">
                 <div class="d-flex justify-content-center">
-                <form action="/user/list" method="get" id="searchBox">
+                <form action="/user/boardList" method="get" id="searchBox">
                     <select th:name="type" th:value="${type}" class="searchBar">
                         <option value='A' th:selected="${type}=='A'">전체</option>
                         <option value='T' th:selected="${type}=='T'">제목</option>
@@ -41,6 +41,7 @@
                         <option value='TC' th:selected="${type}=='TC'">제목+내용</option>
                     </select>
                     <input type="text" th:name="search" th:value="${search}" class="searchBar seachAria" placeholder="검색할 내용을 입력해 주세요">
+                    <input type="hidden" value="Free_Board" name="boardType">
                     <input type="submit" value="검색" id="sBtn" class="searchBar">
                 </form>
                 </div>
@@ -63,13 +64,8 @@
 
                     <td th:text="${board.id}"></td>
                     <th:block th:if="${board.id} == ${board.groupBno}">
-                        <td><a th:href="@{/user/questionContent(id=${board.id},page=${ph.page},type=${type},search=${search})}"
+                        <td><a th:href="@{/user/boardContent(id=${board.id},page=${ph.page},type=${type},search=${search})}"
                                th:text="${board.title}"/></td>
-                    </th:block>
-                    <th:block th:unless="${board.id} == ${board.groupBno}">
-                        <td><a th:href="@{/user/questionContent(id=${board.id},page=${ph.page},type=${type},search=${search})}"
-                                 th:text="'&nbsp&nbsp&nbsp'+'[L답글]'+${board.title}"/>
-                        </td>
                     </th:block>
                     <td th:text="${board.modifiedBy}"></td>
                     <td th:text="${#temporals.format(board.modifiedDate,'yyyy-MM-dd HH:mm')}"></td>
@@ -82,7 +78,7 @@
                 </table>
             </div>
             <div id="btnBox">
-                <button type="button" id="write_btn" class="btn btn-outline-primary" onclick="location.href='/user/questionsForm'">질문글 작성</button>
+                <button type="button" id="write_btn" class="btn btn-outline-primary" onclick="location.href='/user/freeBoardForm'">글 작성</button>
             </div>
 
         </div>
@@ -92,23 +88,24 @@
             <ul id="dyn_ul" class="pagination" style="justify-content: center">
             <!--prev -->
             <th:block th:if ="${ph.showPrev}">
-                <li class="page-item"><a class="page-link" th:href ="@{/user/qnaBoardList(page=${ph.beginPage}-1,type=${type},search=${search})}"><</a></li>
+                <li class="page-item"><a class="page-link" th:href ="@{/user/boardList(page=${ph.beginPage}-1,type=${type},search=${search},boardType=Free_Board)}"><</a></li>
             </th:block>
 
             <!--         페이징        -->
             <th:block th:with="ph = ${ph}">
                 <th:block th:each="num : ${#numbers.sequence(ph.beginPage,ph.endPage)}">
                     <li class="page-item" th:classappend="${ph.page==num}?'active':''">
-                        <a class="page-link" th:href="@{/user/qnaBoardList(page=${num},type=${type},search=${search})}"th:text="${num}" ></a>
+                        <a class="page-link" th:href="@{/user/boardList(page=${num},type=${type},search=${search},boardType=Free_Board)}"th:text="${num}" ></a>
                     </li>
                 </th:block>
             </th:block>
 
             <!--next-->
             <th:block th:if ="${ph.showNext}">
-                <li class="page-item"><a class="page-link" th:href ="@{/user/qnaBoardList(page=${ph.endPage}+1,type=${type},search=${search})}">></a></li>
+                <li class="page-item"><a class="page-link" th:href ="@{/user/boardList(page=${ph.endPage}+1,type=${type},search=${search},boardType=Free_Board)}">></a></li>
             </th:block>
             </ul>
+
         </nav>
         </div>
     </div>

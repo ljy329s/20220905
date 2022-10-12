@@ -35,6 +35,11 @@ public class JyBoardService {
 
     }
 
+    /**
+     * 자유게시판
+     * @param searchMap
+     * @return
+     */
     public int countAll(Map searchMap) {
         return jyBoardRepository.countAll(searchMap);
     }
@@ -43,7 +48,7 @@ public class JyBoardService {
         return jyBoardRepository.myBoardPage(pageMap);
     }
 
-    public ArrayList<JyBoard> selectContent(Long id) {
+    public List<JyBoard> selectContent(Long id) {
          jyBoardRepository.updateCount(id);
         return jyBoardRepository.selectContent(id);
     }
@@ -214,7 +219,7 @@ public class JyBoardService {
     @Transactional
     public Map<String,Object> selectBoardContent(long id) {
        jyBoardRepository.updateCount(id);
-       ArrayList ContentList = jyBoardRepository.selectContent(id);
+       List<JyBoard> ContentList = jyBoardRepository.selectContent(id);
        ArrayList AttachList =jyAttachRepository.attachList(id);
        Map<String,Object> contentBoardMap = new HashMap<>();
        contentBoardMap.put("ContentList",ContentList);
