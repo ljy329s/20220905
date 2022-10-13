@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.adnstyle.myboard.model.repository.JyAttachRepository">
-    <insert id="insertFile" parameterType="java.util.List" >
-       INSERT INTO jy_attach(
+    <insert id="insertFile" parameterType="java.util.List">
+        INSERT INTO jy_attach(
         uuid,
         uploadPath,
         originName,
@@ -10,30 +10,31 @@
         )
         VALUES
         <foreach collection="list" item="item" index="index" open="(" separator="),(" close=")">
-        #{item.uuid},
-        #{item.uploadPath},
-        #{item.originName},
-        #{item.bno}
+            #{item.uuid},
+            #{item.uploadPath},
+            #{item.originName},
+            #{item.bno}
         </foreach>
     </insert>
 
     <select id="attachList" resultType="jyAttach">
-        select attBno,originName,uuid,uploadPath
+        select attBno, originName, uuid, uploadPath
         from jy_attach
-        where bno=#{id}
+        where bno = #{id}
     </select>
 
-<!--    게시글 삭제시 첨부파일도 함께 삭제-->
+    <!--    게시글 삭제시 첨부파일도 함께 삭제-->
     <delete id="deleteAll">
-        delete from jy_attach
+        delete
+        from jy_attach
         where bno = #{id}
     </delete>
 
     <delete id="deleteOnlyAttach">
         delete from jy_attach
         where attBno in
-        <foreach collection="list" item="item" open="(" separator=","  close=")">
-        #{item}
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
         </foreach>
     </delete>
 

@@ -39,6 +39,7 @@ public class PrincipalDetails implements UserDetails {//UserDetails상속받기
         });
         return collect;
     }
+
     //비밀번호리턴
     @Override
     public String getPassword() {

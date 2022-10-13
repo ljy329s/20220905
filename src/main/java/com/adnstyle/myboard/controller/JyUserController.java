@@ -68,23 +68,17 @@ public class JyUserController {
         return "/auth/loginForm";
     }
 
-    //    @PostMapping("/login")
-//    public String loginUser(@RequestParam (value="userId") String userId, @RequestParam(value="userPw") String userPw){
-//        System.out.println("userId : "+userId);
-//        System.out.println("userPw : "+userPw);
-//        int no = jyUserService.loginUser(userId,userPw);
-//        if(no==1) {//로그인 성공시 게시글 화면으로 이동
-//            System.out.println("성공");
-//            return "redirect:/";
-//        }else{//로그인실패시 로그인화면으로 이동
-//            System.out.println("실패");
-//            return "loginForm";
-//        }
+    /**
+     * 마이페이지 화면으로 이동
+     * @return
+     */
+
     @GetMapping("/myPage")
     public String myPage() {
-
         return "myPage";
     }
+
+
 
     //시큐리티연습
     //@Secured 한개의 권한줄때 사용

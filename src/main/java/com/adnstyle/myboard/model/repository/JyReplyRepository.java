@@ -16,7 +16,6 @@ public interface JyReplyRepository {
 
     List<JyReply> selectReplyList(Map pageMap);
 
-
     void updateOrderBno(JyReply reply);
 
     void insertChildReply(JyReply jyReply);

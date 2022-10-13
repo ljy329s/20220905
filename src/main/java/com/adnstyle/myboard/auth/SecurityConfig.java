@@ -12,7 +12,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration//설정클래스임을 알려줌
 @EnableWebSecurity//시큐리티 활성화 스프링 시큐리티 필터(SecurityConfig클래스를 말함)가 스프링 필터체인에 등록됨.
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)//Secured어노테이션 활성화 특정 컨트롤러 메서드에 간단하게 권한부여 가능, preAuthorize 어노테이션 활성화
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+//Secured어노테이션 활성화 특정 컨트롤러 메서드에 간단하게 권한부여 가능, preAuthorize 어노테이션 활성화
 public class SecurityConfig {
 
     @Bean
@@ -21,10 +22,10 @@ public class SecurityConfig {
         http.csrf().disable();//csrf.비활성화
         http
                 .authorizeRequests()
-                    .antMatchers("/user/**").authenticated()//user로 들어오는 주소면 인증이 필요하다 / 인증만되면 다 사용할수있는!
-                    //.antMatchers("/manager/**").access("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")//manager로 들어왔을때 인증뿐 아니라 권한이 있는 사람만 접속 하게끔
-                    .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")//admin으로 들어왔을땐 ADMIN권한이 있는 사람만 접속이 가능하다.
-                    .anyRequest().permitAll()// 이 외의 요청은 모든권한 허용하겠다.
+                .antMatchers("/user/**").authenticated()//user로 들어오는 주소면 인증이 필요하다 / 인증만되면 다 사용할수있는!
+                //.antMatchers("/manager/**").access("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")//manager로 들어왔을때 인증뿐 아니라 권한이 있는 사람만 접속 하게끔
+                .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")//admin으로 들어왔을땐 ADMIN권한이 있는 사람만 접속이 가능하다.
+                .anyRequest().permitAll()// 이 외의 요청은 모든권한 허용하겠다.
                 .and()//그리고? 조건추가?
                 .formLogin()//권한이 필요한 경로에 접근했으면 로그인페이지로 이동시키겠다 스프링시큐리티에서 제공하는 인증방식
                 .loginPage("/loginForm")//사용자정의 로그인페이지 적어줌
@@ -35,7 +36,7 @@ public class SecurityConfig {
     }
 
     @Bean//Bean 해당메서드의 리턴되는 오브젝트를 IoC로 등록해준다
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
 
         return new BCryptPasswordEncoder();
     }

@@ -20,15 +20,20 @@
 
     <select id="selectReplyList" resultType="jyReply" parameterType="map">
  <![CDATA[
-        select re_bno, re_group_bno,
-               re_content, re_created_by,
+        select re_bno,
+               re_group_bno,
+               re_content,
+               re_created_by,
                re_created_date,
                re_modified_date,
-               board_bno, re_del_yn, re_depth, re_order
+               board_bno,
+               re_del_yn,
+               re_depth,
+               re_order
         from jy_reply
-        where board_bno=#{id}
-        order by re_group_bno desc,re_order asc,re_depth asc
-        limit #{offset},#{pageSize}
+        where board_bno = #{id}
+        order by re_group_bno desc, re_order asc, re_depth asc
+            limit #{offset}, #{pageSize}
         ]]>
     </select>
 
@@ -45,8 +50,9 @@
 
     <!--    대댓글 등록-->
     <insert id="insertChildReply">
-        INSERT INTO jy_reply(re_content, re_created_by, re_created_date, re_modified_date, board_bno, re_depth, re_order, re_group_bno)
-        VALUES (#{reContent}, "로그인전", NOW(), NOW(), #{boardBno}, #{reDepth}+1, #{reOrder}+1, #{reGroupBno});
+        INSERT INTO jy_reply(re_content, re_created_by, re_created_date, re_modified_date, board_bno, re_depth,
+                             re_order, re_group_bno)
+        VALUES (#{reContent}, "로그인전", NOW(), NOW(), #{boardBno}, #{reDepth} + 1, #{reOrder} + 1, #{reGroupBno});
     </insert>
 
     <!--    댓글삭제 -->
@@ -63,7 +69,7 @@
         where re_bno = #{reBno}
     </select>
 
-<!--    해당 게시물의 댓글갯수-->
+    <!--    해당 게시물의 댓글갯수-->
     <select id="selectReplyCountAll" parameterType="long" resultType="int">
         select count(*)
         from jy_reply

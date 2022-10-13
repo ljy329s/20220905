@@ -5,11 +5,11 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface JyUserRepository {
-       void insertNewUser(JyUser jyUser);
+    void insertNewUser(JyUser jyUser);
 
-       int checkId(String userId);
+    int checkId(String userId);
 
-       int checkEmail(String userEmail);
+    int checkEmail(String userEmail);
 
-       JyUser selectUser(String userId);
+    JyUser selectUser(String userId);
 }

@@ -44,7 +44,7 @@ public class JyUser {
      * 고객생년월일
      */
     //input type date로 넘어온값은 string이라 date로 저장하려니 에러남
-            //데이트타입포맷 꼭 해주장..  vo date, db date로 해줌
+    //데이트타입포맷 꼭 해주장..  vo date, db date로 해줌
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date userBirth;
 

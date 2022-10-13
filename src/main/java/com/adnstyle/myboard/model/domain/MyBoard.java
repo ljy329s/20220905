@@ -11,7 +11,7 @@ import java.util.List;
 @Alias("myBoard")
 @Data
 @NoArgsConstructor
-public class MyBoard extends Base{
+public class MyBoard extends Base {
 
     /**
      * Base : 둥록자, 등록일, 수정자, 삭제여부, 수정일

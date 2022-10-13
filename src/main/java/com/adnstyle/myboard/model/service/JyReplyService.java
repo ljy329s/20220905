@@ -27,37 +27,30 @@ public class JyReplyService {
         jyReplyRepository.updateGroupBno(bno);//그룹번호 업데이트 해주기
 
     }
-//
-//    public List selectReplyList(long id) {//원본
-//
-//       return jyReplyRepository.selectReplyList(id);//게시글 번호로 조회해서 화면에 보여주기
-//
-//    }
-
 
     public Map<String, Object> selectReplyList(long id, int page) {
         Map pageMap = new HashMap<>();
-        int replyCount= jyReplyRepository.selectReplyCountAll(id);//페이지에 있는 전체 리플숫자
+        int replyCount = jyReplyRepository.selectReplyCountAll(id);//페이지에 있는 전체 리플숫자
 
         PageHandle ph = new PageHandle(replyCount, page);
-        pageMap.put("offset",(page-1)*ph.getPageSize());
-        pageMap.put("pageSize",ph.getPageSize());
-        pageMap.put("id",id);
+        pageMap.put("offset", (page - 1) * ph.getPageSize());
+        pageMap.put("pageSize", ph.getPageSize());
+        pageMap.put("id", id);
 
-        List replyList =jyReplyRepository.selectReplyList(pageMap);//게시글 번호로 조회해서 화면에 보여주기
+        List replyList = jyReplyRepository.selectReplyList(pageMap);//게시글 번호로 조회해서 화면에 보여주기
         Map<String, Object> replyMap = new HashMap<>();
-        replyMap.put("replyList",replyList);
-        replyMap.put("ph",ph);
+        replyMap.put("replyList", replyList);
+        replyMap.put("ph", ph);
 
         return replyMap;
 
     }
 
-@Transactional
-public void insertChildReply(JyReply childReply) {
-    jyReplyRepository.updateOrderBno(childReply);//1.order업데이트 해주기
-    jyReplyRepository.insertChildReply(childReply);//2.하위댓글 insert해주기
-}
+    @Transactional
+    public void insertChildReply(JyReply childReply) {
+        jyReplyRepository.updateOrderBno(childReply);//1.order업데이트 해주기
+        jyReplyRepository.insertChildReply(childReply);//2.하위댓글 insert해주기
+    }
 
 
     public void deleteReply(Long delReBno) {

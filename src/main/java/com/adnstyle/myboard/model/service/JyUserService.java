@@ -59,15 +59,12 @@ public class JyUserService implements UserDetailsService {
 
     /**
      * 로그인
-     * @param
-     * @return
-     * @throws UsernameNotFoundException
      */
     //아이디가 있을때 리턴되는곳 시큐리티 Session안의 Authenication의 내부로
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
         JyUser jyUser = jyUserRepository.selectUser(userId);
-        if(jyUser !=null){
+        if (jyUser != null) {
             return new PrincipalDetails(jyUser);
         }
         return null;

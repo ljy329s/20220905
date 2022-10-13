@@ -39,14 +39,12 @@ public class JyAttachService {
     }
 
 
-@Transactional
+    @Transactional
     public void insertFile(ArrayList fileList) {
-    System.out.println("서비스insertFile"+fileList);
         jyAttachRepository.insertFile(fileList);
     }
 
     public List<JyAttach> attachList(long id) {
-
         return jyAttachRepository.attachList(id);
     }
 
@@ -71,14 +69,14 @@ public class JyAttachService {
         return 1;
     }
 
-@Transactional
-    public void deleteAttach (Long id){
+    @Transactional
+    public void deleteAttach(Long id) {
         jyAttachRepository.deleteAll(id);
 
     }
 
     @Transactional
-    public void deleteOnlyAttach (List<Long> attlist){
+    public void deleteOnlyAttach(List<Long> attlist) {
         jyAttachRepository.deleteOnlyAttach(attlist);
 
     }

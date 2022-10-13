@@ -22,7 +22,7 @@ public class PageHandle {
     /**
      * 네비 사이즈
      */
-    private int naviSize=10;
+    private int naviSize = 10;
 
     /**
      * (현재 페이지 기준 현 네비의)시작페이지
@@ -47,7 +47,7 @@ public class PageHandle {
     /**
      * 한페이지당 보일 게시글 수
      */
-    private int pageSize=10;
+    private int pageSize = 10;
 
     /**
      * 현재 페이지
@@ -66,13 +66,11 @@ public class PageHandle {
 
 
     /**
-     *총게시글수, 해당페이지, 페이지당 보일 게시글 수,네비게이션사이즈를 포함한 생성자로 구하는 페이징 공식
+     * 총게시글수, 해당페이지, 페이지당 보일 게시글 수,네비게이션사이즈를 포함한 생성자로 구하는 페이징 공식
      */
     public PageHandle(int totalCnt, int page) {//int pageSize, int naviSize
         this.totalCnt = totalCnt;
         this.page = page;
-//        this.pageSize = pageSize;
-//        this.naviSize = naviSize;
 
         /**
          * 총 페이지 수 공식

@@ -21,7 +21,6 @@ import java.util.*;
 public class JyBoardService {
 
 
-
     private final JyBoardRepository jyBoardRepository;
 
     private final JyAttachRepository jyAttachRepository;
@@ -37,6 +36,7 @@ public class JyBoardService {
 
     /**
      * 자유게시판
+     *
      * @param searchMap
      * @return
      */
@@ -50,23 +50,24 @@ public class JyBoardService {
 
     @Transactional
     public List<JyBoard> selectContent(Long id) {
-         jyBoardRepository.updateCount(id);
+        jyBoardRepository.updateCount(id);
         return jyBoardRepository.selectContent(id);
     }
 
     /**
      * 게시글상세조회
+     *
      * @param id
      * @return
      */
     @Transactional
-    public Map<String,Object> selectBoardContent(long id) {
+    public Map<String, Object> selectBoardContent(long id) {
         jyBoardRepository.updateCount(id);
         List<JyBoard> ContentList = jyBoardRepository.selectContent(id);
-        List<JyAttach> AttachList =jyAttachRepository.attachList(id);
-        Map<String,Object> contentBoardMap = new HashMap<>();
-        contentBoardMap.put("ContentList",ContentList);
-        contentBoardMap.put("AttachList",AttachList);
+        List<JyAttach> AttachList = jyAttachRepository.attachList(id);
+        Map<String, Object> contentBoardMap = new HashMap<>();
+        contentBoardMap.put("ContentList", ContentList);
+        contentBoardMap.put("AttachList", AttachList);
 
         return contentBoardMap;
     }
@@ -90,11 +91,11 @@ public class JyBoardService {
 
         long id = 0;//등록한 글번호
 
-        if(board.getGroupBno()==null){//일반게시글등록시
+        if (board.getGroupBno() == null) {//일반게시글등록시
             jyBoardRepository.insertContent(board);//게시글등록
             id = jyBoardRepository.selectId();//등록한 게시글 번호 가져오기
             jyBoardRepository.updateGroupBno(id);//글 등록후 불러와서 그룹번호 업데이트 해줄예정
-        }else{//답글등록시(그룹번호있으니)
+        } else {//답글등록시(그룹번호있으니)
             jyBoardRepository.insertAnswer(board);//답글등록
             id = jyBoardRepository.selectId();//등록한 게시글 번호 가져오기 첨부파일등록할때..
         }
@@ -219,16 +220,15 @@ public class JyBoardService {
     @Transactional
     public void deleteAnswer(Long id) {
         int num = jyBoardRepository.deleteAnswer(id);
-            if (num > 0) {
-                List<JyAttach> attachList = jyAttachService.attachList(id);
-                int no = jyAttachService.deleteFiles(attachList);//실제파일 삭제
-                if (no > 0) {
-                    jyAttachService.deleteAttach(id);
-                    System.out.println("게시글 삭제처리후 첨부파일 삭제됨");
-                }
+        if (num > 0) {
+            List<JyAttach> attachList = jyAttachService.attachList(id);
+            int no = jyAttachService.deleteFiles(attachList);//실제파일 삭제
+            if (no > 0) {
+                jyAttachService.deleteAttach(id);
+                System.out.println("게시글 삭제처리후 첨부파일 삭제됨");
             }
         }
-
+    }
 
 
 }
