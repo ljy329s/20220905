@@ -75,21 +75,21 @@
             <ul id="dyn_ul" class="pagination" style="justify-content: center">
             <!--prev -->
             <th:block th:if ="${ph.showPrev}">
-                <li class="page-item"><a class="page-link" th:href ="@{/user/qnaBoardList(page=${ph.beginPage}-1,type=${type},search=${search},boardType=QnA_Board)}"><</a></li>
+                <li class="page-item"><a class="page-link" th:href ="@{/user/boardList(page=${ph.beginPage}-1,type=${type},search=${search},boardType=QnA_Board)}"><</a></li>
             </th:block>
 
             <!--         페이징        -->
             <th:block th:with="ph = ${ph}">
                 <th:block th:each="num : ${#numbers.sequence(ph.beginPage,ph.endPage)}">
                     <li class="page-item" th:classappend="${ph.page==num}?'active':''">
-                        <a class="page-link" th:href="@{/user/qnaBoardList(page=${num},type=${type},search=${search},boardType=QnA_Board)}"th:text="${num}" ></a>
+                        <a class="page-link" th:href="@{/user/boardList(page=${num},type=${type},search=${search}, boardType=QnA_Board)}"th:text="${num}" ></a>
                     </li>
                 </th:block>
             </th:block>
 
             <!--next-->
             <th:block th:if ="${ph.showNext}">
-                <li class="page-item"><a class="page-link" th:href ="@{/user/qnaBoardList(page=${ph.endPage}+1,type=${type},search=${search}, boardType=QnA_Board)}">></a></li>
+                <li class="page-item"><a class="page-link" th:href ="@{/user/boardList(page=${ph.endPage}+1,type=${type},search=${search}, boardType=QnA_Board)}">></a></li>
             </th:block>
             </ul>
         </nav>

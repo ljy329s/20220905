@@ -45,7 +45,7 @@ public class JyAttachService {
         jyAttachRepository.insertFile(fileList);
     }
 
-    public ArrayList<JyAttach> attachList(long id) {
+    public List<JyAttach> attachList(long id) {
 
         return jyAttachRepository.attachList(id);
     }

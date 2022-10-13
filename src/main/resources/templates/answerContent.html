@@ -61,12 +61,14 @@
                     <input type="file" id="onlyAttach" class="form-control" name="uploadFile" multiple style="display: none">
 
                     <input type="hidden" name="id" th:value="${myAnswerContent.id}">
+                    <input type="hidden" name="page" th:value="${page}">
+                    <input type="hidden" name="boardType" th:value="${myAnswerContent.boardType}">
 
                     <div>
                         <div id="attachUl" th:if="${!attachList.isEmpty()}">
                             <ul th:each="attachList : ${attachList}" style="list-style: none">
                                 <li>
-                                    <a th:href="@{/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}">
+                                    <a th:href="@{/user/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}">
                                         <span th:text="${attachList.originName}"/></a>
                                     <input type="checkbox" name="attBno" th:value="${attachList.attBno}"
                                            class="checkBtn" style="display: none">
@@ -82,7 +84,9 @@
                         <button type="button" id="del_btn" class="btn btn-primary"
                                 th:onclick="|location.href='@{/user/deleteAnswer(id=${myAnswerContent.id})}'|">삭제
                         </button>
-                        <button type="button" class="btn btn-primary" id="main_btn" onclick="location.href='/user/boardList?boardType=QnA_Board'">목록</button>
+                        <button type="button" class="btn btn-primary" id="main_btn"
+                                th:onclick="|location.href='@{/user/boardList(page=${page},boardType=${myAnswerContent.boardType})}'|">목록
+
                     </div>
 
                 </form>

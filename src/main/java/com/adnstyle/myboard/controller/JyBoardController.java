@@ -19,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -110,7 +111,7 @@ public class JyBoardController {
     @GetMapping("/boardContent")
     public String myBoardContent(Model model, long id, @RequestParam("page") int page, @RequestParam("type") String type, @RequestParam("search") String search) {
         List<JyBoard> myContent = jyBoardService.selectContent(id);//게시글 번호로 내용 불러오기
-        ArrayList<JyAttach> attachList = jyAttachService.attachList(id);//첨부파일리스트 조회하기
+        List<JyAttach> attachList = jyAttachService.attachList(id);//첨부파일리스트 조회하기
 
         model.addAttribute("myContent", myContent);//게시글내용
         model.addAttribute("attachList", attachList);//첨부파일
@@ -131,10 +132,15 @@ public class JyBoardController {
      * 첨부파일 완전삭제
      */
     @GetMapping("/deleteContent")
-    public String myBoardContentDelete(long id) {
+    public String myBoardContentDelete(long id, String boardType) {
         jyBoardService.deleteContent(id);//게시물 삭제 결과가 있다면
 
-        return "redirect:/";
+        if (boardType.equals("Free_Board")) {
+            return "redirect:/user/boardList?boardType=Free_Board";
+        } else if (boardType.equals("QnA_Board")) {
+            return "redirect:/user/boardList?boardType=QnA_Board";
+        }
+        return null;
     }
 
     /**
@@ -197,7 +203,8 @@ public class JyBoardController {
      * 게시글 수정하기
      */
     @PostMapping("/updateContent")
-    public String myBoardUpdateContent(JyBoard board, MultipartFile[] uploadFile, @RequestParam(value = "attBno", required = false) List<Long> attList) {// )HttpServletRequest request
+    public String myBoardUpdateContent(JyBoard board, MultipartFile[] uploadFile, @RequestParam(value = "attBno", required = false) List<Long> attList, @RequestParam("boardType") String boardType,
+                                       @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "type", defaultValue = "A") String type, @RequestParam(value = "search", defaultValue = "") String search, RedirectAttributes rttr) {// )HttpServletRequest request
         List attFileList = new ArrayList();
         System.out.println("attlist"+attList);
         if (attList != null) {
@@ -208,7 +215,18 @@ public class JyBoardController {
         }
         jyBoardService.updateContent(board, uploadFile);//게시글수정
 
-        return "redirect:/user/jyHome";
+        String bt =board.getBoardType();
+        if(boardType.equals("QnA_Board")){
+            rttr.addAttribute("page",page);
+            rttr.addAttribute("boardType",boardType);
+        }else if(boardType.equals("Free_Board")){
+            rttr.addAttribute("page",page);
+            rttr.addAttribute("search",search);
+            rttr.addAttribute("type",type);
+            rttr.addAttribute("boardType",boardType);
+
+        }
+        return "redirect:/user/boardList";
     }
 
     /**
@@ -229,7 +247,6 @@ public class JyBoardController {
             return "redirect:/user/boardList?boardType=QnA_Board";
         }
     }
-
 //    /**
 //     * 문의글 상세조회
 //     */
@@ -254,6 +271,7 @@ public class JyBoardController {
 //
 //    }
 
+
     /**
     * 답변글 상세조회
     */
@@ -261,7 +279,7 @@ public class JyBoardController {
         public String answerContent(Model model,long id, @RequestParam("page") int page){
             System.out.println("답변상세조회 컨트롤러");
             List<JyBoard> myAnswerContent = jyBoardService.selectContent(id);//게시글 번호로 내용 불러오기
-            ArrayList<JyAttach> attachList = jyAttachService.attachList(id);
+            List<JyAttach> attachList = jyAttachService.attachList(id);
             model.addAttribute("myAnswerContent", myAnswerContent);//게시글내용
             model.addAttribute("attachList", attachList);//첨부파일
             model.addAttribute("page", page);//페이지
@@ -279,7 +297,7 @@ public class JyBoardController {
     public String qnaContent(Model model,long id, @RequestParam("page") int page){
         System.out.println("답변상세조회 컨트롤러");
         List<JyBoard> myQnAContent = jyBoardService.selectContent(id);//게시글 번호로 내용 불러오기
-        ArrayList<JyAttach> attachList = jyAttachService.attachList(id);
+        List<JyAttach> attachList = jyAttachService.attachList(id);
         System.out.println("myQnAContent"+myQnAContent);
         model.addAttribute("myQnAContent", myQnAContent);//게시글내용
         model.addAttribute("attachList", attachList);//첨부파일
@@ -297,8 +315,7 @@ public class JyBoardController {
     @GetMapping("/deleteAnswer")
     public String deleteAnswer(Long id){
         jyBoardService.deleteAnswer(id);
-
-        return "redirect:/";
+        return "redirect:/user/boardList?boardType=QnA_Board";
 
     }
 
@@ -323,7 +340,6 @@ public class JyBoardController {
     @ResponseBody
     public Map insertChildReply(@RequestBody JyReply childReply){
         Map<String,String> map = new HashMap<>();
-        System.out.println("컨트롤러도착");
         System.out.println("ajax에서 넘어온값"+childReply);
         jyReplyService.insertChildReply(childReply);
         map.put("result","success");

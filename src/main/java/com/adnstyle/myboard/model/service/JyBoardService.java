@@ -48,9 +48,27 @@ public class JyBoardService {
         return jyBoardRepository.myBoardPage(pageMap);
     }
 
+    @Transactional
     public List<JyBoard> selectContent(Long id) {
          jyBoardRepository.updateCount(id);
         return jyBoardRepository.selectContent(id);
+    }
+
+    /**
+     * 게시글상세조회
+     * @param id
+     * @return
+     */
+    @Transactional
+    public Map<String,Object> selectBoardContent(long id) {
+        jyBoardRepository.updateCount(id);
+        List<JyBoard> ContentList = jyBoardRepository.selectContent(id);
+        List<JyAttach> AttachList =jyAttachRepository.attachList(id);
+        Map<String,Object> contentBoardMap = new HashMap<>();
+        contentBoardMap.put("ContentList",ContentList);
+        contentBoardMap.put("AttachList",AttachList);
+
+        return contentBoardMap;
     }
 
     @Transactional
@@ -58,7 +76,7 @@ public class JyBoardService {
         int num = jyBoardRepository.deleteContent(id);
 
         if (num > 0) {
-            ArrayList<JyAttach> attachList = jyAttachService.attachList(id);
+            List<JyAttach> attachList = jyAttachService.attachList(id);
             int no = jyAttachService.deleteFiles(attachList);//실제파일 삭제
             if (no > 0) {
                 jyAttachService.deleteAttach(id);
@@ -202,7 +220,7 @@ public class JyBoardService {
     public void deleteAnswer(Long id) {
         int num = jyBoardRepository.deleteAnswer(id);
             if (num > 0) {
-                ArrayList<JyAttach> attachList = jyAttachService.attachList(id);
+                List<JyAttach> attachList = jyAttachService.attachList(id);
                 int no = jyAttachService.deleteFiles(attachList);//실제파일 삭제
                 if (no > 0) {
                     jyAttachService.deleteAttach(id);
@@ -211,21 +229,6 @@ public class JyBoardService {
             }
         }
 
-    /**
-     * 게시글상세조회
-     * @param id
-     * @return
-     */
-    @Transactional
-    public Map<String,Object> selectBoardContent(long id) {
-       jyBoardRepository.updateCount(id);
-       List<JyBoard> ContentList = jyBoardRepository.selectContent(id);
-       ArrayList AttachList =jyAttachRepository.attachList(id);
-       Map<String,Object> contentBoardMap = new HashMap<>();
-       contentBoardMap.put("ContentList",ContentList);
-       contentBoardMap.put("AttachList",AttachList);
 
-        return contentBoardMap;
-    }
 
 }

@@ -18,7 +18,7 @@ public interface JyAttachRepository {
     /**
      * 게시글 번호로 첨부파일 리스트 불러오기
      */
-    ArrayList<JyAttach> attachList(Long id);
+    List<JyAttach> attachList(Long id);
 
     /**
      * 게시글에 포함된 모든 첨부파일 삭제

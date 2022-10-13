@@ -80,7 +80,7 @@
 
             <h1 id="mainTitle">게시글읽기</h1>
             <div id="main">
-                <form action="/updateContent" method="post" id="contentForm" enctype="multipart/form-data"
+                <form action="/user/updateContent" method="post" id="contentForm" enctype="multipart/form-data"
                       th:each="myContent : ${myContent}">
                     <label for="titleBox" class="form-label fs-5 fw-bold">제목</label>
                     <input type="text" id="titleBox" class="form-control" name="title" th:value="${myContent.title}"
@@ -96,6 +96,9 @@
 
                     <input type="hidden" name="id" th:value="${myContent.id}">
                     <input type="hidden" name="boardType" th:value="${myContent.boardType}">
+                    <input type="hidden" name="page" th:value="${page}">
+                    <input type="hidden" name="search" th:value="${search}">
+                    <input type="hidden" name="type" th:value="${type}">
 
 
                     <div>
@@ -118,7 +121,7 @@
                                 th:onclick="|location.href='@{/user/boardList(page=${page},type=${type},search=${search},boardType=${myContent.boardType})}'|">목록
                         </button>
                         <button type="button" id="del_btn" class="btn btn-primary"
-                                th:onclick="|location.href='@{user/deleteContent(id=${myContent.id})}'|">삭제
+                                th:onclick="|location.href='@{/user/deleteContent(id=${myContent.id})}'|">삭제
                         </button>
                     </div>
                 </form>
@@ -127,7 +130,7 @@
             <div>
                 <label>댓글작성</label>
                 <div id="replyBox">
-                    <form id="reply_box" method="post" action="/insertReply">
+                    <form id="reply_box" method="post" action="/user/insertReply">
                         <!--댓글내용-->
                         <input type="text" name="reContent" id="reContent" class="form-control">
                         <!--댓글작성자-->
@@ -149,47 +152,44 @@
                 <div id="replyPaging">
 <!--                여기에 총 카운트수로 page가져오기-->
                 </div>
-
-
-
-
             </div>
-        </div>
-    </div>
-    </div>
-    <div id="chileReplyBox">
-        <!--대댓글달기 버튼 클릭시 나올 Modal -->
-        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
-             tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">대댓글 작성</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="childReH()"
-                                aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
+            <div id="chileReplyBox">
+                <!--대댓글달기 버튼 클릭시 나올 Modal -->
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">대댓글 작성</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="childReH()"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
                                     <textarea name="reContent" id="childReplyContent" placeholder="대댓글을 작성해주세요"
                                               rows="10"></textarea>
 
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="childReSub" class="childReSub btn btn-primary" data-bs-dismiss="modal">등록</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                onclick="childReH()">닫기
-                        </button>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" id="childReSub" class="childReSub btn btn-primary" data-bs-dismiss="modal">등록</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                        onclick="childReH()">닫기
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <!--모달끝-->
         </div>
     </div>
-    <!--모달끝-->
+    </div>
+
     <script>
     //대댓글등록
-        $(document).on("click", "#childReV", function () {//동적으로 생성된 버튼에 이벤트를 적용하려면 이 방식으로! 대댓글달기버튼 클릭시
+        $(document).on("click", ".childReV", function () {//동적으로 생성된 버튼에 이벤트를 적용하려면 이 방식으로! 대댓글달기버튼 클릭시
 
             $("#chileReplyBox").css('display', 'inline');
-            console.log("대댓글달기 버튼 클릭")
+
             let reBno = $(this).data('rebno');
             let reOrder = $(this).data('reorder');
             let reDepth = $(this).data('redepth');
@@ -197,10 +197,13 @@
             let reGroupBno = $(this).data('regroupbno');
             let boardBno = $(this).data('boardbno');
 
-            $(document).off('click').on("click", ".childReSub", function () {
+            //대댓글모달에서 등록 버튼 눌렀을때
+            $(document).off('click',".childReSub").on("click", ".childReSub", function () {
                 let reContent = $("#childReplyContent").val();
                 console.log("하위댓글"+reContent);
+
                 if (reContent.length > 0) {
+
                     let childReply = {
                         "reBno"      : reBno,
                         "reContent"  : reContent,
@@ -222,7 +225,6 @@
                                 alert("댓글이 등록되었습니다.");
                                 childReH();
                                 selectReplyList();
-
                             } else {
                                 alert("댓글등록 실패")
                             }
@@ -306,11 +308,6 @@
             });
         });
 
-        /*beforeSend : function(xhr)
-    {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-      /*  xhr.setRequestHeader("${_csrf.headerName}", "${_csrf.token}");
-    },
-    */
 
     // 댓글조회 함수 페이징
     function selectReplyList(page) {
