@@ -85,7 +85,7 @@
 
                     <input type="hidden" name="id" th:value="${myQnAContent.id}">
                     <input type="hidden" name="boardType" th:value="${myQnAContent.boardType}">
-                    <input tyep="text" name="page" th:value="${page}">
+                    <input type="hidden" name="page" th:value="${page}">
 
                     <div>
                         <div id="attachUl" th:if="${!attachList.isEmpty()}">
@@ -108,7 +108,7 @@
                                 th:onclick="|location.href='@{/user/boardList(page=${page},boardType=${myQnAContent.boardType})}'|">목록
                         </button>
                         <button type="button" id="del_btn" class="btn btn-primary"
-                                th:onclick="|location.href='@{/user/deleteContent(id=${myQnAContent.id})'|">삭제
+                                th:onclick="|location.href='@{/user/deleteContent(id=${myQnAContent.id},boardType=${myQnAContent.boardType})}'|">삭제
                         </button>
                     </div>
                     <div id="btnBox">
@@ -157,7 +157,8 @@
             for (let i = 0; i < formU.length; i++) {
                 formU[i].readOnly = false;
             }
-
+            let writer = document.getElementById("writerBox")
+            writer.readOnly = true;
             //기존 수정하기 버튼 가리기
             document.getElementById("upd_btn").style.display = "none";
             //수정완료 버튼 보이게 하기

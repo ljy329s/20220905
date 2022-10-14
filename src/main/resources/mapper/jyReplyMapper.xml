@@ -52,7 +52,7 @@
     <insert id="insertChildReply">
         INSERT INTO jy_reply(re_content, re_created_by, re_created_date, re_modified_date, board_bno, re_depth,
                              re_order, re_group_bno)
-        VALUES (#{reContent}, "로그인전", NOW(), NOW(), #{boardBno}, #{reDepth} + 1, #{reOrder} + 1, #{reGroupBno});
+        VALUES (#{reContent},#{reCreatedBy}, NOW(), NOW(), #{boardBno}, #{reDepth} + 1, #{reOrder} + 1, #{reGroupBno});
     </insert>
 
     <!--    댓글삭제 -->

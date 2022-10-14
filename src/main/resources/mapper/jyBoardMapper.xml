@@ -49,7 +49,7 @@
         <include refid="searchContents"></include>
     </select>
 
-    <!-- 고객들이 볼 게시판 화면-->
+    <!-- 고객들이 볼 게시판 리스트 화면  -->
     <select id="myBoardPage" parameterType="map" resultType="jyBoard">
         select id, title, view_count, modified_date, modified_by
         from jy_board
@@ -58,6 +58,7 @@
             limit #{offset}, #{pageSize}
     </select>
 
+    <!--  관리자가 볼 게시판 리스트 화면   -->
     <select id="selectList" parameterType="map" resultType="jyBoard">
         select id, title, view_count, modified_date, modified_by,del_yn,group_bno
         from jy_board
@@ -66,19 +67,21 @@
         limit #{offset}, #{pageSize}
     </select>
 
-    <!--게시글 상세조회-->
+    <!--    게시글 상세조회    -->
     <select id="selectContent" parameterType="long" resultType="jyBoard">
         select title, modified_by, content, modified_date, id, group_bno, board_type
         from jy_board
         where id = #{id}
     </select>
 
+    <!--    게시글 클릭시 조회수 증가  -->
     <update id="updateCount" parameterType="long">
         update jy_board
         set view_count= view_count + 1
         where id = #{id}
     </update>
 
+    <!--    게시글 삭제처리(상태값변경)    -->
     <update id="deleteContent" parameterType="long">
         update jy_board set del_yn = 'Y'
         where
@@ -94,7 +97,8 @@
         FROM jy_board
         ORDER BY ID DESC limit 1;
     </select>
-    <!--게시글등록-->
+
+    <!--    게시글등록   -->
     <insert id="insertContent" parameterType="jyBoard">
         insert into jy_board(title, content, view_count, created_by, modified_by, created_date, modified_date,
                              board_type)
@@ -110,21 +114,21 @@
         where id = #{id}
     </update>
 
-    <!--  게시글 등록시 게시글번호를 그룹번호로 수정  -->
+    <!--    게시글 등록시 게시글번호를 그룹번호로 수정   -->
     <update id="updateGroupBno" parameterType="long">
         update jy_board
         set group_bno=#{id}
         where id = #{id}
     </update>
 
-    <!--답글등록-->
+    <!--    답글등록    -->
     <insert id="insertAnswer" parameterType="jyBoard">
         insert into jy_board (title, content, view_count, created_by, modified_by, created_date, modified_date,
                               group_bno, board_type)
         values (#{title}, #{content}, 0, #{createdBy}, #{createdBy}, NOW(), NOW(), #{groupBno}, #{boardType})
     </insert>
 
-    <!--답글삭제-->
+    <!--    답글삭제    -->
     <update id="deleteAnswer" parameterType="long">
         update jy_board
         set del_yn = 'Y'

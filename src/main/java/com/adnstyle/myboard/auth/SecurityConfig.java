@@ -26,12 +26,15 @@ public class SecurityConfig {
                 //.antMatchers("/manager/**").access("hasAnyRole('ROLE_MANAGER','ROLE_ADMIN')")//manager로 들어왔을때 인증뿐 아니라 권한이 있는 사람만 접속 하게끔
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")//admin으로 들어왔을땐 ADMIN권한이 있는 사람만 접속이 가능하다.
                 .anyRequest().permitAll()// 이 외의 요청은 모든권한 허용하겠다.
-                .and()//그리고? 조건추가?
+                    .and()//그리고? 조건추가?
                 .formLogin()//권한이 필요한 경로에 접근했으면 로그인페이지로 이동시키겠다 스프링시큐리티에서 제공하는 인증방식
-                .loginPage("/loginForm")//사용자정의 로그인페이지 적어줌
-                .loginProcessingUrl("/login")// /login 주소로 호출하면 시큐리티가 낚아채서 대신 로그인을 진행해준다.
-                .defaultSuccessUrl("/user/jyHome");//로그인이 성공하면 갈 경로
-
+                    .loginPage("/loginForm")//사용자정의 로그인페이지 적어줌
+                    .loginProcessingUrl("/login")// /login 주소로 호출하면 시큐리티가 낚아채서 대신 로그인을 진행해준다.
+                    .defaultSuccessUrl("/user/userLogin", true)//로그인이 성공하면 갈 경로 ,true를 붙이면 무조건 성공시에 그 경로로 가게 한다. 안적으면 로그인성공시 누르고자한 경로로 가게된다
+                    .and()
+                .logout()//로그아웃관련한 설정하기(설정해주지 않으면 자동적으로 로그아웃후 로그인폼으로 이동)
+                    .logoutUrl("/logout")//시큐리티의 기본 로그아웃 url(/logout)로 적어줬다, logoutUrl : 시큐리티에게 logout요청하기위한 url을 지정하는 메소드
+                    .logoutSuccessUrl("/");//.logoutSuccessUrl:로그아웃이 성공하고 이동할 경로를 지정하는 메소드
         return http.build();
     }
 

@@ -1,9 +1,11 @@
 package com.adnstyle.myboard.auth;
 
 import com.adnstyle.myboard.model.domain.JyUser;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -19,7 +21,10 @@ import java.util.Collection;
 
 //UserDetails을 implements했기때문에 UserDetails==PrincipalDetails
 
-public class PrincipalDetails implements UserDetails {//UserDetails상속받기
+@Getter
+public class PrincipalDetails implements UserDetails, Serializable {//UserDetails상속받기
+
+    private static final long serialVersionUID = 1L;
 
     private JyUser jyUser;
 

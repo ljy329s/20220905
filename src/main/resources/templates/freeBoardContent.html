@@ -115,8 +115,13 @@
 
                     </div>
                     <div class="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-primary" id="upd_btn" style="display: inline">수정하기</button>
+<!--                        <th:block th:if="${session.jyUserSession.userId.toString().equals()}">-->
+                        <!--                        <th:block th:if="${session.jyUserSession.userId.toString().equals(test123)}"> -->
+
+                        <th:block th:if="${session.jyUserSession.userId == myContent.modifiedBy}">
+                       <button type="button" class="btn btn-primary" id="upd_btn" style="display: inline">수정하기</button>
                         <button type="submit" class="btn btn-primary" id="upd_sub" style="display: none">수정완료</button>
+                        </th:block>
                         <button type="button" id="main_btn" class="btn btn-primary"
                                 th:onclick="|location.href='@{/user/boardList(page=${page},type=${type},search=${search},boardType=${myContent.boardType})}'|">목록
                         </button>
@@ -134,7 +139,7 @@
                         <!--댓글내용-->
                         <input type="text" name="reContent" id="reContent" class="form-control">
                         <!--댓글작성자-->
-                        <input type="text" name="reCreatedBy" id="reCreatedBy" value="작성자명" readonly="readonly">
+                        <input type="hidden" name="reCreatedBy" id="reCreatedBy" th:value="${session.jyUserSession.userName}" readonly="readonly">
                         <!--원글게시글 번호-->
                         <th:block th:each="myContent : ${myContent}">
                             <input type="hidden" name="boardBno" id="boardBno" th:value="${myContent.id}">
@@ -168,7 +173,9 @@
                                     <textarea name="reContent" id="childReplyContent" placeholder="대댓글을 작성해주세요"
                                               rows="10"></textarea>
 
+                            <input type="hidden" name="reCreatedBy" id="childReplyCreateBy" th:value="${session.jyUserSession.userName}">
                             </div>
+
                             <div class="modal-footer">
                                 <button type="button" id="childReSub" class="childReSub btn btn-primary" data-bs-dismiss="modal">등록</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
@@ -193,14 +200,16 @@
             let reBno = $(this).data('rebno');
             let reOrder = $(this).data('reorder');
             let reDepth = $(this).data('redepth');
-            let reCreatedBy = $(this).data('recreatedby');
+            //let reCreatedBy = $(this).data('recreatedby');
             let reGroupBno = $(this).data('regroupbno');
             let boardBno = $(this).data('boardbno');
 
             //대댓글모달에서 등록 버튼 눌렀을때
             $(document).off('click',".childReSub").on("click", ".childReSub", function () {
                 let reContent = $("#childReplyContent").val();
+                let reCreatedBy = $("#childReplyCreateBy").val();
                 console.log("하위댓글"+reContent);
+                console.log("작성자"+reCreatedBy);
 
                 if (reContent.length > 0) {
 
@@ -378,7 +387,7 @@
 
                             newReplyList += "<button type='button' id='childReV' class='btn btn-primary childReV' data-bs-toggle='modal'";
                             newReplyList += "data-bs-target='#staticBackdrop'";
-                            newReplyList += "data-rebno=" + reply.reBno + " data-reorder=" + reply.reOrder + " data-redepth=" + reply.reDepth + " data-recreatedby=" + reply.reCreatedBy + " data-regroupbno= " + reply.reGroupBno + " data-boardbno= " + reply.boardBno;
+                            newReplyList += "data-rebno=" + reply.reBno + " data-reorder=" + reply.reOrder + " data-redepth=" + reply.reDepth + " data-regroupbno= " + reply.reGroupBno + " data-boardbno= " + reply.boardBno;//" data-recreatedby=" + reply.reCreatedBy +
                             newReplyList += ">대댓글달기</button>"
                             newReplyList += "</div></td>";
                         }

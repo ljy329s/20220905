@@ -86,7 +86,7 @@
                         </button>
                         <button type="button" class="btn btn-primary" id="main_btn"
                                 th:onclick="|location.href='@{/user/boardList(page=${page},boardType=${myAnswerContent.boardType})}'|">목록
-
+                        </button>
                     </div>
 
                 </form>
@@ -126,6 +126,8 @@
                 for (let i = 0; i < formU.length; i++) {
                     formU[i].readOnly = false;
                 }
+                let writer = document.getElementById("writerBox")
+                writer.readOnly = true;
 
                 //기존 수정하기 버튼 가리기
                 document.getElementById("upd_btn").style.display = "none";

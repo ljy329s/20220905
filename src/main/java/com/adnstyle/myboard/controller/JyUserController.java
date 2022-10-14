@@ -1,12 +1,19 @@
 package com.adnstyle.myboard.controller;
 
+import com.adnstyle.myboard.auth.PrincipalDetails;
 import com.adnstyle.myboard.model.domain.JyUser;
 import com.adnstyle.myboard.model.service.JyUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequiredArgsConstructor
@@ -69,15 +76,27 @@ public class JyUserController {
     }
 
     /**
-     * 마이페이지 화면으로 이동
-     * @return
+     * 로그인 성공시이동할 화면 로그인을 성공하고 넘어가는 화면에서 세션을 생성!
      */
 
+    // @AuthenticationPrincipal 어노테이션을 사용하면 UserDetails에서  return한 객체를 받아서 파라미터로 사용할수있다.
+    @GetMapping("/user/userLogin")
+    public String UserLogin(@AuthenticationPrincipal PrincipalDetails principalDetails, HttpSession session) {
+        JyUser jyUserSession  = principalDetails.getJyUser();
+        session.setAttribute("jyUserSession",jyUserSession);
+        System.out.println(jyUserSession);
+        return "jyHome";
+    }
+
+    /**
+     * 마이페이지 화면으로 이동
+     *
+     * @return
+     */
     @GetMapping("/myPage")
     public String myPage() {
         return "myPage";
     }
-
 
 
     //시큐리티연습
