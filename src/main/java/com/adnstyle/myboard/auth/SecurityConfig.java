@@ -1,5 +1,7 @@
 package com.adnstyle.myboard.auth;
 
+import com.adnstyle.myboard.oauth.PrincipalOauth2UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -9,13 +11,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-
+//구글로그인이 완료된 후의 후처리가 필요함
+// 1.코드받기(받았다는건 인증됐다는것) 2.엑세스토큰(코드를 통해서 엑세스 토큰을 받아야함 사용자 정보에 접근할수있는 권한이 생김)
+// 3. 사용자 프로필 정보를 가져와서 4.정보를 토대로 회원가입을 자동으로 진행
+//4-2 추가적으로 더 필요한 정보가 있다면 추가적인 정보를 얻는 회원가입창이 떠야한다 ex)쇼핑몰 집주소
 @Configuration//설정클래스임을 알려줌
 @EnableWebSecurity//시큐리티 활성화 스프링 시큐리티 필터(SecurityConfig클래스를 말함)가 스프링 필터체인에 등록됨.
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+@RequiredArgsConstructor
 //Secured어노테이션 활성화 특정 컨트롤러 메서드에 간단하게 권한부여 가능, preAuthorize 어노테이션 활성화
 public class SecurityConfig {
 
+    private final PrincipalOauth2UserService principalOauth2UserService;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -34,7 +41,13 @@ public class SecurityConfig {
                     .and()
                 .logout()//로그아웃관련한 설정하기(설정해주지 않으면 자동적으로 로그아웃후 로그인폼으로 이동)
                     .logoutUrl("/logout")//시큐리티의 기본 로그아웃 url(/logout)로 적어줬다, logoutUrl : 시큐리티에게 logout요청하기위한 url을 지정하는 메소드
-                    .logoutSuccessUrl("/");//.logoutSuccessUrl:로그아웃이 성공하고 이동할 경로를 지정하는 메소드
+                    .logoutSuccessUrl("/")//.logoutSuccessUrl:로그아웃이 성공하고 이동할 경로를 지정하는 메소드
+                .and()
+                .oauth2Login()//소셜로그인을 위해 적
+                .loginPage("/loginForm")
+                .userInfoEndpoint()
+                .userService(principalOauth2UserService);
+        ;// 구글로그인이 완료되면 tip.코드를 받는게 아니라 , (엑세스 토큰+ 사용자프로필정보를 한번에 받음)
         return http.build();
     }
 
@@ -44,82 +57,3 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 }
-//403에러가 뜨는건 접근권한이 없다는뜻
-
-
-//    @Bean
-//    public PasswordEncoder passwordEncoder(){//스프링부트 2.0 이후 버전부터는 반드시 PasswordEncoder를 지정해야함
-//        return new BCryptPasswordEncoder();
-//    }
-//
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeRequests()
-//                .antMatchers("/error",
-//                        "/favicon.ico",
-//                        "/**/*.png",
-//                        "/**/*.gif",
-//                        "/**/*.svg",
-//                        "/**/*.jpg",
-//                        "/**/*.html",
-//                        "/**/*.css",
-//                        "/**/*.js",
-//                        "/**/*.jsp", "/oauth/**","/**").permitAll()
-//                .anyRequest().authenticated()
-//
-//                .and()
-//                .csrf()
-//                .disable()
-//                .exceptionHandling();
-//
-//        return http.build();
-//    }
-
-//}
-//package com.adnstyle.myboard.auth;
-//
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.security.web.SecurityFilterChain;
-//
-//@Configuration//설정클래스임을 알려줌
-//@EnableWebSecurity
-//@RequiredArgsConstructor
-//public class SecurityConfig{
-//
-//    @Bean
-//    public PasswordEncoder passwordEncoder(){//스프링부트 2.0 이후 버전부터는 반드시 PasswordEncoder를 지정해야함
-//        return new BCryptPasswordEncoder();
-//    }
-//
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeRequests()
-//                .antMatchers("/error",
-//                        "/favicon.ico",
-//                        "/**/*.png",
-//                        "/**/*.gif",
-//                        "/**/*.svg",
-//                        "/**/*.jpg",
-//                        "/**/*.html",
-//                        "/**/*.css",
-//                        "/**/*.js",
-//                        "/**/*.jsp", "/oauth/**","/**").permitAll()
-//                .anyRequest().authenticated()
-//
-//                .and()
-//                    .csrf()
-//                    .disable()
-//                    .exceptionHandling();
-//
-//        return http.build();
-//    }
-//
-//}

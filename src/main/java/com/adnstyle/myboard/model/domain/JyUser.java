@@ -1,6 +1,7 @@
 package com.adnstyle.myboard.model.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.ibatis.type.Alias;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -9,6 +10,7 @@ import java.util.Date;
 
 @Alias("jyUser")
 @Data
+@NoArgsConstructor
 public class JyUser {
     /**
      * 고객번호
@@ -67,4 +69,25 @@ public class JyUser {
      * 탈퇴일자
      */
     private LocalDateTime endDate;
+
+    /**
+     * 소셜로그인시
+     */
+    private String provider;
+    private String providerId;
+
+    /**
+     * 소셜로그인 회원가입 위한 생성자
+     */
+    public JyUser(String userName, String userPw, String userEmail, String role, String provider, String providerId, LocalDateTime regDate){
+        this.userName =userName;
+        this.userPw =userPw;
+        this.userEmail =userEmail;
+        this.role=role;
+        this.provider=provider;
+        this.providerId=providerId;
+        this.regDate=regDate;
+    }
+
+
 }
