@@ -8,6 +8,14 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+/**
+ * /**
+ *  *    provider          varchar(10)                null,
+ *  *     provider_id      varchar(255)               null,
+ *  *     db에 추가해주기
+ *  */
+
+
 @Alias("jyUser")
 @Data
 @NoArgsConstructor

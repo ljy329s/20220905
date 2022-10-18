@@ -37,6 +37,8 @@ OAuth2User도 같이 implements하여 userObject를 사용가능 그래서 이�
 user객체를 품고있는 부모클래스 PrincipalDetails만 사용하면된다.
 계속 중복적인 설명인데 잘 정리해놓자
 * */
+
+
 @Getter
 public class PrincipalDetails implements UserDetails, OAuth2User, Serializable {//UserDetails상속받기
 
