@@ -43,16 +43,17 @@ public class SecurityConfig {
                     .logoutUrl("/logout")//시큐리티의 기본 로그아웃 url(/logout)로 적어줬다, logoutUrl : 시큐리티에게 logout요청하기위한 url을 지정하는 메소드
                     .logoutSuccessUrl("/")//.logoutSuccessUrl:로그아웃이 성공하고 이동할 경로를 지정하는 메소드
                 .and()
-                .oauth2Login()//소셜로그인을 위해 적
+                .oauth2Login()//소셜로그인을 위해 적음
                 .loginPage("/loginForm")
+                .defaultSuccessUrl("/user/userLogin", true)
                 .userInfoEndpoint()
                 .userService(principalOauth2UserService);
         ;// 구글로그인이 완료되면 tip.코드를 받는게 아니라 , (엑세스 토큰+ 사용자프로필정보를 한번에 받음)
         return http.build();
     }
 
-    @Bean//Bean 해당메서드의 리턴되는 오브젝트를 IoC로 등록해준다
-    public PasswordEncoder passwordEncoder() {
+    @Bean//Bean 해당메서드의 리턴되는 오브젝트를 IoC로 등록해준다 ..순환참조에러가나넹..static적으니까 안남
+    public static PasswordEncoder passwordEncoder() {
 
         return new BCryptPasswordEncoder();
     }

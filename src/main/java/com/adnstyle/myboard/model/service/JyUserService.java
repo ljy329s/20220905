@@ -69,5 +69,13 @@ public class JyUserService implements UserDetailsService {
         }
         return null;
     }
+
+    /**
+     * 소셜회원가입
+     * @param jyUser
+     */
+    public void insertNewScUser(JyUser jyUser) {
+        jyUserRepository.insertNewScUser(jyUser);
+    }
 }
 

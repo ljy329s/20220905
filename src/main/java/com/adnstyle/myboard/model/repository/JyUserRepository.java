@@ -13,4 +13,7 @@ public interface JyUserRepository {
 
     JyUser selectUser(String userId);
 
+    void insertNewScUser(JyUser jyUser);
+
+    JyUser selectScUser(String userId);
 }

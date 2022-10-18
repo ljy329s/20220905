@@ -25,4 +25,17 @@
         where user_id = #{userId}
           and del_yn = 'N'
     </select>
+
+<!--    소셜로그인시 회원등록-->
+    <insert id="insertNewScUser" parameterType="jyUser">
+        insert into jy_user(user_id, user_pw,user_name, user_email , role, reg_date)
+        values (#{userId}, #{userPw},#{userName},#{userEmail}, #{role}, NOW())
+    </insert>
+
+<!--    소셜 로그인-->
+    <select id="selectScUser" resultType="jyUser">
+        select user_id, user_name, user_pw, user_email, role, reg_date, provider,provider_id
+        from jy_user
+        where user_id = #{userId}
+    </select>
 </mapper>

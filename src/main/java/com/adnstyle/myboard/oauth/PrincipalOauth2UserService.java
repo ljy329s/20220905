@@ -3,8 +3,9 @@ package com.adnstyle.myboard.oauth;
 import com.adnstyle.myboard.auth.PrincipalDetails;
 import com.adnstyle.myboard.model.domain.JyUser;
 import com.adnstyle.myboard.model.repository.JyUserRepository;
+import com.adnstyle.myboard.model.service.JyUserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -25,9 +26,10 @@ providerId = super.loadUser(userRequest).getAttributes())를 통해 가져온 su
 @Service
 @RequiredArgsConstructor
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
-
-    private final PasswordEncoder passwordEncoder;
     private final JyUserRepository jyUserRepository;
+    private final JyUserService jyUserService;
+
+    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     //구글로 부터 받은 userRequest 데이터에 대한 후처리되는 함수
     //구글로그인한 정보가 userRequest여기에 들어온다
@@ -40,31 +42,42 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         OAuth2User oAuth2User = super.loadUser(userRequest);
         //구글로그인 버튼을 클릭하면 구글로그인창이 뜨고 여기서 로그인을 진행하면 코드를 리턴받는다.(OAuth-Client라이브러리가 받아줌)-코드를 통해서 AcessTocken을 요청
         //userRequest정보로 회원 프로필을 받아야함(이때 사용하는 함수가 loadUser함수).이 함수로 구글로부터 회원프로필을 받아준다.
-        System.out.println("getAttributes: " +oAuth2User.getAttributes());
+        System.out.println("getAttributes: " + oAuth2User.getAttributes());
 
         //회원가입을 강제로 진행
-        String provider =userRequest.getClientRegistration().getClientId();//google
+        // String provider =userRequest.getClientRegistration().getClientId();//google
+        String provider = userRequest.getClientRegistration().getClientName();//google
         String providerId = oAuth2User.getAttribute("sub");
-        String username = provider+"_"+providerId;//google_sub(sub내용) 이렇게되면 userId가 충돌날일이 없다
-        String password =passwordEncoder.encode("겟인데어");//OAuth방식에는 크게 의미가 없지만 그냥 만들어봄
+        String userId = provider + "_" + providerId;//google_sub(sub내용) 이렇게되면 userId가 충돌날일이 없다
+        String password = bCryptPasswordEncoder.encode("비밀번호");//OAuth방식에는 크게 의미가 없지만 그냥 만들어봄
         String email = oAuth2User.getAttribute("email");
         String role = "ROLE_USER";
+        String username = oAuth2User.getAttribute("name");
 
         //이미 가입되어있는데 또 가입하면 안되니까 해당아이디로 가입이 되어있는지 확인해줘야함
-        JyUser jyUser = jyUserRepository.selectUser(username);
-        if(jyUser==null){
-            jyUser = JyUser.builder()
-                    .username(username)
-                    .password(password)
-                    .email(email)
-                    .role(role)
-                    .provider(provider)
-                    .providerId(providerId)
-                    .build();
-            jyUserRepository.insertNewUser(jyUser);
-        }
+        JyUser jyUser = new JyUser();
+        if (jyUserRepository.selectUser(userId) == null) {//아이디 조회하는 메서드
+            jyUser.setUserId(userId);
+            jyUser.setUserName(username);
+            jyUser.setUserPw(password);
+            jyUser.setUserEmail(email);
+            jyUser.setRole(role);
+            jyUser.setProvider(provider);
+            jyUser.setProviderId(providerId);
 
-        return new PrincipalDetails(jyUser,oAuth2User.getAttributes());
+            jyUserService.insertNewScUser(jyUser); //회원가입하는메서드
+            System.out.println(jyUser);
+
+        }
+        else {
+            jyUser=jyUserRepository.selectScUser(userId);
+        }
+        return new PrincipalDetails(jyUser, oAuth2User.getAttributes());
         //PrincipalDetails세션안에 들어감
+
     }
 }
+
+
+
+
