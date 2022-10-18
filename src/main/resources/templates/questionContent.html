@@ -101,20 +101,27 @@
 
                     </div>
                     <div class="btn-group" role="group" aria-label="Basic example">
+                        <!--글 작성자일 경우에만 수정,삭제 버튼이 보인다-->
+                        <th:block th:if="${session.jyUserSession.userName == myQnAContent.modifiedBy}">
                         <button type="button" class="btn btn-primary" id="upd_btn" style="display: inline">수정하기</button>
                         <button type="submit" class="btn btn-primary" id="upd_sub" style="display: none">수정완료</button>
-                        <!--                        관리자일 경우에만 답변달기 버튼이 보이도록 수정하기! 게시글 번호 가지고 이동-->
+                        </th:block>
                         <button type="button" id="main_btn" class="btn btn-primary"
                                 th:onclick="|location.href='@{/user/boardList(page=${page},boardType=${myQnAContent.boardType})}'|">목록
                         </button>
+                        <th:block th:if="${session.jyUserSession.userName == myQnAContent.modifiedBy}">
                         <button type="button" id="del_btn" class="btn btn-primary"
                                 th:onclick="|location.href='@{/user/deleteContent(id=${myQnAContent.id},boardType=${myQnAContent.boardType})}'|">삭제
                         </button>
+                        </th:block>
                     </div>
                     <div id="btnBox">
+<!--                        관리자일 경우에만 답글달기 버튼이 보임-->
+                    <th:block th:if="${session.jyUserSession.role == 'ROLE_ADMIN'}">
                         <button type="button" class="btn btn-primary" id="answer_btn" style="display: inline"
                                 th:onclick="|location.href='@{/user/answerForm(id=${myQnAContent.id})}'|">답글달기
                         </button>
+                    </th:block>
                     </div>
                 </form>
             </div>

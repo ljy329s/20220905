@@ -6,9 +6,7 @@ import com.adnstyle.myboard.model.service.JyUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -79,9 +77,10 @@ public class JyUserController {
 
     /**
      * 로그인 성공시이동할 화면 로그인을 성공하고 넘어가는 화면에서 세션을 생성!
+     * 일반로그인, 소셜로그인 둘다! 부모클래스인 PrincipalDetails 사용했기때문
      */
 
-    // @AuthenticationPrincipal 어노테이션을 사용하면 UserDetails에서  return한 객체를 받아서 파라미터로 사용할수있다.
+    // @AuthenticationPrincipal 어노테이션을 사용하면 PrincipalDetails에서  return한 객체를 받아서 파라미터로 사용할수있다.
     @GetMapping("/user/userLogin")
     public String UserLogin(@AuthenticationPrincipal PrincipalDetails principalDetails, HttpSession session) {
         JyUser jyUserSession  = principalDetails.getJyUser();
@@ -126,15 +125,15 @@ public class JyUserController {
 //        return "세션정보확인하기";
 //    }
 
-    @GetMapping("/test/oauth/login")
-    public @ResponseBody String testOAuthLogin(Authentication authentication, @AuthenticationPrincipal OAuth2User oauth){//DI 의존성주입 Authentication객체안에 Principal이 있고
-        System.out.println("/test/oauth/login----------------");
-        OAuth2User oAuth2User =(OAuth2User) authentication.getPrincipal();
-
-        System.out.println("authentication"+oAuth2User.getAttributes());
-        System.out.println("oauth2User"+oauth.getAttributes());
-        return "OAuth 세션정보 확인하기";
-    }
+//    @GetMapping("/test/oauth/login")
+//    public @ResponseBody String testOAuthLogin(Authentication authentication, @AuthenticationPrincipal OAuth2User oauth){//DI 의존성주입 Authentication객체안에 Principal이 있고
+//        System.out.println("/test/oauth/login----------------");
+//        OAuth2User oAuth2User =(OAuth2User) authentication.getPrincipal();
+//
+//        System.out.println("authentication"+oAuth2User.getAttributes());
+//        System.out.println("oauth2User"+oauth.getAttributes());
+//        return "OAuth 세션정보 확인하기";
+//    }
 
     //정리
 
