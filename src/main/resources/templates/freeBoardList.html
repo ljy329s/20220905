@@ -26,6 +26,17 @@
     a{
         text-decoration: none;
     }
+    .delBoardList{
+        text-align: center;
+    }
+
+    .t_txt{
+        text-align: center;
+    }
+
+    th{
+        text-align: center;
+    }
 </style>
 <body>
         <div class="container">
@@ -61,15 +72,22 @@
     </thead>
             <tbody>
                 <tr th:each="board : ${myBoardList}">
-                    <td th:text="${board.id}"></td>
-                    <th:block th:if="${board.id} == ${board.groupBno}">
-                        <td><a th:href="@{/user/boardContent(id=${board.id},page=${ph.page},type=${type},search=${search})}"
-                               th:text="${board.title}"/></td>
+                    <th:block th:if="${session.jyUserSession.role} =='ROLE_USER' and ${board.delYn}=='Y'">
+                        <td colspan="6"><h6 class="delBoardList">삭제된 게시물입니다</h6></td>
                     </th:block>
-                    <td th:text="${board.modifiedBy}"></td>
-                    <td th:text="${#temporals.format(board.modifiedDate,'yyyy-MM-dd HH:mm')}"></td>
-                    <td th:text="${board.viewCount}"></td>
-                    <td th:text="${board.delYn}"></td>
+
+                    <th:block th:unless="${session.jyUserSession.role} =='ROLE_USER' and ${board.delYn}=='Y'">
+
+                        <td th:text="${board.id}" class="t_txt"></td>
+                        <th:block th:if="${board.id} == ${board.groupBno}">
+                            <td class="text-truncate"><a th:href="@{/user/boardContent(id=${board.id},page=${ph.page},type=${type},search=${search})}"
+                                   th:text="${board.title}"/></td>
+                        </th:block>
+                        <td class="text-truncate t_txt" th:text="${board.modifiedBy}"></td>
+                        <td th:text="${#temporals.format(board.modifiedDate,'yyyy-MM-dd HH:mm')}" class="t_txt"></td>
+                        <td th:text="${board.viewCount}" class="t_txt"></td>
+                        <td th:text="${board.delYn}" class="t_txt"></td>
+                </th:block>
                 </tr>
             </tbody>
 

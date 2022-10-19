@@ -49,6 +49,7 @@ public class JyAttachService {
     }
 
 
+
     @Transactional
     public int deleteFiles(List<JyAttach> attachList) {
         //첨부파일이 없으면 그냥 메서드 끝내기

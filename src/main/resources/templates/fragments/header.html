@@ -17,8 +17,6 @@
     </style>
     <header>
         <div id="header">
-            <div id="logo">
-                <h2>제목혹은 아이콘이 들어갈곳</h2>
                 <ul id="loginInfo">
                     <th:block th:if="${session.jyUserSession != null}">
                         <li th:text="${session.jyUserSession.userName} + 님 +' '+안녕하세요"></li>
@@ -29,11 +27,10 @@
                         <li>로그인해주세요</li>
                     </th:block>
                 </ul>
-            </div>
         </div>
-        <ul class="nav nav-pills nav-fill">
-            <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="/">메인화면</a>
+        <ul class="nav nav-pills nav-fill" >
+        <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">메인화면</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/user/boardList(boardType='QnA_Board')}">문의하기</a>

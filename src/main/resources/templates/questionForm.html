@@ -59,7 +59,7 @@
                     <label for="titleBox" class="form-label fs-5 fw-bold">제목</label>
                         <input type="text" id="titleBox" class="form-control" name="title">
                     <label for="writerBox" class="form-label fs-5 fw-bold">작성자</label>
-                        <input type="text" id="writerBox" class="form-control" name="createdBy" th:value="${session.jyUserSession.userName}" readonly="readonly">
+                        <input type="text" id="writerBox" class="form-control" name="createdBy" th:value="${session.jyUserSession.userId}" readonly="readonly">
                     <label for="contentBox" class="form-label fs-5 fw-bold">내용</label>
                         <textarea rows="20" name="content" id="contentBox" class="form-control"></textarea>
 

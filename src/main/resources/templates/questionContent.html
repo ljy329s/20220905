@@ -102,7 +102,7 @@
                     </div>
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <!--글 작성자일 경우에만 수정,삭제 버튼이 보인다-->
-                        <th:block th:if="${session.jyUserSession.userName == myQnAContent.modifiedBy}">
+                        <th:block th:if="${session.jyUserSession.userId == myQnAContent.modifiedBy}">
                         <button type="button" class="btn btn-primary" id="upd_btn" style="display: inline">수정하기</button>
                         <button type="submit" class="btn btn-primary" id="upd_sub" style="display: none">수정완료</button>
                         </th:block>

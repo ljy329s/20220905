@@ -4,8 +4,6 @@
       layout:decorate="~{layout/default_layout}">
 <head>
     <meta charset="utf-8">
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/jquery-3.6.1.min.js"></script>
     <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>자유게시판</title>
@@ -101,22 +99,34 @@
                     <input type="hidden" name="type" th:value="${type}">
 
 
+<!--                    <div> 원본-->
+<!--                        <div id="attachUl" th:if="${!attachList.isEmpty()}">-->
+<!--                            <ul th:each="attachList : ${attachList}" class="checkboxList" style="list-style: none">-->
+<!--                                <li>-->
+<!--                                    <a th:href="@{/user/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}">-->
+<!--                                        <span th:text="${attachList.originName}"/></a>-->
+<!--                                    <input type="checkbox" name="attBno" th:value="${attachList.attBno}"-->
+<!--                                           class="checkBtn" onclick="checkClick1()" style="display: none">-->
+<!--                                </li>-->
+<!--                            </ul>-->
+<!--                        </div>-->
+
+<!--                    </div>-->
+
                     <div>
                         <div id="attachUl" th:if="${!attachList.isEmpty()}">
                             <ul th:each="attachList : ${attachList}" class="checkboxList" style="list-style: none">
                                 <li>
                                     <a th:href="@{/user/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}">
                                         <span th:text="${attachList.originName}"/></a>
-                                    <input type="checkbox" name="attBno" th:value="${attachList.attBno}"
-                                           class="checkBtn" onclick="checkClick1()" style="display: none">
+                                    <button type="button" name="attBno" th:value="${attachList.attBno}"
+                                            class="checkBtn" onclick="checkClick1()" style="display: none">삭제</button>
                                 </li>
                             </ul>
                         </div>
 
                     </div>
                     <div class="btn-group" role="group" aria-label="Basic example">
-<!--                        <th:block th:if="${session.jyUserSession.userId.toString().equals()}">-->
-                        <!--                        <th:block th:if="${session.jyUserSession.userId.toString().equals(test123)}"> -->
 
                         <th:block th:if="${session.jyUserSession.userId == myContent.modifiedBy}">
                        <button type="button" class="btn btn-primary" id="upd_btn" style="display: inline">수정하기</button>
@@ -125,9 +135,12 @@
                         <button type="button" id="main_btn" class="btn btn-primary"
                                 th:onclick="|location.href='@{/user/boardList(page=${page},type=${type},search=${search},boardType=${myContent.boardType})}'|">목록
                         </button>
+
+                        <th:block th:if="${session.jyUserSession.userId == myContent.modifiedBy}">
                         <button type="button" id="del_btn" class="btn btn-primary"
-                                th:onclick="|location.href='@{/user/deleteContent(id=${myContent.id})}'|">삭제
+                                th:onclick="|location.href='@{/user/deleteContent(id=${myContent.id},boardType=${myContent.boardType})}'|">삭제
                         </button>
+                        </th:block>
                     </div>
                 </form>
             </div>
@@ -139,7 +152,7 @@
                         <!--댓글내용-->
                         <input type="text" name="reContent" id="reContent" class="form-control">
                         <!--댓글작성자-->
-                        <input type="hidden" name="reCreatedBy" id="reCreatedBy" th:value="${session.jyUserSession.userName}" readonly="readonly">
+                        <input type="hidden" name="reCreatedBy" id="reCreatedBy" th:value="${session.jyUserSession.userId}" readonly="readonly">
                         <!--원글게시글 번호-->
                         <th:block th:each="myContent : ${myContent}">
                             <input type="hidden" name="boardBno" id="boardBno" th:value="${myContent.id}">
@@ -192,6 +205,10 @@
     </div>
 
     <script>
+//접속되자마자 댓글조회 함수 실행
+        $(document).ready(function (){
+            selectReplyList();
+        })
     //대댓글등록
         $(document).on("click", ".childReV", function () {//동적으로 생성된 버튼에 이벤트를 적용하려면 이 방식으로! 대댓글달기버튼 클릭시
 
@@ -200,7 +217,6 @@
             let reBno = $(this).data('rebno');
             let reOrder = $(this).data('reorder');
             let reDepth = $(this).data('redepth');
-            //let reCreatedBy = $(this).data('recreatedby');
             let reGroupBno = $(this).data('regroupbno');
             let boardBno = $(this).data('boardbno');
 
@@ -379,16 +395,18 @@
                             newReplyList += "<td>" + reply.reCreatedDate + "</td>";
 
                             newReplyList += "<td><div>";
-                            newReplyList += "<input type='hidden' value=" + reply.reBno + " id='reBno' class='reBno'>";
-                            newReplyList += "<button type='button'";
-                            newReplyList += "class='reply_del_btn btn btn-primary' id='reply_del_btn'";
-                            newReplyList += "value=" + reply.reBno + ">";
-                            newReplyList += "삭제</button>";
+                            if(JyUserSession.userId==reply.reCreatedBy) {
+                                newReplyList += "<input type='hidden' value=" + reply.reBno + " id='reBno' class='reBno'>";
+                                newReplyList += "<button type='button'";
+                                newReplyList += "class='reply_del_btn btn btn-primary' id='reply_del_btn'";
+                                newReplyList += "value=" + reply.reBno + ">";
+                                newReplyList += "삭제</button>";
+                            }
+                                newReplyList += "<button type='button' id='childReV' class='btn btn-primary childReV' data-bs-toggle='modal'";
+                                newReplyList += "data-bs-target='#staticBackdrop'";
+                                newReplyList += "data-rebno=" + reply.reBno + " data-reorder=" + reply.reOrder + " data-redepth=" + reply.reDepth + " data-regroupbno= " + reply.reGroupBno + " data-boardbno= " + reply.boardBno;//" data-recreatedby=" + reply.reCreatedBy +
+                                newReplyList += ">대댓글달기</button>"
 
-                            newReplyList += "<button type='button' id='childReV' class='btn btn-primary childReV' data-bs-toggle='modal'";
-                            newReplyList += "data-bs-target='#staticBackdrop'";
-                            newReplyList += "data-rebno=" + reply.reBno + " data-reorder=" + reply.reOrder + " data-redepth=" + reply.reDepth + " data-regroupbno= " + reply.reGroupBno + " data-boardbno= " + reply.boardBno;//" data-recreatedby=" + reply.reCreatedBy +
-                            newReplyList += ">대댓글달기</button>"
                             newReplyList += "</div></td>";
                         }
                         newReplyList+="</tr>";
@@ -437,30 +455,12 @@
         })
     }
 
-        // 체크박스 클릭시 취소선 생기게하기ㅜㅜㅜㅜㅜ
-        // let ul = document.querySelector('ul');
-        //
-        // const checkClick = (i) => {
-        //
-        //     if (ul.children[i].querySelector('span').style.textDecorationLine === "line-through") {
-        //         ul.children[i].querySelector('span').style.textDecorationLine = '';
-        //     } else {
-        //         ul.children[i].querySelector('span').style.textDecorationLine = "line-through";
-        //     }
-        // }
-        //
-        // if (ul) {
-        //     for (let i = 0; i < ul.childElementCount; i++) {
-        //         //  ul.children[i].querySelector('input').value = i;
-        //         ul.children[i].querySelector('input').setAttribute('onClick', 'checkClick(${i})');
-        //
-        //     }
-        // }
-
-
         //수정버튼 클릭시 upd_btnE 함수를 실행해라
-        const upd_btn = document.getElementById("upd_btn")
-        upd_btn.addEventListener('click', upd_btnE);
+        //const upd_btn = document.getElementById("upd_btn")
+        //upd_btn.addEventListener('click', upd_btnE);
+        $("#upd_btn").click(function() {
+            upd_btnE();
+        });
 
         //수정버튼 클릭시 upd_btnE 실행
         function upd_btnE() {
@@ -487,12 +487,11 @@
         }
 
 
-        $(document).ready(function (){
-            selectReplyList();
-        })
+
 
     </script>
-
+    <script src="/js/jquery-3.6.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
     </body>
 </th:block>
 </html>
