@@ -73,6 +73,8 @@
 
     </style>
     <body>
+    <script src="/js/jquery-3.6.1.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
     <div>
         <div class="container">
 
@@ -98,34 +100,33 @@
                     <input type="hidden" name="search" th:value="${search}">
                     <input type="hidden" name="type" th:value="${type}">
 
-
-<!--                    <div> 원본-->
+<!--                    <div>-->
 <!--                        <div id="attachUl" th:if="${!attachList.isEmpty()}">-->
 <!--                            <ul th:each="attachList : ${attachList}" class="checkboxList" style="list-style: none">-->
 <!--                                <li>-->
 <!--                                    <a th:href="@{/user/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}">-->
 <!--                                        <span th:text="${attachList.originName}"/></a>-->
-<!--                                    <input type="checkbox" name="attBno" th:value="${attachList.attBno}"-->
-<!--                                           class="checkBtn" onclick="checkClick1()" style="display: none">-->
+<!--                                    <button type="button" name="attBno" th:value="${attachList.attBno}"-->
+<!--                                            class="checkBtn" onclick="attDelClick()" style="display: none" >삭제</button>-->
+<!--&lt;!&ndash;                                    삭제버튼 누르면 화면에서 가리기 파일번호로 접근  아니면 attr로 del로 변경 실제 파일 삭제되는 기능은 지울까 고민주&ndash;&gt;-->
 <!--                                </li>-->
 <!--                            </ul>-->
 <!--                        </div>-->
-
 <!--                    </div>-->
-
                     <div>
                         <div id="attachUl" th:if="${!attachList.isEmpty()}">
                             <ul th:each="attachList : ${attachList}" class="checkboxList" style="list-style: none">
-                                <li>
+                                <li id="attDelBtn">
                                     <a th:href="@{/user/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}">
                                         <span th:text="${attachList.originName}"/></a>
                                     <button type="button" name="attBno" th:value="${attachList.attBno}"
-                                            class="checkBtn" onclick="checkClick1()" style="display: none">삭제</button>
+                                            th:attr="data-att=${attachList.attBno}" id="attBno">삭제</button>
+                                    <!--                                    삭제버튼 누르면 화면에서 가리기 파일번호로 접근  아니면 attr로 del로 변경 실제 파일 삭제되는 기능은 지울까 고민주-->
                                 </li>
                             </ul>
                         </div>
-
                     </div>
+
                     <div class="btn-group" role="group" aria-label="Basic example">
 
                         <th:block th:if="${session.jyUserSession.userId == myContent.modifiedBy}">
@@ -157,7 +158,7 @@
                         <th:block th:each="myContent : ${myContent}">
                             <input type="hidden" name="boardBno" id="boardBno" th:value="${myContent.id}">
                         </th:block>
-                        <input type="button" id="replySub" value="댓글작성"/>
+                        <input type="button" class="btn btn-outline-info" id="replySub" value="댓글작성"/>
 
 
                     </form>
@@ -454,7 +455,11 @@
             }
         })
     }
-
+        $(document).ready(function() {
+            $(document).on("click", "#attBno", function () {//동적으로 생성된 버튼에 이벤트를 적용하려면 이 방식으로
+               $("#attDelBtn").attr("style", "display:none");
+            })
+        })
         //수정버튼 클릭시 upd_btnE 함수를 실행해라
         //const upd_btn = document.getElementById("upd_btn")
         //upd_btn.addEventListener('click', upd_btnE);
@@ -486,12 +491,7 @@
             }
         }
 
-
-
-
     </script>
-    <script src="/js/jquery-3.6.1.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
     </body>
 </th:block>
 </html>

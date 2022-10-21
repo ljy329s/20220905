@@ -144,14 +144,13 @@ public class JyBoardService {
                     throw new RuntimeException(e);
                 }
             }//end for
-            System.out.println("입력한값" + board);
-
             jyAttachService.insertFile((ArrayList) fileList);//게시글 첨부파일등록
-
-        }
+         }
     }
 
-    //게시글 수정하기
+    /**
+     *  게시글 수정하기
+     */
 
     @Transactional
     public void updateContent(JyBoard board, MultipartFile[] uploadFile) {

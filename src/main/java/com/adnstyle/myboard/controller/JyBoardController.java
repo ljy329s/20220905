@@ -139,7 +139,6 @@ public class JyBoardController {
     @PostMapping("/insertContent")
     public String myBoardInsertContent(MultipartFile[] uploadFile, JyBoard board) {
         jyBoardService.insertContent(board, uploadFile);
-        System.out.println("board" + board);
         String boardType = board.getBoardType();
         if (boardType.equals("Free_Board")) {
             return "redirect:/user/boardList?boardType=Free_Board";
@@ -154,7 +153,11 @@ public class JyBoardController {
      * 첨부파일 다운로드
      */
     @GetMapping(value = "/downloadFile", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    @ResponseBody
+//    @ResponseBody
+    /*
+    ResponseEntity는 View를 제공하지 않는 형태로 요청을 처리하고, 직접 결과 데이터 및 http상태코드를 설정하여 응답할수있다.
+    ResponseEntity를 사용하기 위해서는 응답상태코드 , 응답헤더,응답 봄문을 설정해줘야함
+    */
     public ResponseEntity<Resource> downloadFile(String uploadPath, String fileName) {
         Resource resource = new FileSystemResource(uploadPath + "\\" + fileName);//역슬래시를 한번 문자열으로 출력하려면 \\두번! (파일경로와 폴더 사이에 역슬래시 있어야함!!!)
         String resourceName = resource.getFilename();
@@ -170,6 +173,7 @@ public class JyBoardController {
 
         return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
     }
+
 
     /**
      * 게시글 수정하기

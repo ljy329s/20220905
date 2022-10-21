@@ -19,6 +19,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final PrincipalOauth2UserService principalOauth2UserService;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -34,6 +35,7 @@ public class SecurityConfig {
                     .loginPage("/loginForm")
                     .loginProcessingUrl("/login")
                     .defaultSuccessUrl("/user/userLogin", true)
+                    .failureUrl("/failLogin")
                     .and()
                 .logout()
                     .logoutUrl("/logout")

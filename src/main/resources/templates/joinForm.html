@@ -7,50 +7,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>회원가입</title>
 </head>
+<style>
+    .titleCenter {
+        text-align: center;
+    }
+    #joinBtn{
+    margin: 20px;
+        float: right;
+    }
+</style>
 <body>
-<div class="container">
-    <form method="post" id="newMember" action="/join">
-        <div class="form-group">
-            <label for="userId">* 아이디</label>
-            <input type="text" class="form-control" name="userId" id="userId" placeholder="사용자 아이디 10자리 이내"
-                   minlength="5" maxlength="10" required="required">
-            <button type="button" id="checkId">중복확인</button>
-        </div>
-        <span id="idSpan"> </span>
+<div class="d-flex justify-content-center mt-5">
+    <div class="col-4 card ">
+        <div class="card-body">
+            <form method="post" id="newMember" action="/join">
+                <h1 class="titleCenter">회원가입</h1>
+                <div class="form-group">
+                    <label for="userId">* 아이디</label>
+                    <input type="text" class="form-control" name="userId" id="userId" placeholder="사용자 아이디 10자리 이내"
+                           minlength="5" maxlength="10" required="required">
+                    <button type="button" id="checkId" class="btn btn-outline-info btn-sm">중복확인</button>
+                </div>
+                <span id="idSpan"> </span>
 
-        <div class="form-group">
-            <label for="userPw">* 비밀번호</label>
-            <input type="password" class="form-control" name="userPw" id="userPw" placeholder="사용자 비밀번호 20자리 이내"
-                   minlength="8" maxlength="20" required="required">
+                <div class="form-group">
+                    <label for="userPw">* 비밀번호</label>
+                    <input type="password" class="form-control" name="userPw" id="userPw" placeholder="사용자 비밀번호 20자리 이내"
+                           minlength="8" maxlength="20" required="required">
+                </div>
+                <span id="pwSpan"> </span>
+                <div class="form-group">
+                    <label for="userPwCk">* 비밀번호 재확인</label>
+                    <input type="password" class="form-control" id="userPwCk" placeholder="사용자 비밀번호 재확인"
+                           minlength="8" maxlength="20" required="required">
+                </div>
+                <span id="pwCkSpan"> </span>
+                <div class="form-group">
+                    <label for="userName">* 이름</label>
+                    <input type="text" class="form-control" name="userName" id="userName" placeholder="사용자 이름"
+                           maxlength="20" required="required">
+                </div>
+                <div class="form-group">
+                    <label for="userPhone">휴대전화</label>
+                    <input type="text" class="form-control" name="userPhone" id="userPhone" placeholder="사용자 휴대전화">
+                </div>
+                <div class="form-group">
+                    <label for="userEmail">* 이메일</label>
+                    <input type="text" class="form-control" name="userEmail" id="userEmail" placeholder="사용자 이메일"
+                           required="required">
+                </div>
+                <span id="emailSpan"> </span>
+                <div class="form-group">
+                    <label for="userBirth">생년월일</label>
+                    <input type="date" class="form-control" name="userBirth" id="userBirth" placeholder="사용자 생년월일">
+                </div>
+                <div id="joinBtn">
+                    <button type="button" class="btn btn-outline-primary" id="newUserSub">회원가입</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="location.href='/loginForm'">돌아가기</button>
+                </div>
+            </form>
         </div>
-        <span id="pwSpan"> </span>
-        <div class="form-group">
-            <label for="userPwCk">* 비밀번호 재확인</label>
-            <input type="password" class="form-control" id="userPwCk" placeholder="사용자 비밀번호 재확인"
-                   minlength="8" maxlength="20" required="required">
-        </div>
-        <span id="pwCkSpan"> </span>
-        <div class="form-group">
-            <label for="userName">* 이름</label>
-            <input type="text" class="form-control" name="userName" id="userName" placeholder="사용자 이름" maxlength="20" required="required">
-        </div>
-        <div class="form-group">
-            <label for="userPhone">휴대전화</label>
-            <input type="text" class="form-control" name="userPhone" id="userPhone" placeholder="사용자 휴대전화">
-        </div>
-        <div class="form-group">
-            <label for="userEmail">* 이메일</label>
-            <input type="text" class="form-control" name="userEmail" id="userEmail" placeholder="사용자 이메일" required="required">
-        </div>
-        <span id="emailSpan"> </span>
-        <div class="form-group">
-            <label for="userBirth">생년월일</label>
-            <input type="date" class="form-control" name="userBirth" id="userBirth" placeholder="사용자 생년월일">
-        </div>
-        <button type="button" class="btn btn-primary" id="newUserSub">회원가입</button>
-    </form>
+    </div>
 </div>
-
 <!--아이디 중복체크 ajax-->
 </body>
 <script>
@@ -67,9 +85,9 @@
             return;
         } else {//아이디 5글자 넘을때 중복확인
             $.ajax({
-                url: "/checkId",
-                data: {"userId": userId},
-                type: "post",
+                url    : "/checkId",
+                data   : {"userId": userId},
+                type   : "post",
                 success: function (no) {
                     if (no > 0) {
                         alert("중복된 아이디입니다.")
@@ -156,9 +174,9 @@
             return;
         }
         $.ajax({
-            url: "/checkEmail",
-            type: "post",
-            data: {"userEmail": userEmail},
+            url    : "/checkEmail",
+            type   : "post",
+            data   : {"userEmail": userEmail},
             success: function (no) {
                 if (no > 0) {
                     $("#emailSpan").html("이미 사용중인 이메일 입니다.");
@@ -216,7 +234,7 @@
 
             let newUserSub = $("#newUserSub");
             if (!newUserSub.disabled) {//전송버튼이 잠기지 않았다면
-                alert("전송버튼 안잠겼으면 전송되라 제발ㅠ");
+                alert("회원가입 되었습니다");
                 $("#newMember").submit();
 
             } else {

@@ -89,6 +89,15 @@ public class JyUserController {
     }
 
     /**
+     * 로그인 실패시
+     */
+    @GetMapping("/failLogin")
+    public String failLogin(){
+
+    return "auth/failLoginForm";
+    }
+
+    /**
      * 마이페이지 화면으로 이동
      *
      * @return
