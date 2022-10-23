@@ -38,6 +38,11 @@ public class JyAttach {
      * 게시글 번호
      */
     private Long bno;
+
+    /**
+     * 삭제여부 (디폴드값 'N')
+     */
+    private String delYn;
 }
 
 /**

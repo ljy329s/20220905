@@ -12,8 +12,8 @@ public interface JyUserRepository {
     int checkEmail(String userEmail);
 
     JyUser selectUser(String userId);
+    
+    JyUser selectScUser(String userId);
 
     void insertNewScUser(JyUser jyUser);
-
-    JyUser selectScUser(String userId);
 }

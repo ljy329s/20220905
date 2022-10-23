@@ -182,12 +182,13 @@ public class JyBoardController {
     public String myBoardUpdateContent(JyBoard board, MultipartFile[] uploadFile, @RequestParam(value = "attBno", required = false) List<Long> attList, @RequestParam("boardType") String boardType,
                                        @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "type", defaultValue = "A") String type, @RequestParam(value = "search", defaultValue = "") String search, RedirectAttributes rttr) {// )HttpServletRequest request
         List attFileList = new ArrayList();
-        System.out.println("attlist"+attList);
+        System.out.println("attList"+attList);
         if (attList != null) {
             for (Long attBno : attList) {
                 attFileList.add(attBno);
             }
-            jyAttachService.deleteOnlyAttach(attFileList);//첨부파일만삭제
+            //jyAttachService.deleteOnlyAttach(attFileList);//첨부파일만 완전삭제
+            jyAttachService.delAttachYn(attFileList);//첨부파일 상태값 변경
         }
         jyBoardService.updateContent(board, uploadFile);//게시글수정
 

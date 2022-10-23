@@ -77,9 +77,14 @@ public class JyAttachService {
 
     }
 
+    /**
+     * 첨부파일 완전 삭제
+     */
     @Transactional
     public void deleteOnlyAttach(List<Long> attlist) {
         jyAttachRepository.deleteOnlyAttach(attlist);
-
+    }
+    public void delAttachYn(List<Long> attlist){
+        jyAttachRepository.delAttachYn(attlist);
     }
 }

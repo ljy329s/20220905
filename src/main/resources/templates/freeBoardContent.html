@@ -116,12 +116,11 @@
                     <div>
                         <div id="attachUl" th:if="${!attachList.isEmpty()}">
                             <ul th:each="attachList : ${attachList}" class="checkboxList" style="list-style: none">
-                                <li id="attDelBtn">
+                                <li id="attList" th:value="${attachList.attBno}">
                                     <a th:href="@{/user/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}">
                                         <span th:text="${attachList.originName}"/></a>
-                                    <button type="button" name="attBno" th:value="${attachList.attBno}"
-                                            th:attr="data-att=${attachList.attBno}" id="attBno">삭제</button>
-                                    <!--                                    삭제버튼 누르면 화면에서 가리기 파일번호로 접근  아니면 attr로 del로 변경 실제 파일 삭제되는 기능은 지울까 고민주-->
+                                    <button type="button" th:value="${attachList.attBno}" class="attBno"
+                                            th:attr="data-att=${attachList.attBno}" id="attBno" style="display: none">삭제</button><!--name="attBno"-->
                                 </li>
                             </ul>
                         </div>
@@ -455,14 +454,19 @@
             }
         })
     }
-        $(document).ready(function() {
-            $(document).on("click", "#attBno", function () {//동적으로 생성된 버튼에 이벤트를 적용하려면 이 방식으로
-               $("#attDelBtn").attr("style", "display:none");
-            })
-        })
+/*삭제버튼 누르면 화면에서 첨부파일 가리기*/
+            $(document).on("click", "#attBno", function (e) {//동적으로 생성된 버튼에 이벤트를 적용하려면 이 방식으로
+                let attList = e.target.closest('li');//closest 상위 태그 접근
+                let attDelBno = e.target.value;
+                e.target.closest('li').setAttribute('name','attBno');
+                let str="";
+                str += '<input type="hidden" name="attBno" value='+attDelBno+'>';
+                $('#contentForm').append(str);
+                attList.style.display="none";//클릭한 버튼이 포함된 li 가리기
+
+            });
+
         //수정버튼 클릭시 upd_btnE 함수를 실행해라
-        //const upd_btn = document.getElementById("upd_btn")
-        //upd_btn.addEventListener('click', upd_btnE);
         $("#upd_btn").click(function() {
             upd_btnE();
         });
@@ -484,10 +488,10 @@
             //파일추가 보이게 하기
             document.getElementById("onlyAttach").style.display = "inline";
 
-            //첨부파일있을때 체크박스 보이게하기
-            let checkBtn = document.getElementsByClassName("checkBtn")
-            for (let i = 0; i < checkBtn.length; i++) {
-                checkBtn[i].style.display = "inline";
+            //첨부파일있을때 삭제버튼 보이게하기
+            let attBno = document.getElementsByClassName("attBno")
+            for (let i = 0; i < attBno.length; i++) {
+                attBno[i].style.display = "inline";
             }
         }
 

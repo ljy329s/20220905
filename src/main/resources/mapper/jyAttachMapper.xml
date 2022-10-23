@@ -21,6 +21,7 @@
         select attBno, originName, uuid, uploadPath
         from jy_attach
         where bno = #{id}
+        and del_yn='N'
     </select>
 
     <!--    게시글 삭제시 첨부파일도 함께 삭제-->
@@ -38,4 +39,12 @@
         </foreach>
     </delete>
 
+    <update id="delAttachYn" parameterType="list">
+        update jy_attach
+        set del_yn = 'Y'
+        where attBno in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 </mapper>

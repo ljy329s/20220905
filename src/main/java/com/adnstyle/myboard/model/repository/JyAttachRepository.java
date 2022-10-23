@@ -30,4 +30,8 @@ public interface JyAttachRepository {
      */
     void deleteOnlyAttach(List<Long> attlist);
 
+    /**
+     * 첨부파일 상태값만 바꾸기
+     */
+    void delAttachYn(List<Long> attlist);
 }

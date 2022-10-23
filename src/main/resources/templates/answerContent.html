@@ -50,7 +50,7 @@
         <div class="container">
             <h1 id="mainTitle">답변읽기</h1>
             <div id="main">
-                <form action="/user/updateContent" method="post" enctype="multipart/form-data"
+                <form action="/user/updateContent" method="post" id="contentForm" enctype="multipart/form-data"
                       th:each="myAnswerContent : ${myAnswerContent}">
                     <label for="titleBox" class="form-label fs-5 fw-bold">제목</label>
                     <input type="text" id="titleBox" class="form-control" name="title" readonly="readonly" th:value="${myAnswerContent.title}">
@@ -70,8 +70,8 @@
                                 <li>
                                     <a th:href="@{/user/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}">
                                         <span th:text="${attachList.originName}"/></a>
-                                    <input type="checkbox" name="attBno" th:value="${attachList.attBno}"
-                                           class="checkBtn" style="display: none">
+                                    <button type="button" th:value="${attachList.attBno}" class="attBno"
+                                            th:attr="data-att=${attachList.attBno}" id="attBno" style="display: none">삭제</button>
                                 </li>
                             </ul>
                         </div>
@@ -97,30 +97,22 @@
             </div>
         </div>
         <script>
+            /*삭제버튼 누르면 화면에서 첨부파일 가리기*/
+            $(document).on("click", "#attBno", function (e) {//동적으로 생성된 버튼에 이벤트를 적용하려면 이 방식으로
+                let attList = e.target.closest('li');//closest 상위 태그 접근
+                let attDelBno = e.target.value;
+                e.target.closest('li').setAttribute('name','attBno');
+                let str="";
+                str += '<input type="hidden" name="attBno" value='+attDelBno+'>';
+                $('#contentForm').append(str);
+                attList.style.display="none";//클릭한 버튼이 포함된 li 가리기
 
-            // // 체크박스 클릭시 취소선 생기게하기ㅜㅜㅜㅜㅜ
-            // let ul = document.querySelector('ul');
-            //
-            // const checkClick = (i) => {
-            //     if (ul.children[i].querySelector('span').style.textDecorationLine === "line-through") {
-            //         ul.children[i].querySelector('span').style.textDecorationLine = '';
-            //     } else {
-            //         ul.children[i].querySelector('span').style.textDecorationLine = "line-through";
-            //     }
-            // }
-            //
-            // if (ul) {
-            //     for (let i = 0; i < ul.childElementCount; i++) {
-            //         //  ul.children[i].querySelector('input').value = i;
-            //         ul.children[i].querySelector('input').setAttribute('onClick', `checkClick(${i})`);
-            //
-            //     }
-            // }
-
+            });
 
             //수정버튼 클릭시 upd_btnE 함수를 실행해라
-            const upd_btn = document.getElementById("upd_btn")
-            upd_btn.addEventListener('click', upd_btnE);
+            $("#upd_btn").click(function() {
+                upd_btnE();
+            });
 
             //수정버튼 클릭시 upd_btnE 실행
             function upd_btnE() {
@@ -141,10 +133,10 @@
                 //파일추가 보이게 하기
                 document.getElementById("onlyAttach").style.display = "inline";
 
-                //첨부파일있을때 체크박스 보이게하기
-                let checkBtn = document.getElementsByClassName("checkBtn")
-                for (let i = 0; i < checkBtn.length; i++) {
-                    checkBtn[i].style.display = "inline";
+                //첨부파일있을때 삭제버튼 보이게하기
+                let attBno = document.getElementsByClassName("attBno")
+                for (let i = 0; i < attBno.length; i++) {
+                    attBno[i].style.display = "inline";
                 }
             }
         </script>
