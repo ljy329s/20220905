@@ -134,7 +134,7 @@
         $(document).on("click", "#attBno", function (e) {//동적으로 생성된 버튼에 이벤트를 적용하려면 이 방식으로
             let attList = e.target.closest('li');//closest 상위 태그 접근
             let attDelBno = e.target.value;
-            e.target.closest('li').setAttribute('name','attBno');
+
             let str="";
             str += '<input type="hidden" name="attBno" value='+attDelBno+'>';
             $('#contentForm').append(str);

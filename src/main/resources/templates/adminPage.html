@@ -1,0 +1,52 @@
+<!doctype html>
+<html xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default_layout}">
+<head>
+  <meta charset="utf-8">
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/jquery-3.6.1.min.js"></script>
+  <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>관리자 페이지</title>
+</head>
+<th:block layout:fragment="content">
+<style>
+  #main{
+    background-color: #0dcaf0;
+    height: 700px;
+  }
+
+</style>
+  <body>
+<div id="main">
+  <div id="adminPage">
+<div class="card col-3">
+  <div class="card-body">
+    <table>
+      <tr>
+        <th>아이디</th>
+        <th>이름</th>
+        <th>이메일</th>
+        <th>휴대폰</th>
+        <th>생일</th>
+        <th>가입일</th>
+      </tr>
+      <tr th:each="${jyUserList : jyUserList}">
+        <td th:value = "${jyUserList.userId}"></td>
+        <td th:value = "${jyUserList.userName}"></td>
+        <td th:value = "${jyUserList.userEmail}"></td>
+        <td th:value = "${jyUserList.userPhone}"></td>
+        <td th:value = "${jyUserList.userBirth}"></td>
+        <td th:value = "${jyUserList.regDate}"></td>
+      </tr>
+    </table>
+    <p>고객정보</p>
+  </div>
+
+</div>
+  </div>
+</div>
+</body>
+</th:block>
+</html>

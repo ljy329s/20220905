@@ -8,12 +8,10 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -98,9 +96,44 @@ public class JyUserController {
     }
 
     /**
+     * 아이디 비밀번호 찾기(아이디찾기)
+     */
+    @GetMapping("/findIdPw")
+    public String findIdPw(){
+
+        return "findIdPw";
+    }
+    /**
+     * 입력정보와 일치하는 아이디가 있는지
+     */
+    @PostMapping("/findId")
+    @ResponseBody
+    public String findId(@RequestBody Map<String,String> jyUser){
+        System.out.println("jyUser"+jyUser);
+        String userId = jyUserService.findId(jyUser);
+        System.out.println("userId"+userId);
+        if(userId != null && userId != "" && userId.length()>0){
+            return userId;
+        }else{
+            return null;
+        }
+
+    }
+
+
+    /**
+     * 비밀번호 찾기
+     */
+    @GetMapping("/findPw")
+    public String findPw(){
+
+        return "findPw";
+    }
+
+
+
+    /**
      * 마이페이지 화면으로 이동
-     *
-     * @return
      */
     @GetMapping("/myPage")
     public String myPage() {

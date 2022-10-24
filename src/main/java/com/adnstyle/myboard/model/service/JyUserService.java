@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class JyUserService implements UserDetailsService {
@@ -76,6 +78,15 @@ public class JyUserService implements UserDetailsService {
      */
     public void insertNewScUser(JyUser jyUser) {
         jyUserRepository.insertNewScUser(jyUser);
+    }
+
+    /**
+     * 아이디 있는지 확인
+     */
+    public String findId(Map<String,String> jyUser) {
+        System.out.println(jyUser+"서비스");
+        return jyUserRepository.findId(jyUser);
+
     }
 }
 

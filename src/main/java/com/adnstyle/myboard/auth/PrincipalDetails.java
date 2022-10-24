@@ -86,7 +86,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User, Serializable {
     public Map<String, Object> getAttributes() {//sub:유저의 대표키(primarykey)
         return attributes;//필드에 리턴
     }
-    @Override//잘쓰지 않음
+    @Override
     public String getName() {
         return null;
     }

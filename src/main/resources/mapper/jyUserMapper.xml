@@ -38,4 +38,13 @@
         from jy_user
         where user_id = #{userId}
     </select>
+
+<!--    아이디 찾기-->
+    <select id="findId" resultType="string" parameterType="map">
+        select user_id
+        from jy_user
+        where user_name = #{userName}
+        and user_email = #{userEmail}
+    </select>
+
 </mapper>

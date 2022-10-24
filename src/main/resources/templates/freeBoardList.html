@@ -26,13 +26,6 @@
     a{
         text-decoration: none;
     }
-    .delBoardList{
-        text-align: center;
-    }
-
-    .t_txt{
-        text-align: center;
-    }
 
     th{
         text-align: center;
@@ -73,7 +66,7 @@
             <tbody>
                 <tr th:each="board : ${myBoardList}">
                     <th:block th:if="${session.jyUserSession.role} =='ROLE_USER' and ${board.delYn}=='Y'">
-                        <td colspan="6"><h6 class="delBoardList">삭제된 게시물입니다</h6></td>
+                        <td colspan="6"><h6 class="text-center">삭제된 게시물입니다</h6></td>
                     </th:block>
 
                     <th:block th:unless="${session.jyUserSession.role} =='ROLE_USER' and ${board.delYn}=='Y'">
@@ -84,9 +77,9 @@
                                    th:text="${board.title}"/></td>
                         </th:block>
                         <td class="text-truncate t_txt" th:text="${board.modifiedBy}"></td>
-                        <td th:text="${#temporals.format(board.modifiedDate,'yyyy-MM-dd HH:mm')}" class="t_txt"></td>
-                        <td th:text="${board.viewCount}" class="t_txt"></td>
-                        <td th:text="${board.delYn}" class="t_txt"></td>
+                        <td th:text="${#temporals.format(board.modifiedDate,'yyyy-MM-dd HH:mm')}" class="text-center"></td>
+                        <td th:text="${board.viewCount}" class="text-center"></td>
+                        <td th:text="${board.delYn}" class="text-center"></td>
                 </th:block>
                 </tr>
             </tbody>

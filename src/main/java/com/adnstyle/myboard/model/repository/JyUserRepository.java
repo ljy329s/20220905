@@ -3,6 +3,8 @@ package com.adnstyle.myboard.model.repository;
 import com.adnstyle.myboard.model.domain.JyUser;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.Map;
+
 @Mapper
 public interface JyUserRepository {
     void insertNewUser(JyUser jyUser);
@@ -16,4 +18,6 @@ public interface JyUserRepository {
     JyUser selectScUser(String userId);
 
     void insertNewScUser(JyUser jyUser);
+
+    String findId(Map<String,String> jyUser);
 }

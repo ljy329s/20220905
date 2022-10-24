@@ -11,20 +11,28 @@
 
         #loginInfo {
             text-align: right;
+            background-color: white;
+            border-radius: 10px;
+            float: right;
+            padding: 10px;
+            width: 200px;
         }
         ul{
             list-style: none;
         }
         .nav-item:hover {
             background-color: #85cdff;
-
         }
         .nav-link:hover{
             color: white;
         }
-        a:visited{
+        a:hover{
+            text-decoration: underline;
+        }
+        a:visited, a:link {
             color: black;
         }
+
 
     </style>
     <header>
@@ -32,7 +40,7 @@
                 <ul id="loginInfo">
                     <th:block th:if="${session.jyUserSession != null}">
                         <li th:text="${session.jyUserSession.userName} + 님 +' '+안녕하세요"></li>
-                        <li><button type="button" onclick="location.href='/logout'" class="btn btn-outline-dark">로그아웃</button> </li>
+                        <li><button type="button" onclick="location.href='/logout'" id="logout" class="btn btn-outline-dark">로그아웃</button> </li>
                     </th:block>
                     <th:block th:unless="${session.jyUserSession != null}">
                         <li>로그인 해주세요</li>
@@ -41,8 +49,9 @@
                 </ul>
         </div>
         <ul class="nav nav-pills nav-fill" >
-        <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="/">메인화면</a>
+
+        <li class="nav-item" id="nav01">
+                <a class="nav-link" aria-current="page" href="/" value="main">메인화면</a>
         </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/user/boardList(boardType='QnA_Board')}">문의하기</a>
@@ -59,6 +68,10 @@
         let JyUserSession = [[${session.jyUserSession}]]
         console.log("JyUserSession" + JyUserSession);
     </script>
-
+<script>
+    $("#logout").click(function (){
+      alert("로그아웃 했습니다");
+    })
+</script>
 </th:block>
 </html>
