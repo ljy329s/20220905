@@ -20,6 +20,9 @@ public class JyUserService implements UserDetailsService {
     private final JyUserRepository jyUserRepository;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * 회원가입
+     */
     @Transactional
     public void insertNewUser(JyUser jyUser) {
         String pw = jyUser.getUserPw();
@@ -27,19 +30,25 @@ public class JyUserService implements UserDetailsService {
         jyUser.setRole("ROLE_USER");
 
         jyUserRepository.insertNewUser(jyUser);
-
     }
 
+    /**
+     * 아이디 중복 확인
+     */
     public int checkId(String userId) {
         int no = jyUserRepository.checkId(userId);
         return no;
     }
 
+    /**
+     * 이메일 중복확인
+     */
     public int checkEmail(String userEmail) {
         int no = jyUserRepository.checkEmail(userEmail);
         return no;
     }
 
+//    시큐리티 적용전
 //    public int loginUser(String userId, String userPw) {
 //
 //        //먼저 비밀번호 가져오기

@@ -159,7 +159,7 @@ public class JyBoardController {
     ResponseEntity를 사용하기 위해서는 응답상태코드 , 응답헤더,응답 봄문을 설정해줘야함
     */
     public ResponseEntity<Resource> downloadFile(String uploadPath, String fileName) {
-        Resource resource = new FileSystemResource(uploadPath + "\\" + fileName);//역슬래시를 한번 문자열으로 출력하려면 \\두번! (파일경로와 폴더 사이에 역슬래시 있어야함!!!)
+        Resource resource = new FileSystemResource(uploadPath + "\\" + fileName);
         String resourceName = resource.getFilename();
         HttpHeaders headers = new HttpHeaders();
 
@@ -211,6 +211,7 @@ public class JyBoardController {
     @GetMapping("/answerForm")
     public String writeForm(Long id, Model model) {
         model.addAttribute("id", id);
+
         return "answerForm";
     }
 
@@ -220,6 +221,7 @@ public class JyBoardController {
     @PostMapping("/insertAnswer")
     public String insertAnswer(MultipartFile[] uploadFile, JyBoard board) {
         jyBoardService.insertContent(board, uploadFile);
+
         return "redirect:/user/boardList?boardType=QnA_Board";
     }
 
@@ -235,6 +237,7 @@ public class JyBoardController {
             model.addAttribute("myAnswerContent", myAnswerContent);//게시글내용
             model.addAttribute("attachList", attachList);//첨부파일
             model.addAttribute("page", page);//페이지
+
             return "answerContent";
         }
 
@@ -248,6 +251,7 @@ public class JyBoardController {
         model.addAttribute("myQnAContent", myQnAContent);//게시글내용
         model.addAttribute("attachList", attachList);//첨부파일
         model.addAttribute("page", page);//페이지
+
         return "questionContent";
     }
 
@@ -258,6 +262,7 @@ public class JyBoardController {
     @GetMapping("/deleteAnswer")
     public String deleteAnswer(Long id){
         jyBoardService.deleteAnswer(id);
+
         return "redirect:/user/boardList?boardType=QnA_Board";
     }
 
@@ -269,8 +274,9 @@ public class JyBoardController {
     @ResponseBody
     public Map<String,String> replySub(@RequestBody JyReply jyReply){
         Map <String,String> map = new HashMap<>();
-       jyReplyService.insertReply(jyReply);
-       map.put("result","success");
+        jyReplyService.insertReply(jyReply);
+        map.put("result","success");
+
         return map;
     }
 
@@ -282,9 +288,9 @@ public class JyBoardController {
     @ResponseBody
     public Map insertChildReply(@RequestBody JyReply childReply){
         Map<String,String> map = new HashMap<>();
-        System.out.println("ajax에서 넘어온값"+childReply);
         jyReplyService.insertChildReply(childReply);
         map.put("result","success");
+
         return map;
     }
 
@@ -296,9 +302,9 @@ public class JyBoardController {
     @ResponseBody
     public Map deleteReply(@RequestParam(value = "delReBno") Long delReBno){
         Map <String,String> map = new HashMap<>();
-        System.out.println(delReBno+"delReBno");
         jyReplyService.deleteReply(delReBno);
         map.put("result","success");
+
         return map;
 
     }
@@ -309,6 +315,7 @@ public class JyBoardController {
     @GetMapping("/selectReplyList")
     @ResponseBody
     public Map<String,Object> selectReplyList(@RequestParam(value = "boardBno") Long boardBno, @RequestParam(value = "page", defaultValue = "1") int page){
+
     return jyReplyService.selectReplyList(boardBno ,page);
 
     }

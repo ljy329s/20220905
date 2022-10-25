@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class JyHomeController {
 @GetMapping("/")
     public String jyHome(){
+
     return "jyHome";
     }
 }

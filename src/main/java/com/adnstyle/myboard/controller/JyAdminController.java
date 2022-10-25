@@ -22,12 +22,16 @@ import java.util.List;
 public class JyAdminController {
 
     private final JyAdminService jyAdminService;
+
+    /**
+     * 관리자 페이지로 이동시 고객 정보 조회하여 이동
+     */
     @GetMapping("/adminPage")
     public String adminPage(Model model) {
         List<JyUser> jyUserList = new ArrayList();
         jyUserList = jyAdminService.selectUserList();
-        System.out.println("jyUserList"+jyUserList);
         model.addAttribute("jyUserList",jyUserList);
+
         return "adminPage";
     }
 }

@@ -11,8 +11,9 @@
     .titleCenter {
         text-align: center;
     }
-    #joinBtn{
-    margin: 20px;
+
+    #joinBtn {
+        margin: 20px;
         float: right;
     }
 </style>
@@ -63,7 +64,8 @@
                 </div>
                 <div id="joinBtn">
                     <button type="button" class="btn btn-outline-primary" id="newUserSub">회원가입</button>
-                    <button type="button" class="btn btn-outline-primary" onclick="location.href='/loginForm'">돌아가기</button>
+                    <button type="button" class="btn btn-outline-primary" onclick="location.href='/loginForm'">돌아가기
+                    </button>
                 </div>
             </form>
         </div>
@@ -225,8 +227,7 @@
                 return;
             }
 
-
-//함수 다시 돌면서 조건에 맞는지 확인하고 틀리면 전송버튼 잠기게
+//함수 다시 돌면서 조건에 맞는지 확인하고 틀리면 전송버튼 잠기게함
             checkId(userId);
             checkPw(userPw);
             matchPw(userPw, userPwCk);

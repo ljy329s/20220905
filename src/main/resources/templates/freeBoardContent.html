@@ -281,8 +281,8 @@
             console.log("delReBno" + delReBno);
 
             $.ajax({
-                url : '/user/deleteReply',
-                type: 'POST',
+                url    : '/user/deleteReply',
+                type   : 'POST',
                 data   : {delReBno: delReBno},
                 success: function (data) {
                     if (data.result == 'success') {

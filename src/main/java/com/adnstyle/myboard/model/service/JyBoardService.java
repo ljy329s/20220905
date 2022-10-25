@@ -81,7 +81,6 @@ public class JyBoardService {
             int no = jyAttachService.deleteFiles(attachList);//실제파일 삭제
             if (no > 0) {
                 jyAttachService.deleteAttach(id);
-                System.out.println("게시글 삭제처리후 첨부파일 삭제됨");
             }
         }
     }
@@ -99,6 +98,7 @@ public class JyBoardService {
             jyBoardRepository.insertAnswer(board);//답글등록
             id = jyBoardRepository.selectId();//등록한 게시글 번호 가져오기 첨부파일등록할때..
         }
+
         String originUploadFileName = "";
         String changeUploadFileName = "";
 

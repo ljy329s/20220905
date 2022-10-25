@@ -63,7 +63,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User, Serializable {
         return true;
     }
 
-    //이 계정이 잠겼니? 아닐때 true
+    //이 계정이 잠기지 않았으면 true
     @Override
     public boolean isAccountNonLocked() {
         return true;
@@ -86,6 +86,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User, Serializable {
     public Map<String, Object> getAttributes() {//sub:유저의 대표키(primarykey)
         return attributes;//필드에 리턴
     }
+
     @Override
     public String getName() {
         return null;
