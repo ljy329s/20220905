@@ -53,15 +53,33 @@
             <div class="table-responsive">
                 <table class="table table-hover" style="table-layout: fixed">
             <thead class="table-primary">
-            <tr>
-                <th style="width: 10%">번호</th>
-                <th style="width: 40%">제목</th>
-                <th style="width: 10%">작성자</th>
-                <th style="width: 20%">작성일</th>
-                <th style="width: 10%">조회 수</th>
-                <th style="width: 10%">삭제 여부</th>
+<!--            <tr>-->
+<!--                <th style="width: 10%">번호</th>-->
+<!--                <th style="width: 40%">제목</th>-->
+<!--                <th style="width: 10%">작성자</th>-->
+<!--                <th style="width: 20%">작성일</th>-->
+<!--                <th style="width: 10%">조회 수</th>-->
+<!--                <th style="width: 10%">삭제 여부</th>-->
 
-            </tr>
+<!--            </tr>-->
+<tr>
+    <th:block th:if="${session.jyUserSession.role} =='ROLE_ADMIN'">
+        <th style="width: 10%">번호</th>-
+        <th style="width: 40%">제목</th>
+        <th style="width: 10%">작성자</th>
+        <th style="width: 20%">작성일</th>
+        <th style="width: 10%">조회 수</th>
+        <th style="width: 10%">삭제 여부</th>
+    </th:block>
+    <th:block th:unless="${session.jyUserSession.role} =='ROLE_ADMIN'">
+        <th style="width: 10%">번호</th>
+        <th style="width: 50%">제목</th>
+        <th style="width: 10%">작성자</th>
+        <th style="width: 20%">작성일</th>
+        <th style="width: 10%">조회 수</th>
+    </th:block>
+
+</tr>
     </thead>
             <tbody>
                 <tr th:each="board : ${myBoardList}">
@@ -71,7 +89,7 @@
 
                     <th:block th:unless="${session.jyUserSession.role} =='ROLE_USER' and ${board.delYn}=='Y'">
 
-                        <td th:text="${board.id}" class="t_txt"></td>
+                        <td th:text="${board.id}" class="text-center"></td>
                         <th:block th:if="${board.id} == ${board.groupBno}">
                             <td class="text-truncate"><a th:href="@{/user/boardContent(id=${board.id},page=${ph.page},type=${type},search=${search})}"
                                    th:text="${board.title}"/></td>
@@ -79,7 +97,9 @@
                         <td class="text-truncate t_txt" th:text="${board.modifiedBy}"></td>
                         <td th:text="${#temporals.format(board.modifiedDate,'yyyy-MM-dd HH:mm')}" class="text-center"></td>
                         <td th:text="${board.viewCount}" class="text-center"></td>
+                        <th:block th:if="${session.jyUserSession.role} =='ROLE_ADMIN'">
                         <td th:text="${board.delYn}" class="text-center"></td>
+                        </th:block>
                 </th:block>
                 </tr>
             </tbody>
