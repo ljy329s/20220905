@@ -26,8 +26,9 @@
                 <div class="form-group">
                     <label for="userId">* 아이디</label>
                     <input type="text" class="form-control" name="userId" id="userId" placeholder="사용자 아이디 10자리 이내"
-                           maxlength="10">
+                           maxlength="10" required="required">
                     <button type="button" id="checkId" class="btn btn-outline-info btn-sm">중복확인</button>
+                    <input type="hidden" value="" id="idValue">
                     <span id="idSpan"></span>
                 </div>
                 <div class="form-group">
@@ -50,7 +51,7 @@
                 </div>
                 <div class="form-group">
                     <label for="userPhone">* 휴대전화</label>
-                    <input type="text" class="form-control" name="userPhone" id="userPhone" placeholder="사용자 휴대전화">
+                    <input type="text" class="form-control" name="userPhone" id="userPhone" placeholder="사용자 휴대전화" required="required">
                     <div class="invalid-feedback">휴대전화 형식에 맞춰 입력해주세요 ex)010-0000-0000</div>
                     <span id="phoneSpan"></span>
                     <button id="checkPhone" class="btn btn-outline-info btn-sm">인증번호 전송</button>
@@ -83,38 +84,46 @@
 
 </body>
 <script>
-<!--    휴대전화번호 검사-->
-    $("#checkPhone").click(function () {//휴대폰 인증번호 버튼 클릭
+//    휴대전화번호 검사
+
+    $("#checkPhone").keyup(function () {//휴대폰 인증번호 버튼 클릭
         let userPhone = $("#userPhone").val();
         checkPhone(userPhone);
     });
-    function checkPhone(userPhone) {
 
+    function checkPhone(userPhone) {
         $("#userPhone").keyup(function () {
-            let regPhone = /^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$/;
-            let userPhone = $("#userPhone").val();
+            let regPhone = /^\d{3}-\d{4}-\d{4}$/ ;
 
             if (!userPhone.match(regPhone)) {//정규식여부와 일치하지 않는다면
-                $("#phoneSpan").html("휴대전화 양식을 다시 확인해주세요 ex)010-0000-0000");
+                $("#phoneSpan").html("휴대전화 양식을 다시 확인해주세요1 ex)010-0000-0000");
                 $("#phoneSpan").css('color', 'red');
                 $("#newUserSub").attr("disabled", true)
                 return;
-
-                if (14 > userPhone.length) {
+            }
+                if (13 != userPhone.length) {
                     alert("휴대폰 번호 양식에 맞춰 입력해주세요")
-                    $("#phoneSpan").html("휴대폰 양식에 맞춰 입력해주세요 ex)010-0000-0000")
+                    $("#phoneSpan").html("휴대폰 양식에 맞춰 입력해주세요2 ex)010-0000-0000")
+                    $("#phoneSpan").css('color', 'red');
+                    $("#newUserSub").attr("disabled", true)
                     return;
                 }
-            }
+
+                if(userPhone.length===0 && userPhone==='' && userPhone === null){
+                    alert("휴대폰 번호 양식에 맞춰 입력해주세요3")
+                    $("#phoneSpan").html("휴대폰 번호를 입력해주세요 ex)010-0000-0000")
+                    $("#phoneSpan").css('color', 'red');
+                    $("#newUserSub").attr("disabled", true)
+                }
             ;
         });
     };
 
     <!--아이디 중복체크 ajax-->
 
-            $("#checkId").click(function () {//아이디중복확인
-            let userId = $("#userId").val();
-            checkId(userId);
+        $("#checkId").click(function () {//아이디중복확인
+        let userId = $("#userId").val();
+        checkId(userId);
         });
 
         function checkId(userId) {
@@ -133,12 +142,14 @@
                             $("#newUserSub").attr("disabled", true)
                             $("#idSpan").html("중복된 아이디입니다.")
                             $("#idSpan").css('color', 'red');
+                            $("#idValue").val("false");
                             return;
 
                         } else {
                             $("#idSpan").html("사용가능한 아이디입니다.")
                             $("#idSpan").css('color', 'black');
                             $("#newUserSub").attr("disabled", false)
+                            $("#idValue").val("true");
                         }
 
                     }, error() {
@@ -239,50 +250,69 @@
             let userPw = $("#userPw").val();
             let userPwCk = $("#userPwCk").val();
             let userEmail = $("#userEmail").val();
+            let userPhone = $("#userPhone").val();
 
-            check(userId, userPw, userPwCk, userEmail)
+            check(userId, userPw, userPwCk, userEmail,userPhone)
 
             //값 다 적혀있는지 확인
             function check(userId, userPw, userPwCk, userEmail) {
                 if (userId == "" || userId == null) {
                     alert("아이디를 입력해주세요");
                     $("#userId").focus();
+                    $("#newUserSub").attr("disabled", true);
                     return;
                 }
+                if ($("#idValue").val() == 'false') {
+                    alert("중복된 아이디 입니다.");
+                    $("#userId").focus();
+                    $("#newUserSub").attr("disabled", true);
+                    return;
+                };
+
                 if (userPw == "" || userPw == null) {
                     alert("비밀번호를 입력해주세요");
                     $("#userPw").focus();
+                    $("#newUserSub").attr("disabled", true);
                     return;
                 }
                 if (userPwCk == null || userPwCk == '' || userPw != userPwCk) {
                     alert("비밀번호를 재확인해주세요");
                     $("#userPwCk").focus();
+                    $("#newUserSub").attr("disabled", true);
                     return;
                 }
-                if (userEmail == null || userEmail == '') {
+
+                if (userPhone === null || userPhone === '') {
+                    alert("휴대폰 번호를 입력해주세요.");
+                    $("#userPhone").focus();
+                    $("#newUserSub").attr("disabled", true);
+                    return;
+                };
+
+                if (userEmail === null || userEmail === '') {
                     alert("이메일을 입력해주세요");
+                    $("#newUserSub").attr("disabled", true);
                     $("#userEmail").focus();
                     return;
                 }
                 if ($("#emailValue").val() == 'false') {
                     alert("중복된 이메일 입니다.")
+                    $("#newUserSub").attr("disabled", true);
                     return;
-                }
-                ;
+                };
 
 
 //함수 다시 돌면서 정규식, 중복 등의 조건에 맞는지 확인하고 틀리면 전송버튼 잠기게함
-                checkId(userId);
-                checkPw(userPw);
-                matchPw(userPw, userPwCk);
-                checkEmail(userEmail);
-
+                    checkId(userId);
+                    checkPw(userPw);
+                    matchPw(userPw, userPwCk);
+                    checkPhone(userPhone);
+                    checkEmail(userEmail);
 
                 let newUserSub = $("#newUserSub");
                 if (!newUserSub.disabled) {//전송버튼이 잠기지 않았다면
                     alert("회원가입 되었습니다");
                     $("#newMember").submit();
-
                 } else {
                     alert("회원가입정보를 다시 확인 해주세요");
                     return;
