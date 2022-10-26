@@ -51,15 +51,18 @@
                 </div>
                 <div class="form-group">
                     <label for="userPhone">* 휴대전화</label>
-                    <input type="text" class="form-control" name="userPhone" id="userPhone" placeholder="사용자 휴대전화(ex)010-0000-0000)" required="required" maxlength="13">
-                    <div class="invalid-feedback">휴대전화는 숫자만 입력해주세요 </div>
+                    <input type="text" class="form-control" name="userPhone" id="userPhone"
+                           placeholder="사용자 휴대전화(ex)010-0000-0000)" required="required" maxlength="13">
+                    <div class="invalid-feedback">휴대전화는 숫자만 입력해주세요</div>
                     <span id="phoneSpan"></span>
                     <button id="sendMessage" class="btn btn-outline-info btn-sm" disabled="disabled">인증번호 전송</button>
                 </div>
                 <div class="form-group">
                     <label for="userPhone">* 인증확인</label>
-                    <input type="text" class="form-control" name="userPhone" id="userPhoneCk" placeholder="인증번호를 입력해주세요" required="required">
-                    <button class="btn btn-outline-info btn-sm">확인</button>
+                    <input type="text" class="form-control" name="userPhone" id="userPhoneCk" placeholder="인증번호를 입력해주세요"
+                           required="required">
+                    <button class="btn btn-outline-info btn-sm" id="checkSmS">확인</button>
+                    <input type="hidden" value="" id="checkSmSValue">
                 </div>
                 <div class="form-group">
                     <label for="userEmail">* 이메일</label>
@@ -85,28 +88,39 @@
 </body>
 <script>
     //휴대폰 인증번호 전송 클릭
-    $("#sendMessage").click(function (){
+    $("#sendMessage").click(function () {
         let userPhone = $("#userPhone").val();
 
         $.ajax({//문자 보내는 ajax(문자보내주는 ajax)
-            url    : "http://localhost:9080/sendMessage",
-            data   : {"userPhone": userPhone},
-            type   : "post",
-            success: function (data) {
-                if (data) {
+            url: "http://localhost:9080/sendMessage",
+            data: {"userPhone": userPhone},
+            type: "post",
+            success: function (ranNum) {
+                if (ranNum.length == 6) {
                     alert("인증번호가 전송되었습니다.")
                     $("#phoneSpan").css('color', 'black');
                     $("#phoneSpan").html('제한시간내에 인증번호를 입력해주세요');
+
+                    $("#checkSmS").click(function (ranNum) {
+                        let userPhoneCk = $("#userPhoneCk").val();
+                        if (userPhoneCk === ranNum) {
+                            alert("인증확인되었습니다.")
+                            $("#checkSmS").attr("disabled", true);
+                            $("#checkSmSValue").val("true")
+                        } else {
+                            $("#checkSmSValue").val("false")
+                        }
+                    })
+
                     return;
-                }else{
+                } else {
                 }
             }
-       })
+        })
     });
 
 
-
-//    휴대전화번호 검사
+    //    휴대전화번호 검사
 
     $("#userPhone").keyup(function () {//휴대전화 입력시
         let userPhone = $("#userPhone").val();
@@ -114,238 +128,243 @@
     });
 
     function checkPhone(userPhone) {
-            let regPhone = /^\d{3}-\d{4}-\d{4}$/ ;
+        let regPhone = /^\d{3}-\d{4}-\d{4}$/;
 
-            if (regPhone.test(userPhone)==false) {//정규식여부와 일치하지 않는다면
-                $("#phoneSpan").html("휴대전화 양식을 다시 확인해주세요 ex)010-0000-0000");
-                $("#phoneSpan").css('color', 'red');
-                $("#newUserSub").attr("disabled", true)
-                $("#checkPhone").attr("disabled", true)
-                return;
-            }
-            else if (13 != userPhone.length) {
-                alert("휴대전화 양식을 다시 확인해주세요")
-                $("#phoneSpan").html("휴대전화 양식을 다시 확인해주세요 ex)010-0000-0000")
-                $("#phoneSpan").css('color', 'red');
-                $("#newUserSub").attr("disabled", true)
-                $("#checkPhone").attr("disabled", true)
-                return;
-            }
-
-            else if(userPhone.length===0 && userPhone==='' && userPhone === null){
-                alert("휴대폰 번호 양식에 맞춰 입력해주세요3")
-                $("#phoneSpan").html("휴대폰 번호를 입력해주세요 ex)010-0000-0000")
-                $("#phoneSpan").css('color', 'red');
-                $("#newUserSub").attr("disabled", true)
-                $("#checkPhone").attr("disabled", true)
-            }
-            else{
-                $("#phoneSpan").html("")
-                $("#newUserSub").attr("disabled", false)
-                $("#checkPhone").attr("disabled", false)
-            }
-      //  });
+        if (regPhone.test(userPhone) == false) {//정규식여부와 일치하지 않는다면
+            $("#phoneSpan").html("휴대전화 양식을 다시 확인해주세요 ex)010-0000-0000");
+            $("#phoneSpan").css('color', 'red');
+            $("#newUserSub").attr("disabled", true)
+            $("#checkPhone").attr("disabled", true)
+            return;
+        } else if (13 != userPhone.length) {
+            alert("휴대전화 양식을 다시 확인해주세요")
+            $("#phoneSpan").html("휴대전화 양식을 다시 확인해주세요 ex)010-0000-0000")
+            $("#phoneSpan").css('color', 'red');
+            $("#newUserSub").attr("disabled", true)
+            $("#checkPhone").attr("disabled", true)
+            return;
+        } else if (userPhone.length === 0 && userPhone === '' && userPhone === null) {
+            alert("휴대폰 번호 양식에 맞춰 입력해주세요3")
+            $("#phoneSpan").html("휴대폰 번호를 입력해주세요 ex)010-0000-0000")
+            $("#phoneSpan").css('color', 'red');
+            $("#newUserSub").attr("disabled", true)
+            $("#checkPhone").attr("disabled", true)
+        } else {
+            $("#phoneSpan").html("")
+            $("#newUserSub").attr("disabled", false)
+            $("#checkPhone").attr("disabled", false)
+        }
+        //  });
     };
 
     <!--아이디 중복체크 ajax-->
 
-        $("#checkId").click(function () {//아이디중복확인
+    $("#checkId").click(function () {//아이디중복확인
         let userId = $("#userId").val();
         checkId(userId);
-        });
+    });
 
-        function checkId(userId) {
-            if (5 > userId.length) {
-                alert("아이디는 5글자 이상으로 작성해주세요")
-                $("#idSpan").html("아이디는 5글자 이상으로 작성해주세요.")
-                return;
-            } else {//아이디 5글자 넘을때 중복확인
-                $.ajax({
-                    url    : "/checkId",
-                    data   : {"userId": userId},
-                    type   : "post",
-                    success: function (no) {
-                        if (no > 0) {
-                            alert("중복된 아이디입니다.")
-                            $("#newUserSub").attr("disabled", true)
-                            $("#idSpan").html("중복된 아이디입니다.")
-                            $("#idSpan").css('color', 'red');
-                            $("#idValue").val("false");
-                            return;
+    function checkId(userId) {
+        if (5 > userId.length) {
+            alert("아이디는 5글자 이상으로 작성해주세요")
+            $("#idSpan").html("아이디는 5글자 이상으로 작성해주세요.")
+            return;
+        } else {//아이디 5글자 넘을때 중복확인
+            $.ajax({
+                url: "/checkId",
+                data: {"userId": userId},
+                type: "post",
+                success: function (no) {
+                    if (no > 0) {
+                        alert("중복된 아이디입니다.")
+                        $("#newUserSub").attr("disabled", true)
+                        $("#idSpan").html("중복된 아이디입니다.")
+                        $("#idSpan").css('color', 'red');
+                        $("#idValue").val("false");
+                        return;
 
-                        } else {
-                            $("#idSpan").html("사용가능한 아이디입니다.")
-                            $("#idSpan").css('color', 'black');
-                            $("#newUserSub").attr("disabled", false)
-                            $("#idValue").val("true");
-                        }
-
-                    }, error() {
-                        alert("아이디 중복체크 통신 에러")
+                    } else {
+                        $("#idSpan").html("사용가능한 아이디입니다.")
+                        $("#idSpan").css('color', 'black');
+                        $("#newUserSub").attr("disabled", false)
+                        $("#idValue").val("true");
                     }
-                });
-            }
-            ;
-        };
 
-
-        //비밀번호 정규식 확인 함수
-
-        $("#userPw").keyup(function () {
-            let userPw = $("#userPw").val();
-            checkPw(userPw);
-        });
-
-        function checkPw(userPw) {
-
-            //비밀번호 정규식 최소8글자, 하나이상의 문자, 하나이상의 숫자, 하나의 특수문자
-            let regPw = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
-
-            if (!userPw.match(regPw)) {//정규식여부와 일치하지 않는다면
-                $("#pwSpan").html("비밀번호 조건을 다시 확인해주세요 (8글자이상 +문자하나이상, 숫자하나이상, 특수문자 하나이상)");
-                $("#pwSpan").css('color', 'red');
-                $("#newUserSub").attr("disabled", true)
-                return;
-
-            } else if (userPw.match(regPw)) {
-                $("#pwSpan").html("사용가능한 비밀번호");
-                $("#pwSpan").css('color', 'black')
-                $("#newUserSub").attr("disabled", false)
-
-            }
+                }, error() {
+                    alert("아이디 중복체크 통신 에러")
+                }
+            });
         }
+        ;
+    };
 
-        $("#userPwCk").keyup(function () {
-            let userPwCk = $("#userPwCk").val();
-            let userPw = $("#userPw").val();
-            matchPw(userPw, userPwCk)
-        });
 
-        function matchPw(userPw, userPwCk) {
+    //비밀번호 정규식 확인 함수
 
-            if (userPw != userPwCk) {//비밀번호 재확인시 다르다면
-                $("#pwCkSpan").html("비밀번호 불일치")
-                $("#pwCkSpan").css('color', 'red');
-                $("#newUserSub").attr("disabled", true)
-                return;
-            } else {
-                $("#pwCkSpan").html("비밀번호 일치")
-                $("#pwCkSpan").css('color', 'black');
-                $("#newUserSub").attr("disabled", false)
+    $("#userPw").keyup(function () {
+        let userPw = $("#userPw").val();
+        checkPw(userPw);
+    });
 
+    function checkPw(userPw) {
+
+        //비밀번호 정규식 최소8글자, 하나이상의 문자, 하나이상의 숫자, 하나의 특수문자
+        let regPw = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
+
+        if (!userPw.match(regPw)) {//정규식여부와 일치하지 않는다면
+            $("#pwSpan").html("비밀번호 조건을 다시 확인해주세요 (8글자이상 +문자하나이상, 숫자하나이상, 특수문자 하나이상)");
+            $("#pwSpan").css('color', 'red');
+            $("#newUserSub").attr("disabled", true)
+            return;
+
+        } else if (userPw.match(regPw)) {
+            $("#pwSpan").html("사용가능한 비밀번호");
+            $("#pwSpan").css('color', 'black')
+            $("#newUserSub").attr("disabled", false)
+
+        }
+    }
+
+    $("#userPwCk").keyup(function () {
+        let userPwCk = $("#userPwCk").val();
+        let userPw = $("#userPw").val();
+        matchPw(userPw, userPwCk)
+    });
+
+    function matchPw(userPw, userPwCk) {
+
+        if (userPw != userPwCk) {//비밀번호 재확인시 다르다면
+            $("#pwCkSpan").html("비밀번호 불일치")
+            $("#pwCkSpan").css('color', 'red');
+            $("#newUserSub").attr("disabled", true)
+            return;
+        } else {
+            $("#pwCkSpan").html("비밀번호 일치")
+            $("#pwCkSpan").css('color', 'black');
+            $("#newUserSub").attr("disabled", false)
+
+        }
+    };
+
+
+    $("#userEmail").keyup(function () {//이메일 중복확인
+        let userEmail = $("#userEmail").val();
+        //이메일 정규식 조건에 맞는지 확인
+        checkEmail(userEmail);
+    });
+
+    function checkEmail(userEmail) {
+        let regEmail = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
+        if (!userEmail.match(regEmail)) {
+            $("#emailSpan").html("이메일 형식을 확인해주세요");
+            $("#emailSpan").css('color', 'red');
+            $("#newUserSub").attr("disabled", true);
+            return;
+        }
+        $.ajax({
+            url: "/checkEmail",
+            type: "post",
+            data: {"userEmail": userEmail},
+            success: function (no) {
+                if (no != 0) {
+                    $("#emailSpan").html("이미 사용중인 이메일 입니다.");
+                    $("#emailSpan").css('color', 'red');
+                    $("#newUserSub").attr("disabled", true);
+                    $("#emailValue").val("false");
+                    return;
+                } else {
+                    $("#emailSpan").html("사용 가능한 이메일 입니다.");
+                    $("#emailSpan").css('color', 'black');
+                    $("#newUserSub").attr("disabled", false);
+                    $("#emailValue").val("ture");
+                }
             }
-        };
+        })
+    };
 
+    $("#newUserSub").click(function () {//회원가입버튼 클릭시 모든 조건 확인후 전송
 
-        $("#userEmail").keyup(function () {//이메일 중복확인
-            let userEmail = $("#userEmail").val();
-            //이메일 정규식 조건에 맞는지 확인
-            checkEmail(userEmail);
-        });
+        let userId = $("#userId").val();
+        let userPw = $("#userPw").val();
+        let userPwCk = $("#userPwCk").val();
+        let userEmail = $("#userEmail").val();
+        let userPhone = $("#userPhone").val();
 
-        function checkEmail(userEmail) {
-            let regEmail = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
-            if (!userEmail.match(regEmail)) {
-                $("#emailSpan").html("이메일 형식을 확인해주세요");
-                $("#emailSpan").css('color', 'red');
+        check(userId, userPw, userPwCk, userEmail, userPhone)
+
+        //값 다 적혀있는지 확인
+        function check(userId, userPw, userPwCk, userEmail) {
+            if (userId == "" || userId == null) {
+                alert("아이디를 입력해주세요");
+                $("#userId").focus();
                 $("#newUserSub").attr("disabled", true);
                 return;
             }
-            $.ajax({
-                url    : "/checkEmail",
-                type   : "post",
-                data   : {"userEmail": userEmail},
-                success: function (no) {
-                    if (no != 0) {
-                        $("#emailSpan").html("이미 사용중인 이메일 입니다.");
-                        $("#emailSpan").css('color', 'red');
-                        $("#newUserSub").attr("disabled", true);
-                        $("#emailValue").val("false");
-                        return;
-                    } else {
-                        $("#emailSpan").html("사용 가능한 이메일 입니다.");
-                        $("#emailSpan").css('color', 'black');
-                        $("#newUserSub").attr("disabled", false);
-                        $("#emailValue").val("ture");
-                    }
-                }
-            })
-        };
+            if ($("#idValue").val() == 'false') {
+                alert("중복된 아이디 입니다.");
+                $("#userId").focus();
+                $("#newUserSub").attr("disabled", true);
+                return;
+            }
+            ;
 
-        $("#newUserSub").click(function () {//회원가입버튼 클릭시 모든 조건 확인후 전송
+            if (userPw == "" || userPw == null) {
+                alert("비밀번호를 입력해주세요");
+                $("#userPw").focus();
+                $("#newUserSub").attr("disabled", true);
+                return;
+            }
+            if (userPwCk == null || userPwCk == '' || userPw != userPwCk) {
+                alert("비밀번호를 재확인해주세요");
+                $("#userPwCk").focus();
+                $("#newUserSub").attr("disabled", true);
+                return;
+            }
 
-            let userId = $("#userId").val();
-            let userPw = $("#userPw").val();
-            let userPwCk = $("#userPwCk").val();
-            let userEmail = $("#userEmail").val();
-            let userPhone = $("#userPhone").val();
+            if (userPhone === null || userPhone === '') {
+                alert("휴대폰 번호를 입력해주세요.");
+                $("#userPhone").focus();
+                $("#newUserSub").attr("disabled", true);
+                return;
+            }
+            ;
+            if ($("#checkSmSValue").val() == 'false' || $("#checkSmSValue").val() == null || $("#checkSmSValue").val() == '') {
+                alert("인증번호를 입력해주세요.");
+                $("#userPhoneCk").focus();
+                $("#newUserSub").attr("disabled", true);
+                return;
+            }
 
-            check(userId, userPw, userPwCk, userEmail,userPhone)
-
-            //값 다 적혀있는지 확인
-            function check(userId, userPw, userPwCk, userEmail) {
-                if (userId == "" || userId == null) {
-                    alert("아이디를 입력해주세요");
-                    $("#userId").focus();
-                    $("#newUserSub").attr("disabled", true);
-                    return;
-                }
-                if ($("#idValue").val() == 'false') {
-                    alert("중복된 아이디 입니다.");
-                    $("#userId").focus();
-                    $("#newUserSub").attr("disabled", true);
-                    return;
-                };
-
-                if (userPw == "" || userPw == null) {
-                    alert("비밀번호를 입력해주세요");
-                    $("#userPw").focus();
-                    $("#newUserSub").attr("disabled", true);
-                    return;
-                }
-                if (userPwCk == null || userPwCk == '' || userPw != userPwCk) {
-                    alert("비밀번호를 재확인해주세요");
-                    $("#userPwCk").focus();
-                    $("#newUserSub").attr("disabled", true);
-                    return;
-                }
-
-                if (userPhone === null || userPhone === '') {
-                    alert("휴대폰 번호를 입력해주세요.");
-                    $("#userPhone").focus();
-                    $("#newUserSub").attr("disabled", true);
-                    return;
-                };
-
-                if (userEmail === null || userEmail === '') {
-                    alert("이메일을 입력해주세요");
-                    $("#newUserSub").attr("disabled", true);
-                    $("#userEmail").focus();
-                    return;
-                }
-                if ($("#emailValue").val() == 'false') {
-                    alert("중복된 이메일 입니다.")
-                    $("#newUserSub").attr("disabled", true);
-                    return;
-                };
+            if (userEmail === null || userEmail === '') {
+                alert("이메일을 입력해주세요");
+                $("#newUserSub").attr("disabled", true);
+                $("#userEmail").focus();
+                return;
+            }
+            if ($("#emailValue").val() == 'false') {
+                alert("중복된 이메일 입니다.")
+                $("#newUserSub").attr("disabled", true);
+                return;
+            }
+            ;
 
 
 //함수 다시 돌면서 정규식, 중복 등의 조건에 맞는지 확인하고 틀리면 전송버튼 잠기게함
-                    checkId(userId);
-                    checkPw(userPw);
-                    matchPw(userPw, userPwCk);
-                    checkPhone(userPhone);
-                    checkEmail(userEmail);
+            checkId(userId);
+            checkPw(userPw);
+            matchPw(userPw, userPwCk);
+            checkPhone(userPhone);
+            checkEmail(userEmail);
 
-                let newUserSub = $("#newUserSub");
-                if (!newUserSub.disabled) {//전송버튼이 잠기지 않았다면
-                    alert("회원가입 되었습니다");
-                    $("#newMember").submit();
-                } else {
-                    alert("회원가입정보를 다시 확인 해주세요");
-                    return;
-                }
+            let newUserSub = $("#newUserSub");
+            if (!newUserSub.disabled) {//전송버튼이 잠기지 않았다면
+                alert("회원가입 되었습니다");
+                $("#newMember").submit();
+            } else {
+                alert("회원가입정보를 다시 확인 해주세요");
+                return;
             }
-        });
+        }
+    });
 </script>
 </html>
