@@ -59,10 +59,11 @@
                 </div>
                 <div class="form-group">
                     <label for="userPhone">* 인증확인</label>
-                    <input type="text" class="form-control" name="userPhone" id="userPhoneCk" placeholder="인증번호를 입력해주세요"
+                    <input type="text" class="form-control" name="userPhone" id="ranNumCk" placeholder="인증번호를 입력해주세요"
                            required="required">
                     <button class="btn btn-outline-info btn-sm" id="checkSmS">확인</button>
-                    <input type="hidden" value="" id="checkSmSValue">
+                    <!--                    disabled="disabled"-->
+                    <input type="hidden" value="false" id="checkSmSValue">
                 </div>
                 <div class="form-group">
                     <label for="userEmail">* 이메일</label>
@@ -92,33 +93,49 @@
         let userPhone = $("#userPhone").val();
 
         $.ajax({//문자 보내는 ajax(문자보내주는 ajax)
-            url: "http://localhost:9080/sendMessage",
-            data: {"userPhone": userPhone},
-            type: "post",
-            success: function (ranNum) {
-                if (ranNum.length == 6) {
+            url     : "http://localhost:9080/sendMessage",
+            data    : {"userPhone": userPhone},
+            type    : "post",
+            success : function (data) {
+                if (data === "success") {
                     alert("인증번호가 전송되었습니다.")
                     $("#phoneSpan").css('color', 'black');
                     $("#phoneSpan").html('제한시간내에 인증번호를 입력해주세요');
-
-                    $("#checkSmS").click(function (ranNum) {
-                        let userPhoneCk = $("#userPhoneCk").val();
-                        if (userPhoneCk === ranNum) {
-                            alert("인증확인되었습니다.")
-                            $("#checkSmS").attr("disabled", true);
-                            $("#checkSmSValue").val("true")
-                        } else {
-                            $("#checkSmSValue").val("false")
-                        }
-                    })
-
-                    return;
-                } else {
+                    $("#checkSmS").attr("disabled", false);
                 }
+            }, error: function () {
+                alert("인증실패 error발생");
             }
         })
     });
 
+    //인증확인 버튼을 클릭했을때
+    //폰번호와 입력한 번호를 가지고 최근 전송된 인증번호와 비교
+    $("#checkSmS").click(function () {
+        let ranNumCk = $("#ranNumCk").val();
+        let userPhone = $("#userPhone").val();
+        $.ajax({
+            url     : "http://localhost:9080/selectRanNum",
+            data    : {
+                "ranNumCk" : ranNumCk,
+                "userPhone": userPhone
+            },
+            type    : "post",
+            success : function (data) {
+                if (data === "success") {
+                    alert("인증확인되었습니다.")
+                    $("#checkSmSValue").val("true");
+                    $("#checkSmS").attr("disabled", true);
+                } else if (data === "fail") {
+                    alert("인증번호를 다시 확인해주세요");
+                }
+            }, error: function () {
+                alert("인증번호 확인과정 에러발생");
+            }
+
+        });
+
+    });
 
     //    휴대전화번호 검사
 
@@ -127,6 +144,7 @@
         checkPhone(userPhone);
     });
 
+    //휴대전화번호를 제대로 입력했다면 문자 전송버튼 클릭가능
     function checkPhone(userPhone) {
         let regPhone = /^\d{3}-\d{4}-\d{4}$/;
 
@@ -134,27 +152,26 @@
             $("#phoneSpan").html("휴대전화 양식을 다시 확인해주세요 ex)010-0000-0000");
             $("#phoneSpan").css('color', 'red');
             $("#newUserSub").attr("disabled", true)
-            $("#checkPhone").attr("disabled", true)
+            $("#sendMessage").attr("disabled", true)
             return;
         } else if (13 != userPhone.length) {
             alert("휴대전화 양식을 다시 확인해주세요")
             $("#phoneSpan").html("휴대전화 양식을 다시 확인해주세요 ex)010-0000-0000")
             $("#phoneSpan").css('color', 'red');
             $("#newUserSub").attr("disabled", true)
-            $("#checkPhone").attr("disabled", true)
+            $("#sendMessage").attr("disabled", true)
             return;
         } else if (userPhone.length === 0 && userPhone === '' && userPhone === null) {
             alert("휴대폰 번호 양식에 맞춰 입력해주세요3")
             $("#phoneSpan").html("휴대폰 번호를 입력해주세요 ex)010-0000-0000")
             $("#phoneSpan").css('color', 'red');
             $("#newUserSub").attr("disabled", true)
-            $("#checkPhone").attr("disabled", true)
+            $("#sendMessage").attr("disabled", true)
         } else {
             $("#phoneSpan").html("")
             $("#newUserSub").attr("disabled", false)
-            $("#checkPhone").attr("disabled", false)
+            $("#sendMessage").attr("disabled", false)
         }
-        //  });
     };
 
     <!--아이디 중복체크 ajax-->
@@ -171,9 +188,9 @@
             return;
         } else {//아이디 5글자 넘을때 중복확인
             $.ajax({
-                url: "/checkId",
-                data: {"userId": userId},
-                type: "post",
+                url    : "/checkId",
+                data   : {"userId": userId},
+                type   : "post",
                 success: function (no) {
                     if (no > 0) {
                         alert("중복된 아이디입니다.")
@@ -262,9 +279,9 @@
             return;
         }
         $.ajax({
-            url: "/checkEmail",
-            type: "post",
-            data: {"userEmail": userEmail},
+            url    : "/checkEmail",
+            type   : "post",
+            data   : {"userEmail": userEmail},
             success: function (no) {
                 if (no != 0) {
                     $("#emailSpan").html("이미 사용중인 이메일 입니다.");
@@ -329,7 +346,7 @@
             }
             ;
             if ($("#checkSmSValue").val() == 'false' || $("#checkSmSValue").val() == null || $("#checkSmSValue").val() == '') {
-                alert("인증번호를 입력해주세요.");
+                alert("인증번호를 확인해주세요.");
                 $("#userPhoneCk").focus();
                 $("#newUserSub").attr("disabled", true);
                 return;
