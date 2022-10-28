@@ -48,26 +48,6 @@ public class JyUserService implements UserDetailsService {
         return no;
     }
 
-//    시큐리티 적용전
-//    public int loginUser(String userId, String userPw) {
-//
-//        //먼저 비밀번호 가져오기
-//        String encPw = jyUserRepository.selectUser(userId);
-//        System.out.println("encPw" + encPw);
-//        if (encPw != null && encPw != "") {//값이 있다면
-//            boolean pwCheck = passwordEncoder.matches(userPw, encPw);
-//            System.out.println("pwCheck" + pwCheck);
-//            if (pwCheck) {
-//                return 1;
-//            } else {
-//                return 0;
-//            }
-//        } else {
-//            return 0;
-//        }
-//
-//    }
-
     /**
      * 로그인
      */

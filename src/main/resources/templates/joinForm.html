@@ -35,7 +35,7 @@
                     <label for="userPw">* 비밀번호</label>
                     <input type="password" class="form-control" name="userPw" id="userPw" placeholder="사용자 비밀번호 20자리 이내"
                            minlength="8" maxlength="20" required="required">
-                    <span id="pwSpan"> </span>
+                    <span id="pwSpan"></span>
                 </div>
                 <div class="form-group">
                     <label for="userPwCk">* 비밀번호 재확인</label>
@@ -58,8 +58,8 @@
                     <button id="sendMessage" class="btn btn-outline-info btn-sm" disabled="disabled">인증번호 전송</button>
                 </div>
                 <div class="form-group">
-                    <label for="userPhone">* 인증확인</label>
-                    <input type="text" class="form-control" name="userPhone" id="ranNumCk" placeholder="인증번호를 입력해주세요"
+                    <label for="ranNumCk">* 인증확인</label>
+                    <input type="text" class="form-control" name="ranNumCk" id="ranNumCk" placeholder="인증번호를 입력해주세요"
                            required="required">
                     <button class="btn btn-outline-info btn-sm" id="checkSmS">확인</button>
                     <!--                    disabled="disabled"-->
@@ -93,6 +93,8 @@
         let userPhone = $("#userPhone").val();
 
         $.ajax({//문자 보내는 ajax(문자보내주는 ajax)
+            // url     : "http://192.168.3.116:8880/sendMessage",
+            // data    : {"trPhone": userPhone},//성준,권희님이 만든 곳 쓸때 주석 지우기
             url     : "http://localhost:9080/sendMessage",
             data    : {"userPhone": userPhone},
             type    : "post",
@@ -104,7 +106,7 @@
                     $("#checkSmS").attr("disabled", false);
                 }
             }, error: function () {
-                alert("인증실패 error발생");
+                alert("인증번호 전송 실패 error발생");
             }
         })
     });
@@ -130,21 +132,20 @@
                     alert("인증번호를 다시 확인해주세요");
                 }
             }, error: function () {
-                alert("인증번호 확인과정 에러발생");
+                alert("인증번호 확인 에러 발생");
             }
 
         });
 
     });
 
-    //    휴대전화번호 검사
-
+    // 휴대전화번호 검사
     $("#userPhone").keyup(function () {//휴대전화 입력시
         let userPhone = $("#userPhone").val();
         checkPhone(userPhone);
     });
 
-    //휴대전화번호를 제대로 입력했다면 문자 전송버튼 클릭가능
+     // 휴대전화번호를 제대로 입력했다면 문자 전송버튼 클릭가능
     function checkPhone(userPhone) {
         let regPhone = /^\d{3}-\d{4}-\d{4}$/;
 
@@ -174,8 +175,7 @@
         }
     };
 
-    <!--아이디 중복체크 ajax-->
-
+    // 아이디 중복체크 ajax
     $("#checkId").click(function () {//아이디중복확인
         let userId = $("#userId").val();
         checkId(userId);

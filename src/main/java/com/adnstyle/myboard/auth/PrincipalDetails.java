@@ -19,7 +19,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User, Serializable {
 
     private JyUser jyUser;
 
-    private Map<String,Object> attributes;
+    private Map<String, Object> attributes;
 
     //일반로그인시 사용
     public PrincipalDetails(JyUser jyUser) {
@@ -27,9 +27,9 @@ public class PrincipalDetails implements UserDetails, OAuth2User, Serializable {
     }
 
     //OAuth 소셜로그인시 사용
-    public PrincipalDetails(JyUser jyUser, Map<String,Object> attributes) {//attributes정보를가지고 jyUser를 만든다
+    public PrincipalDetails(JyUser jyUser, Map<String, Object> attributes) {//attributes정보를가지고 jyUser를 만든다
         this.jyUser = jyUser;
-        this.attributes=attributes;
+        this.attributes = attributes;
     }
 
     //해당 User의 권한을 리턴하는곳

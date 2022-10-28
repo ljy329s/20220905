@@ -31,7 +31,6 @@ public class JyAdminController {
         List<JyUser> jyUserList = new ArrayList();
         jyUserList = jyAdminService.selectUserList();
         model.addAttribute("jyUserList",jyUserList);
-
         return "adminPage";
     }
 }

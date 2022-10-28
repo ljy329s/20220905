@@ -47,7 +47,7 @@ public class JyBoardController {
      * 사이트메인화면(로그인후 뜰 화면)
      */
     @GetMapping("/jyHome")
-    public String jyHome(){
+    public String jyHome() {
         return "jyHome";
     }
 
@@ -55,7 +55,7 @@ public class JyBoardController {
      * 게시글 리스트(자유,답변)+페이징처리+검색처리(자유게시판)
      */
     @GetMapping("/boardList")
-    public String qnaBoardList(Model model, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "type", defaultValue = "A") String type, @RequestParam(value = "search", defaultValue = "") String search, @RequestParam("boardType") String boardType){
+    public String qnaBoardList(Model model, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "type", defaultValue = "A") String type, @RequestParam(value = "search", defaultValue = "") String search, @RequestParam("boardType") String boardType) {
         Map searchMap = new HashMap();
         searchMap.put("type", type);
         searchMap.put("search", search);
@@ -65,7 +65,7 @@ public class JyBoardController {
         PageHandle ph = new PageHandle(totalCnt, page);
 
         searchMap.put("offset", ((page - 1) * ph.getPageSize()));
-        searchMap.put("pageSize",ph.getPageSize());
+        searchMap.put("pageSize", ph.getPageSize());
 
         List<JyBoard> myBoardList = jyBoardService.selectList(searchMap);//게시글리스트 조회용
 
@@ -74,7 +74,7 @@ public class JyBoardController {
         model.addAttribute("type", type);
         model.addAttribute("search", search);
 
-        if(boardType.equals("QnA_Board")){
+        if (boardType.equals("QnA_Board")) {
             return "qnaBoardList";
         } else if (boardType.equals("Free_Board")) {
             return "freeBoardList";
@@ -182,7 +182,7 @@ public class JyBoardController {
     public String myBoardUpdateContent(JyBoard board, MultipartFile[] uploadFile, @RequestParam(value = "attBno", required = false) List<Long> attList, @RequestParam("boardType") String boardType,
                                        @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "type", defaultValue = "A") String type, @RequestParam(value = "search", defaultValue = "") String search, RedirectAttributes rttr) {// )HttpServletRequest request
         List attFileList = new ArrayList();
-        System.out.println("attList"+attList);
+        System.out.println("attList" + attList);
         if (attList != null) {
             for (Long attBno : attList) {
                 attFileList.add(attBno);
@@ -192,14 +192,14 @@ public class JyBoardController {
         }
         jyBoardService.updateContent(board, uploadFile);//게시글수정
 
-        if(boardType.equals("QnA_Board")){
-            rttr.addAttribute("page",page);
-            rttr.addAttribute("boardType",boardType);
-        }else if(boardType.equals("Free_Board")){
-            rttr.addAttribute("page",page);
-            rttr.addAttribute("search",search);
-            rttr.addAttribute("type",type);
-            rttr.addAttribute("boardType",boardType);
+        if (boardType.equals("QnA_Board")) {
+            rttr.addAttribute("page", page);
+            rttr.addAttribute("boardType", boardType);
+        } else if (boardType.equals("Free_Board")) {
+            rttr.addAttribute("page", page);
+            rttr.addAttribute("search", search);
+            rttr.addAttribute("type", type);
+            rttr.addAttribute("boardType", boardType);
 
         }
         return "redirect:/user/boardList";
@@ -226,26 +226,25 @@ public class JyBoardController {
     }
 
     /**
-    * 답변글 상세조회
-    */
-        @GetMapping("/answerContent")
-        public String answerContent(Model model,long id, @RequestParam("page") int page){
-            System.out.println("답변상세조회 컨트롤러");
-            logger.debug("답 상세조회 컨트롤러=========================================");
-            List<JyBoard> myAnswerContent = jyBoardService.selectContent(id);//게시글 번호로 내용 불러오기
-            List<JyAttach> attachList = jyAttachService.attachList(id);
-            model.addAttribute("myAnswerContent", myAnswerContent);//게시글내용
-            model.addAttribute("attachList", attachList);//첨부파일
-            model.addAttribute("page", page);//페이지
+     * 답변글 상세조회
+     */
+    @GetMapping("/answerContent")
+    public String answerContent(Model model, long id, @RequestParam("page") int page) {
+        logger.debug("답 상세조회 컨트롤러=========================================");
+        List<JyBoard> myAnswerContent = jyBoardService.selectContent(id);//게시글 번호로 내용 불러오기
+        List<JyAttach> attachList = jyAttachService.attachList(id);
+        model.addAttribute("myAnswerContent", myAnswerContent);//게시글내용
+        model.addAttribute("attachList", attachList);//첨부파일
+        model.addAttribute("page", page);//페이지
 
-            return "answerContent";
-        }
+        return "answerContent";
+    }
 
     /**
      * 문의글 상세조회
      */
     @GetMapping("/qnaContent")
-    public String qnaContent(Model model,long id, @RequestParam("page") int page){
+    public String qnaContent(Model model, long id, @RequestParam("page") int page) {
         List<JyBoard> myQnAContent = jyBoardService.selectContent(id);//게시글 번호로 내용 불러오기
         List<JyAttach> attachList = jyAttachService.attachList(id);
         model.addAttribute("myQnAContent", myQnAContent);//게시글내용
@@ -259,8 +258,8 @@ public class JyBoardController {
      * 답변삭제
      */
 
-    @GetMapping("/deleteAnswer")
-    public String deleteAnswer(Long id){
+    //@GetMapping("/deleteAnswer")
+    public String deleteAnswer(Long id) {
         jyBoardService.deleteAnswer(id);
 
         return "redirect:/user/boardList?boardType=QnA_Board";
@@ -272,10 +271,10 @@ public class JyBoardController {
 
     @PostMapping("/insertReply")
     @ResponseBody
-    public Map<String,String> replySub(@RequestBody JyReply jyReply){
-        Map <String,String> map = new HashMap<>();
+    public Map<String, String> replySub(@RequestBody JyReply jyReply) {
+        Map<String, String> map = new HashMap<>();
         jyReplyService.insertReply(jyReply);
-        map.put("result","success");
+        map.put("result", "success");
 
         return map;
     }
@@ -286,10 +285,10 @@ public class JyBoardController {
 
     @PostMapping("/insertChildReply")
     @ResponseBody
-    public Map insertChildReply(@RequestBody JyReply childReply){
-        Map<String,String> map = new HashMap<>();
+    public Map insertChildReply(@RequestBody JyReply childReply) {
+        Map<String, String> map = new HashMap<>();
         jyReplyService.insertChildReply(childReply);
-        map.put("result","success");
+        map.put("result", "success");
 
         return map;
     }
@@ -300,10 +299,10 @@ public class JyBoardController {
 
     @PostMapping("/deleteReply")
     @ResponseBody
-    public Map deleteReply(@RequestParam(value = "delReBno") Long delReBno){
-        Map <String,String> map = new HashMap<>();
+    public Map deleteReply(@RequestParam(value = "delReBno") Long delReBno) {
+        Map<String, String> map = new HashMap<>();
         jyReplyService.deleteReply(delReBno);
-        map.put("result","success");
+        map.put("result", "success");
 
         return map;
 
@@ -314,9 +313,9 @@ public class JyBoardController {
      */
     @GetMapping("/selectReplyList")
     @ResponseBody
-    public Map<String,Object> selectReplyList(@RequestParam(value = "boardBno") Long boardBno, @RequestParam(value = "page", defaultValue = "1") int page){
+    public Map<String, Object> selectReplyList(@RequestParam(value = "boardBno") Long boardBno, @RequestParam(value = "page", defaultValue = "1") int page) {
 
-    return jyReplyService.selectReplyList(boardBno ,page);
+        return jyReplyService.selectReplyList(boardBno, page);
 
     }
 }

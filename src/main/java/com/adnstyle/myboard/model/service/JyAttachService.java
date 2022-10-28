@@ -36,9 +36,7 @@ public class JyAttachService {
 
         //format패턴의 "-"를 os의 구분자로 바꾸겠다 os마다 구분자가 달라서 File.separator 적어줘야함
         return str.replace("-", File.separator);
-
     }
-
 
     @Transactional
     public void insertFile(ArrayList fileList) {
@@ -48,8 +46,6 @@ public class JyAttachService {
     public List<JyAttach> attachList(long id) {
         return jyAttachRepository.attachList(id);
     }
-
-
 
     @Transactional
     public int deleteFiles(List<JyAttach> attachList) {
@@ -84,7 +80,13 @@ public class JyAttachService {
     public void deleteOnlyAttach(List<Long> attlist) {
         jyAttachRepository.deleteOnlyAttach(attlist);
     }
-    public void delAttachYn(List<Long> attlist){
+
+    /**
+     * 첨부파일 상태값 삭제로 변경
+     */
+    @Transactional
+    public void delAttachYn(List<Long> attlist) {
         jyAttachRepository.delAttachYn(attlist);
     }
+
 }

@@ -176,10 +176,7 @@ public class JyBoardService {
             File uploadPath = new File(uploadFolder, jyAttachService.getFolder());//File(상위경로,하위경로?)
 
             if (uploadPath.exists() == false) {
-                uploadPath.mkdirs();//mkdirs(); 폴더 만드는 메서드
-                System.out.println("폴더생성");
-            } else {
-                System.out.println("이미 폴더가 있습니다");
+                uploadPath.mkdirs();//mkdirs(); 폴더 만드는 메서드 (폴더가 없다면 폴더 생성)
             }
 
             for (MultipartFile multipartFile : uploadFile) {

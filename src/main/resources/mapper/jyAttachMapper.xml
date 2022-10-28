@@ -2,12 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.adnstyle.myboard.model.repository.JyAttachRepository">
     <insert id="insertFile" parameterType="java.util.List">
-        INSERT INTO jy_attach(
-        uuid,
-        uploadPath,
-        originName,
-        bno
-        )
+        INSERT INTO jy_attach
+            (uuid, uploadPath, originName, bno)
         VALUES
         <foreach collection="list" item="item" index="index" open="(" separator="),(" close=")">
             #{item.uuid},
@@ -18,31 +14,33 @@
     </insert>
 
     <select id="attachList" resultType="jyAttach">
-        select attBno, originName, uuid, uploadPath
-        from jy_attach
-        where bno = #{id}
-        and del_yn='N'
+        SELECT attBno,
+               originName,
+               uuid,
+               uploadPath
+        FROM   jy_attach
+        WHERE  bno = #{id}
+        AND    del_yn = 'N'
     </select>
 
     <!--    게시글 삭제시 첨부파일도 함께 삭제-->
     <delete id="deleteAll">
-        delete
-        from jy_attach
-        where bno = #{id}
+        DELETE FROM jy_attach
+        WHERE bno = #{id}
     </delete>
 
     <delete id="deleteOnlyAttach">
-        delete from jy_attach
-        where attBno in
+        DELETE FROM jy_attach
+        WHERE attBno IN
         <foreach collection="list" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
     </delete>
 
     <update id="delAttachYn" parameterType="list">
-        update jy_attach
-        set del_yn = 'Y'
-        where attBno in
+        UPDATE jy_attach
+        SET del_yn = 'Y'
+        WHERE attBno IN
         <foreach collection="list" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>

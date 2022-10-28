@@ -4,8 +4,13 @@
 
     <!--    관리자페이지 전체 고객 정보조회-->
     <select id ="selectUserList" parameterType="jyUser" resultType="jyUser">
-        select user_id,user_name,user_email, user_phone,user_birth,reg_date
-        from jy_user;
+        SELECT user_id,
+               user_name,
+               user_email,
+               user_phone,
+               user_birth,
+               reg_date
+        FROM   jy_user;
     </select>
 
 </mapper>

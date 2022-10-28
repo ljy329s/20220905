@@ -2,25 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.adnstyle.myboard.model.repository.JyReplyRepository">
     <insert id="insertReply" parameterType="jyReply">
-        insert into jy_reply(re_content, re_created_by, re_created_date, re_modified_date, board_bno)
-        values (#{reContent}, #{reCreatedBy}, NOW(), NOW(), #{boardBno})
+        INSERT INTO jy_reply(re_content, re_created_by, re_created_date, re_modified_date, board_bno)
+        VALUES (#{reContent}, #{reCreatedBy}, NOW(), NOW(), #{boardBno})
     </insert>
 
     <select id="selectMaxReBno" resultType="long">
-        select re_bno
-        from jy_reply
-        order by re_bno desc limit 1
+        SELECT re_bno
+        FROM jy_reply
+        ORDER BY re_bno DESC LIMIT 1
     </select>
 
     <update id="updateGroupBno" parameterType="long">
-        update jy_reply
-        set re_group_bno=#{bno}
-        where re_bno = #{bno}
+        UPDATE jy_reply
+        SET    re_group_bno=#{bno}
+        WHERE  re_bno = #{bno}
     </update>
 
     <select id="selectReplyList" resultType="jyReply" parameterType="map">
  <![CDATA[
-        select re_bno,
+        SELECT re_bno,
                re_group_bno,
                re_content,
                re_created_by,
@@ -30,21 +30,21 @@
                re_del_yn,
                re_depth,
                re_order
-        from jy_reply
-        where board_bno = #{id}
-        order by re_group_bno desc, re_order asc, re_depth asc
-            limit #{offset}, #{pageSize}
+        FROM   jy_reply
+        WHERE  board_bno = #{id}
+        ORDER BY re_group_bno DESC , re_order ASC, re_depth ASC
+        LIMIT #{offset}, #{pageSize}
         ]]>
     </select>
 
     <!--    댓글 정렬번호 업데이트-->
     <update id="updateOrderBno">
         <![CDATA[
-        update jy_reply
-        set re_order = re_order + 1
-        where re_order > #{reOrder}
-          and re_group_bno = #{reGroupBno}
-          and board_bno = #{boardBno};
+        UPDATE jy_reply
+        SET    re_order = re_order + 1
+        WHERE  re_order > #{reOrder}
+          AND  re_group_bno = #{reGroupBno}
+          AND  board_bno = #{boardBno};
         ]]>
     </update>
 
@@ -57,22 +57,22 @@
 
     <!--    댓글삭제 -->
     <update id="deleteReply" parameterType="long">
-        update jy_reply
-        set re_del_yn ='Y'
-        where re_bno = #{delReBno}
+        UPDATE jy_reply
+        SET    re_del_yn ='Y'
+        WHERE  re_bno = #{delReBno}
     </update>
 
     <!-- 대댓글달기-부모 댓글정보 불러오기-->
     <select id="selectReply" parameterType="long" resultType="jyReply">
-        select *
-        from jy_reply
-        where re_bno = #{reBno}
+        SELECT *
+        FROM   jy_reply
+        WHERE  re_bno = #{reBno}
     </select>
 
     <!--    해당 게시물의 댓글갯수-->
     <select id="selectReplyCountAll" parameterType="long" resultType="int">
-        select count(*)
-        from jy_reply
-        where board_bno = #{id}
+        SELECT count(*)
+        FROM   jy_reply
+        WHERE  board_bno = #{id}
     </select>
 </mapper>
