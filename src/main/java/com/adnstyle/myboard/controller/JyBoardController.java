@@ -32,7 +32,7 @@ import java.util.Map;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/user")//로그인한 사람들만 접근할수있게
+@RequestMapping("/user")//로그인한 사람들만 허용할것!
 public class JyBoardController {
 
     private final JyBoardService jyBoardService;

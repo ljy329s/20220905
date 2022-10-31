@@ -6,23 +6,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>회원가입</title>
-</head>
-<style>
-    .titleCenter {
-        text-align: center;
-    }
+    <style>
+        .titleCenter {
+            text-align: center;
+        }
 
-    #joinBtn {
-        margin: 20px;
-        float: right;
-    }
-</style>
+        #joinBtn {
+            margin: 20px;
+            float: right;
+        }
+
+        #profile_preview {
+            width: 105px;
+            height: 140px;
+        }
+    </style>
+</head>
 <body>
 <div class="d-flex justify-content-center mt-5">
     <div class="col-4 card ">
         <div class="card-body">
             <form method="post" id="newMember" action="/join">
                 <h1 class="titleCenter">회원가입</h1>
+                <div>
+                    <img id="profile_preview" src="">
+                </div>
+                <div class="form-group">
+                    <label for="profile">프로필사진</label>
+                    <input type="file" accept=".png,.jpg,.jepg" id="profile" class="form-control"
+                           onchange="readURL(this)">
+                </div>
+
                 <div class="form-group">
                     <label for="userId">* 아이디</label>
                     <input type="text" class="form-control" name="userId" id="userId" placeholder="사용자 아이디 10자리 이내"
@@ -87,14 +101,69 @@
 </div>
 
 </body>
+<!--등록한 프로필사진 해당영역에 미리 보여주기-->
 <script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();//파일을 읽기 위한 FileReader객체 생성 비동기적으로 파일을 읽어들일때 사용된다.
+            reader.onload = function (e) {//파일 읽어들이기를 성공했을때 호출되는 이벤트 핸들러 onload읽기 동작이 성공적으로 완료됐을때 동작
+                document.getElementById("profile_preview").src = e.target.result;//img태그의 src속성에 읽어들인 file내용을 지정 result:파일의 내용을 반환
+            };
+            reader.readAsDataURL(input.files[0]);//file내용을 읽고 dataUrl형식의 문자열로 저장. 바이너리 파일을 Base64 Encode 문자열로 반환 그 이후 이미지로 볼수있다.
+        } else {
+            document.getElementById("profile_preview").src = "";//파일이 없을땐 src 비우기
+
+        }
+    };
+    //건희님 sms_api 휴대폰번호 입력후 인증번호 받기
+    //휴대폰 인증번호 전송 클릭
+    // $("#sendMessage").click(function () {
+    //     let userPhone = $("#userPhone").val();
+    //
+    //     $.ajax({//문자 보내는 ajax(문자보내주는 ajax)
+    //         url     : "http://192.168.3.116:8880/sendMessage",
+    //         data    : {"trPhone": userPhone},
+    //         type    : "post",
+    //         success : function (data) {
+    //             if (data.result == "success") {
+    //                 alert("인증번호가 전송되었습니다.")
+    //                 $("#phoneSpan").css('color', 'black');
+    //                 $("#phoneSpan").html('제한시간내에 인증번호를 입력해주세요');
+    //                 $("#checkSmS").attr("disabled", false);
+    //             }
+    //         }, error: function () {
+    //             alert("인증번호 전송 실패 error발생");
+    //         }
+    //     })
+    // });
+
+    //건희님 sms_api
+    // $("#checkSmS").click(function () {//건희님 sms_api 인증번호 일치여부 확인
+    //     let ranNumCk = $("#ranNumCk").val();
+    //     let userPhone = $("#userPhone").val();
+    // $.ajax({
+    //     type: "POST",
+    //     url : "http://192.168.3.116:8880/smsCheck/select",
+    //
+    //     data   : {'phone': userPhone, 'checkNumber': ranNumCk},
+    //     success: function (data) {
+    //         if (data.result == 'success') {
+    //             alert('인증되었습니다.');
+    //             // $(".phoneInput").prop("readonly", true);
+    //             // $(".smsCheck").prop("disabled", true);
+    //             // seconds = 0;
+    //         } else {
+    //             alert('불일치');
+    //         }
+    //      }
+    //     })
+    //     });
+
     //휴대폰 인증번호 전송 클릭
     $("#sendMessage").click(function () {
         let userPhone = $("#userPhone").val();
 
         $.ajax({//문자 보내는 ajax(문자보내주는 ajax)
-            // url     : "http://192.168.3.116:8880/sendMessage",
-            // data    : {"trPhone": userPhone},//성준,권희님이 만든 곳 쓸때 주석 지우기
             url     : "http://localhost:9080/sendMessage",
             data    : {"userPhone": userPhone},
             type    : "post",
@@ -111,13 +180,13 @@
         })
     });
 
-    //인증확인 버튼을 클릭했을때
-    //폰번호와 입력한 번호를 가지고 최근 전송된 인증번호와 비교
+    // 인증확인 버튼을 클릭했을때
+    // 폰번호와 입력한 번호를 가지고 최근 전송된 인증번호와 비교(jy sms_api)
     $("#checkSmS").click(function () {
         let ranNumCk = $("#ranNumCk").val();
         let userPhone = $("#userPhone").val();
         $.ajax({
-            url     : "http://localhost:9080/selectRanNum",
+            url     : "http://localhost:9080/selectRanNum",//내가한것
             data    : {
                 "ranNumCk" : ranNumCk,
                 "userPhone": userPhone
@@ -138,6 +207,7 @@
         });
 
     });
+
 
     // 휴대전화번호 검사
     $("#userPhone").keyup(function () {//휴대전화 입력시

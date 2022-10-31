@@ -129,7 +129,7 @@ public class JyUserController {
     /**
      * 마이페이지 화면으로 이동
      */
-    @GetMapping("/myPage")
+    @GetMapping("/user/myPage")
     public String myPage() {
 
         return "myPage";

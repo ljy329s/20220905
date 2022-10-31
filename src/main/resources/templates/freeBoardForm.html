@@ -6,10 +6,7 @@
     <meta charset="utf-8">
     <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>자유게시글 작성</title>
-</head>
-<th:block layout:fragment="content">
     <style>
         form {
             text-align: center;
@@ -48,6 +45,9 @@
             text-align: center;
         }
     </style>
+</head>
+<th:block layout:fragment="content">
+
     <body>
     <div>
         <div class="container">
@@ -57,11 +57,12 @@
                 <form action="/user/insertContent" method="post" enctype="multipart/form-data">
 
                     <label for="titleBox" class="form-label fs-5 fw-bold">제목</label>
-                        <input type="text" id="titleBox" class="form-control" name="title">
+                    <input type="text" id="titleBox" class="form-control" name="title">
                     <label for="writerBox" class="form-label fs-5 fw-bold">작성자</label>
-                        <input type="text" id="writerBox" class="form-control" name="createdBy" th:value="${session.jyUserSession.userId}" readonly="readonly">
+                    <input type="text" id="writerBox" class="form-control" name="createdBy"
+                           th:value="${session.jyUserSession.userId}" readonly="readonly">
                     <label for="contentBox" class="form-label fs-5 fw-bold">내용</label>
-                        <textarea rows="20" name="content" id="contentBox" class="form-control"></textarea>
+                    <textarea rows="20" name="content" id="contentBox" class="form-control"></textarea>
 
                     <input type="hidden" name="boardType" value="Free_Board">
                     <input type="file" id="onlyAttach" class="form-control" name="uploadFile" multiple>

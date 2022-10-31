@@ -7,25 +7,17 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>QnA 게시판 리스트</title>
-</head>
-<th:block layout:fragment="content">
     <style>
         #write_btn {
             float: right;
         }
-
-        a {
-            text-decoration: none;
-        }
-
-        .t_txt {
-            text-align: center;
-        }
-
         th {
             text-align: center;
         }
     </style>
+</head>
+
+<th:block layout:fragment="content">
     <body>
     <div class="container">
         <div id="main">
@@ -54,7 +46,7 @@
                             <td colspan="5"><h6 class="text-center">삭제된 게시물입니다</h6></td>
                         </th:block>
                         <th:block th:unless="${session.jyUserSession.role} =='ROLE_USER' and ${board.delYn}=='Y'">
-                            <td th:text="${board.id}" class="t_txt"></td>
+                            <td th:text="${board.id}" class="text-center"></td>
                             <th:block th:if="${board.id} == ${board.groupBno}">
                                 <td class="text-truncate"><a
                                         th:href="@{/user/qnaContent(id=${board.id},page=${ph.page})}"
@@ -65,11 +57,11 @@
                                        th:text="'&nbsp&nbsp&nbsp'+'[L답글]'+${board.title}"/>
                                 </td>
                             </th:block>
-                            <td class="text-truncate t_txt" th:text="${board.modifiedBy}"></td>
+                            <td class="text-truncate text-center" th:text="${board.modifiedBy}"></td>
                             <td th:text="${#temporals.format(board.modifiedDate,'yyyy-MM-dd HH:mm')}"
-                                class="t_txt"></td>
+                                class="text-center"></td>
                             <th:block th:if="${session.jyUserSession.role} =='ROLE_ADMIN'">
-                                <td th:text="${board.delYn}" class="t_txt"></td>
+                                <td th:text="${board.delYn}" class="text-center"></td>
                             </th:block>
                         </th:block>
                     </tr>
