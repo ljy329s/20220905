@@ -10,10 +10,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>아이디/비밀번호찾기</title>
     <style>
-        #findId{
+        #findId {
             margin-top: 50px;
         }
-        #btnBox{
+
+        #btnBox {
             text-align: center;
         }
     </style>
@@ -32,17 +33,19 @@
                 </div>
                 <div class="card-body">
                     <form id="selectFindId" method="post">
-                    <div>
-                        <label for="userName">이름</label>
-                        <input type="text" name="userName" id="userName" class="form-control" placeholder="이름을 입력해주세요">
-                    </div>
-                    <div>
-                        <label for="userEmail">이메일</label>
-                        <input type="email" name="userEmail" id="userEmail" class="form-control" placeholder="가입당시 이메일을 입력해주세요">
-                    </div>
-                    <div id="btnBox">
-                    <button type="button" id="findId" class="btn btn-outline-info">아이디 찾기</button>
-                    </div>
+                        <div>
+                            <label for="userName">이름</label>
+                            <input type="text" name="userName" id="userName" class="form-control"
+                                   placeholder="이름을 입력해주세요">
+                        </div>
+                        <div>
+                            <label for="userEmail">이메일</label>
+                            <input type="email" name="userEmail" id="userEmail" class="form-control"
+                                   placeholder="가입당시 이메일을 입력해주세요">
+                        </div>
+                        <div id="btnBox">
+                            <button type="button" id="findId" class="btn btn-outline-info">아이디 찾기</button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -55,32 +58,32 @@
             let userName = $("#userName").val();
             let userEmail = $("#userEmail").val();
             let jyUser = {
-                "userName"      : userName,
-                "userEmail"  : userEmail
+                "userName" : userName,
+                "userEmail": userEmail
             }
 
-                $.ajax({
-                    url    : "/findId",
-                    type   : 'POST',
-                    contentType: "application/json; charset=utf-8",
-                    data       : JSON.stringify(jyUser),
-                    success: function (data) {
-                        console.log(data)
-                        if (data != null && data != "" && data.length>0 ) {
-                            //alert("가입할때 등록한 이메일로 아이디를 전송했습니다.");
-                            alert("아이디는 : " + data + " 입니다.");
-                            return;
-                        } else {
-                            alert("사용자 정보를 다시 확인해주세요")
-                            location.href = '/findIdPw';
-                        }
-
-
-                    }, error() {
-                        alert("아이디찾기 에러")
+            $.ajax({
+                url        : "/findId",
+                type       : 'POST',
+                contentType: "application/json; charset=utf-8",
+                data       : JSON.stringify(jyUser),
+                success    : function (data) {
+                    console.log(data)
+                    if (data != null && data != "" && data.length > 0) {
+                        //alert("가입할때 등록한 이메일로 아이디를 전송했습니다.");
+                        alert("아이디는 : " + data + " 입니다.");
+                        return;
+                    } else {
+                        alert("사용자 정보를 다시 확인해주세요")
+                        location.href = '/findIdPw';
                     }
-                })
-                });
+
+
+                }, error() {
+                    alert("아이디찾기 에러")
+                }
+            })
+        });
 
         //  2. 없으면 정보를 정확하게 입력해주세요 , 있으면 메일로 전송
         //  3. 가입당시 이메일로 전송되었습니다 메시지 띄워주고 id/pw찾기 화면으로 이동
