@@ -20,7 +20,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class JyBoardService {
 
-
     private final JyBoardRepository jyBoardRepository;
 
     private final JyAttachRepository jyAttachRepository;

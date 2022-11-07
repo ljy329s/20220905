@@ -9,8 +9,6 @@ import com.adnstyle.myboard.model.service.JyBoardService;
 import com.adnstyle.myboard.model.service.JyReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -41,7 +39,6 @@ public class JyBoardController {
 
     private final JyReplyService jyReplyService;
 
-    private final Logger logger = LoggerFactory.getLogger(JyBoardController.class);
 
     /**
      * 사이트메인화면(로그인후 뜰 화면)
@@ -230,7 +227,7 @@ public class JyBoardController {
      */
     @GetMapping("/answerContent")
     public String answerContent(Model model, long id, @RequestParam("page") int page) {
-        logger.debug("답 상세조회 컨트롤러=========================================");
+        log.debug("답 상세조회 컨트롤러=========================================");
         List<JyBoard> myAnswerContent = jyBoardService.selectContent(id);//게시글 번호로 내용 불러오기
         List<JyAttach> attachList = jyAttachService.attachList(id);
         model.addAttribute("myAnswerContent", myAnswerContent);//게시글내용

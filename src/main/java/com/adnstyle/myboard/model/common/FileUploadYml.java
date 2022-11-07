@@ -1,11 +1,13 @@
 package com.adnstyle.myboard.model.common;
 
-import lombok.Data;
+import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.ConstructorBinding;
 
-@Data
-@Component
+//@Data
+//@Component
+@Getter
+@ConstructorBinding
 @ConfigurationProperties(prefix = "spring.file-upload")
 public class FileUploadYml {
 
