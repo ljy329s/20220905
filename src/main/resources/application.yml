@@ -22,7 +22,6 @@ spring:
   file-upload:
     save-dir: C:\\upload
 
-
   servlet:
     multipart:
       max-file-size: 50MB
