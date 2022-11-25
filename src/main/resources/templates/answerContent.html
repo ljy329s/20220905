@@ -99,11 +99,11 @@
                         <button type="button" class="btn btn-primary" id="upd_btn">수정</button>
                         <button type="submit" class="btn btn-primary" id="upd_sub" style="display: none">수정완료</button>
                         <button type="button" id="del_btn" class="btn btn-primary"
-                                th:onclick="|location.href='@{/user/deleteAnswer/{boardType}(id=${myAnswerContent.id},boardType=${myAnswerContent.boardType})}'|">삭제
+                                th:onclick="|location.href='@{/user/deleteAnswer(id=${myAnswerContent.id},boardType=${myAnswerContent.boardType})}'|">삭제
                         </button>
                     </th:block>
                     <button type="button" class="btn btn-primary" id="main_btn"
-                            th:onclick="|location.href='@{/user/boardList/{boardType}(page=${page},boardType=${myAnswerContent.boardType})}'|">
+                            th:onclick="|location.href='@{/user/boardList(page=${page},boardType=${myAnswerContent.boardType})}'|">
                         목록
                     </button>
                 </div>

@@ -18,8 +18,4 @@ public class FileUploadYml {
      */
     private final String saveDir;
 
-//    public FileUploadYml(String saveDir) {
-//        this.saveDir = saveDir;
-//    }
 }
-

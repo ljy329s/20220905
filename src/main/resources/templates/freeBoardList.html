@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko" xmlns:th="http://thymeleaf.org"
+<html lang="ko" xmlns:th="www.http://thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/default_layout}">
 <head>
@@ -46,7 +46,8 @@
             </select>
             <input type="search" th:name="search" th:value="${search}" class="searchBar seachAria"
                    placeholder="검색할 내용을 입력해 주세요">
-            <input type="hidden" value="Free_Board" name="boardType">
+            <input type="text" name="boardType" value="Free_Board">
+<!--            <input type="text" th:value="${boardType}" name="boardType">-->
             <input type="submit" value="검색" id="sBtn" class="searchBar">
           </form>
         </div>
@@ -79,11 +80,10 @@
             </th:block>
 
             <th:block th:unless="${session.jyUserSession.role} =='ROLE_USER' and ${board.delYn}=='Y'">
-
               <td th:text="${board.id}" class="text-center"></td>
               <th:block th:if="${board.id} == ${board.groupBno}">
                 <td class="text-truncate"><a
-                        th:href="@{/user/boardContent(id=${board.id},page=${ph.page},type=${type},search=${search})}"
+                        th:href="@{/user/boardContent(id=${board.id},page=${ph.page},type=${type},search=${search},boardType=${board.boardType})}"
                         th:text="${board.title}"/></td>
               </th:block>
               <td class="text-truncate t_txt" th:text="${board.modifiedBy}"></td>

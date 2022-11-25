@@ -126,14 +126,14 @@
             </th:block>
 <!--            <button type="button" id="main_btn" class="btn btn-primary"-->
 <!--                    th:onclick="|location.href='@{/user/boardList/{id}/{page}/{type}/{boardType}(id=${board.id}, page=${page}, type=${type}, boardType=${myContent.boardType} search=${search})}'|">-->
-            <button type="button" id="main_btn" class="btn btn-primary" th:onclick="|location.href='@{/user/boardList/{boardType}(page=${page},type=${type},search=${search},boardType=${myContent.boardType})}'|">
+            <button type="button" id="main_btn" class="btn btn-primary" th:onclick="|location.href='@{/user/boardList(page=${page},type=${type},search=${search},boardType=${myContent.boardType})}'|">
               목록
             </button>
 
 
             <th:block th:if="${session.jyUserSession.userId == myContent.modifiedBy}">
               <button type="button" id="del_btn" class="btn btn-primary"
-                      th:onclick="|location.href='@{/user/deleteContent/{boardType}(id=${myContent.id},boardType=${myContent.boardType})}'|">
+                      th:onclick="|location.href='@{/user/deleteContent(id=${myContent.id},boardType=${myContent.boardType})}'|">
                 삭제
               </button>
             </th:block>
@@ -332,7 +332,6 @@
         }
       });
     });
-
 
     // 댓글조회 함수 페이징
     function selectReplyList(page) {

@@ -58,12 +58,14 @@
                     <input type="file" id="onlyAttach" class="form-control" name="uploadFile" multiple>
 
                     <!--     답글인지 게시글인지 구분하는 용도 groupBno      -->
-                    <input type="hidden" name="groupBno" th:value="${id}">
-                    <input type="hidden" name="boardType" th:value="QnA_Board">
+                    <input type="text" name="groupBno" th:value="${id}">
+                    <input type="text" name="boardType" th:value="${boardType}">
 
                     <div class="btn-group" role="group" aria-label="Basic example">
                         <button type="submit" class="btn btn-primary" id="sub_btn">등록</button>
-                        <button type="button" class="btn btn-primary" id="main_btn" th:onclick="|location.href='@{/user/boardList/{boardType}(boardType='QnA_Board')}'|">목록</button>
+<!--                        <button type="button" class="btn btn-primary" id="main_btn" th:onclick="|location.href='@{/user/boardList(boardType='QnA_Board')}'|">목록</button>-->
+                      <button type="button" class="btn btn-primary" id="main_btn" th:onclick="|location.href='@{/user/boardList(boardType='QnA_Board')}'|">목록</button>
+
                     </div>
                 </form>
 

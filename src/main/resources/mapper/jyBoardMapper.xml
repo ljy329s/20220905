@@ -70,7 +70,8 @@
                modified_date,
                modified_by,
                del_yn,
-               group_bno
+               group_bno,
+               board_type
         FROM jy_board
         <include refid="searchContents"></include>
         ORDER BY group_bno DESC , id ASC
