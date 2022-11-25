@@ -54,7 +54,7 @@
         SELECT id,
                title,
                view_count,
-               0modified_date,
+               modified_date,
                modified_by
         FROM   jy_board
         WHERE  del_yn = 'N'

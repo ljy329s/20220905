@@ -101,7 +101,7 @@
               <button type="submit" class="btn btn-primary" id="upd_sub" style="display: none">수정완료</button>
             </th:block>
             <button type="button" id="main_btn" class="btn btn-primary"
-                    th:onclick="|location.href='@{/user/boardList(page=${page},boardType=${myQnAContent.boardType})}'|">
+                    th:onclick="|location.href='@{/user/boardList/{boardType}(page=${page},boardType=${myQnAContent.boardType})}'|">
               목록
             </button>
             <th:block th:if="${session.jyUserSession.userName == myQnAContent.modifiedBy}">
@@ -115,7 +115,7 @@
             <!--                        관리자일 경우에만 답글달기 버튼이 보임-->
             <th:block th:if="${session.jyUserSession.role == 'ROLE_ADMIN'}">
               <button type="button" class="btn btn-primary" id="answer_btn" style="display: inline"
-                      th:onclick="|location.href='@{/user/answerForm(id=${myQnAContent.id})}'|">답글달기
+                      th:onclick="|location.href='@{/user/answerForm/{id}(id=${myQnAContent.id})}'|">답글달기
               </button>
             </th:block>
           </div>
