@@ -9,8 +9,6 @@ import com.adnstyle.myboard.model.service.JyBoardService;
 import com.adnstyle.myboard.model.service.JyReplyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -41,7 +39,6 @@ public class JyBoardController {
 
     private final JyReplyService jyReplyService;
 
-    private final Logger logger = LoggerFactory.getLogger(JyBoardController.class);
 
     /**
      * 사이트메인화면(로그인후 뜰 화면)
@@ -55,7 +52,8 @@ public class JyBoardController {
      * 게시글 리스트(자유,답변)+페이징처리+검색처리(자유게시판)
      */
     @GetMapping("/boardList")
-    public String qnaBoardList(Model model, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "type", defaultValue = "A") String type, @RequestParam(value = "search", defaultValue = "") String search, @RequestParam("boardType") String boardType) {
+    public String qnaBoardList(Model model, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "type", defaultValue = "A") String type,
+                               @RequestParam(value = "search", defaultValue = "") String search, @RequestParam("boardType") String boardType) {
         Map searchMap = new HashMap();
         searchMap.put("type", type);
         searchMap.put("search", search);
@@ -73,7 +71,7 @@ public class JyBoardController {
         model.addAttribute("ph", ph);
         model.addAttribute("type", type);
         model.addAttribute("search", search);
-
+        model.addAttribute("boardType", boardType);
         if (boardType.equals("QnA_Board")) {
             return "qnaBoardList";
         } else if (boardType.equals("Free_Board")) {
@@ -81,7 +79,6 @@ public class JyBoardController {
         }
         return null;
     }
-
 
     /**
      * 게시글 상세조회
@@ -101,20 +98,16 @@ public class JyBoardController {
 
     }
 
+
     /**
      * 게시글 삭제(상태값 변경)
-     * 첨부파일 완전삭제
      */
     @GetMapping("/deleteContent")
-    public String myBoardContentDelete(long id, String boardType) {
-        jyBoardService.deleteContent(id);//게시물 삭제 결과가 있다면
-
-        if (boardType.equals("Free_Board")) {
-            return "redirect:/user/boardList?boardType=Free_Board";
-        } else if (boardType.equals("QnA_Board")) {
-            return "redirect:/user/boardList?boardType=QnA_Board";
-        }
-        return null;
+    public String myBoardContentDelete(@RequestParam long id, @RequestParam String boardType, RedirectAttributes rttr) {
+        jyBoardService.deleteContent(id);
+        rttr.addAttribute("id",id);
+        rttr.addAttribute("boardType",boardType);
+            return "redirect:/user/boardList";
     }
 
     /**
@@ -137,15 +130,14 @@ public class JyBoardController {
      * 게시글(질문글,자유게시판) 등록 + 첨부파일등록
      */
     @PostMapping("/insertContent")
-    public String myBoardInsertContent(MultipartFile[] uploadFile, JyBoard board) {
+    public String myBoardInsertContent(MultipartFile[] uploadFile, JyBoard board, RedirectAttributes rttr) {
+        System.out.println("컨트롤러의 board : "+board);
+        System.out.println("컨트롤러의 uploadFile: "+uploadFile);
         jyBoardService.insertContent(board, uploadFile);
         String boardType = board.getBoardType();
-        if (boardType.equals("Free_Board")) {
-            return "redirect:/user/boardList?boardType=Free_Board";
-        } else if (boardType.equals("QnA_Board")) {
-            return "redirect:/user/boardList?boardType=QnA_Board";
-        }
-        return null;
+        rttr.addAttribute("boardType",boardType);
+
+        return "redirect:/user/boardList";
     }
 
 
@@ -179,8 +171,11 @@ public class JyBoardController {
      * 게시글 수정하기
      */
     @PostMapping("/updateContent")
-    public String myBoardUpdateContent(JyBoard board, MultipartFile[] uploadFile, @RequestParam(value = "attBno", required = false) List<Long> attList, @RequestParam("boardType") String boardType,
-                                       @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "type", defaultValue = "A") String type, @RequestParam(value = "search", defaultValue = "") String search, RedirectAttributes rttr) {// )HttpServletRequest request
+    public String myBoardUpdateContent(JyBoard board, MultipartFile[]
+            uploadFile, @RequestParam(value = "attBno", required = false) List<Long> attList, @RequestParam("boardType") String boardType,
+                   @RequestParam(value = "page", defaultValue = "1") int page,
+                       @RequestParam(value = "type", defaultValue = "A") String type,
+                       @RequestParam(value = "search", defaultValue = "") String search, RedirectAttributes rttr) {//HttpServletRequest request
         List attFileList = new ArrayList();
         System.out.println("attList" + attList);
         if (attList != null) {
@@ -195,34 +190,39 @@ public class JyBoardController {
         if (boardType.equals("QnA_Board")) {
             rttr.addAttribute("page", page);
             rttr.addAttribute("boardType", boardType);
+            return "redirect:/user/boardList";
         } else if (boardType.equals("Free_Board")) {
             rttr.addAttribute("page", page);
             rttr.addAttribute("search", search);
             rttr.addAttribute("type", type);
             rttr.addAttribute("boardType", boardType);
+            return "redirect:/user/boardList";
 
         }
-        return "redirect:/user/boardList";
+        return null;
     }
 
     /**
      * 답변달기 폼으로 이동
      */
     @GetMapping("/answerForm")
-    public String writeForm(Long id, Model model) {
-        model.addAttribute("id", id);
+    public String writeForm(@RequestParam("id") Long id, @RequestParam("boardType") String boardType, Model model) {
+        model.addAttribute("id", id);//그룹아이디가 될것
+        model.addAttribute("boardType",boardType);//그룹아이디가 될것
 
         return "answerForm";
     }
+
 
     /**
      * 답변등록
      */
     @PostMapping("/insertAnswer")
-    public String insertAnswer(MultipartFile[] uploadFile, JyBoard board) {
+    public String insertAnswer(MultipartFile[] uploadFile, JyBoard board,RedirectAttributes rttr) {
         jyBoardService.insertContent(board, uploadFile);
-
-        return "redirect:/user/boardList?boardType=QnA_Board";
+        String boardType = board.getBoardType();
+        rttr.addAttribute("boardType",boardType);
+        return "redirect:/user/boardList";
     }
 
     /**
@@ -230,7 +230,7 @@ public class JyBoardController {
      */
     @GetMapping("/answerContent")
     public String answerContent(Model model, long id, @RequestParam("page") int page) {
-        logger.debug("답 상세조회 컨트롤러=========================================");
+        log.debug("답 상세조회 컨트롤러=========================================");
         List<JyBoard> myAnswerContent = jyBoardService.selectContent(id);//게시글 번호로 내용 불러오기
         List<JyAttach> attachList = jyAttachService.attachList(id);
         model.addAttribute("myAnswerContent", myAnswerContent);//게시글내용
@@ -258,11 +258,11 @@ public class JyBoardController {
      * 답변삭제
      */
 
-    //@GetMapping("/deleteAnswer")
-    public String deleteAnswer(Long id) {
+    @GetMapping("/deleteAnswer")
+    public String deleteAnswer(Long id, @RequestParam("boardType") String boardType, RedirectAttributes rttr) {
         jyBoardService.deleteAnswer(id);
-
-        return "redirect:/user/boardList?boardType=QnA_Board";
+        rttr.addAttribute("boardType",boardType);
+        return "redirect:/user/boardList";
     }
 
     /**
@@ -313,7 +313,8 @@ public class JyBoardController {
      */
     @GetMapping("/selectReplyList")
     @ResponseBody
-    public Map<String, Object> selectReplyList(@RequestParam(value = "boardBno") Long boardBno, @RequestParam(value = "page", defaultValue = "1") int page) {
+    public Map<String, Object> selectReplyList(@RequestParam(value = "boardBno") Long boardBno,
+                                               @RequestParam(value = "page", defaultValue = "1") int page) {
 
         return jyReplyService.selectReplyList(boardBno, page);
 

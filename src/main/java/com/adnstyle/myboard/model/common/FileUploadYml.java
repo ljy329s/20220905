@@ -2,9 +2,10 @@ package com.adnstyle.myboard.model.common;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 @Data
-//@Component 쓰지않고 Application에 @configurationPropertisScan달아주면 된다.
+@Component
 @ConfigurationProperties(prefix = "spring.file-upload")
 public class FileUploadYml {
 

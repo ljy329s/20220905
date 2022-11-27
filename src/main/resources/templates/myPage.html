@@ -3,70 +3,74 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/default_layout}">
 <head>
-    <meta charset="utf-8">
-    <script src="/js/jquery-3.6.1.min.js"></script>
-    <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <script src="/js/jquery-3.6.1.min.js"></script>
+  <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>마이페이지</title>
+  <title>마이페이지</title>
 </head>
 <th:block layout:fragment="content">
-    <body>
-    <div class="d-flex justify-content-center mt-5">
+  <body>
+  <div class="d-flex justify-content-center mt-5">
 
-        <div class="col-4 card">
-            <div class="card-body">
+    <div class="col-4 card">
+      <div class="card-body">
 
-                <div class="form-group">
-                    <label for="userName">이름</label>
-                    <input type="text" class="form-control" id="userName" th:value="${session.jyUserSession.userName}" readonly="readonly">
-                </div>
-                <div class="form-group">
-                    <label for="userBirth">생년월일</label>
-                    <input type="text" class="form-control myPage" id="userBirth"
-                    th:value="${session.jyUserSession.userBirth}" readonly="readonly">
-                </div>
-                <div class="form-group">
-                    <label for="userPhone">휴대폰번호</label>
-                    <input type="text" class="form-control myPage" id="userPhone"
-                           th:value="${session.jyUserSession.userPhone}" readonly="readonly">
-                </div>
-                <div class="form-group">
-                    <label for="userEmail">이메일</label>
-                    <input type="text" class="form-control myPage" id="userEmail"
-                           th:value="${session.jyUserSession.userEmail}" readonly="readonly">
-                </div>
-                <div class="form-group">
-                    <label for="regDate">가입일자</label>
-                    <input type="text" class="form-control" id="regDate" name="regDate"
-                        th:value="${session.jyUserSession.regDate}" readonly="readonly">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <button type="button" id="updateMP" class="btn btn-outline-info">수정</button>
-                <button type="button" id="updateMPS" class="btn btn-outline-info" style="display: none" >수정완료</button>
-                <button type="button" id="mpBack" class="btn btn-outline-info" style="display: none" onclick="location.href='/myPage'">취소</button>
-            </div>
+        <div class="form-group">
+          <label for="userName">이름</label>
+          <input type="text" class="form-control" id="userName" th:value="${session.jyUserSession.userName}"
+                 readonly="readonly">
         </div>
-    </div>
-<script>
-<!--    수정버튼 누르면 읽기전용을 false로-->
-    $("#updateMP").click(function () {
-        upd_btnE();
-    });
-    function upd_btnE() {
-        $("#updateMPS").css('display','inline');
-        $("#mpBack").css('display','inline');
-        $("#updateMP").css('display','none');
-        let myForm = $(".myPage");
-        for (let i = 0; i < myForm.length; i++) {
-            myForm[i].readOnly = false;
-        }
+        <div class="form-group">
+          <label for="userBirth">생년월일</label>
+          <input type="text" class="form-control myPage" id="userBirth"
+                 th:value="${session.jyUserSession.userBirth}" readonly="readonly">
+        </div>
+        <div class="form-group">
+          <label for="userPhone">휴대폰번호</label>
+          <input type="text" class="form-control myPage" id="userPhone"
+                 th:value="${session.jyUserSession.userPhone}" readonly="readonly">
+        </div>
+        <div class="form-group">
+          <label for="userEmail">이메일</label>
+          <input type="text" class="form-control myPage" id="userEmail"
+                 th:value="${session.jyUserSession.userEmail}" readonly="readonly">
+        </div>
+        <div class="form-group">
+          <label for="regDate">가입일자</label>
+          <input type="text" class="form-control" id="regDate" name="regDate"
+                 th:value="${session.jyUserSession.regDate}" readonly="readonly">
+        </div>
+      </div>
 
-}
-</script>
-    </body>
+      <div class="form-group">
+        <button type="button" id="updateMP" class="btn btn-outline-info">수정</button>
+        <button type="button" id="updateMPS" class="btn btn-outline-info" style="display: none">수정완료</button>
+        <button type="button" id="mpBack" class="btn btn-outline-info" style="display: none"
+                onclick="location.href='/myPage'">취소
+        </button>
+      </div>
+    </div>
+  </div>
+  <script>
+    <!--    수정버튼 누르면 읽기전용을 false로-->
+    $("#updateMP").click(function () {
+      upd_btnE();
+    });
+
+    function upd_btnE() {
+      $("#updateMPS").css('display', 'inline');
+      $("#mpBack").css('display', 'inline');
+      $("#updateMP").css('display', 'none');
+      let myForm = $(".myPage");
+      for (let i = 0; i < myForm.length; i++) {
+        myForm[i].readOnly = false;
+      }
+
+    }
+  </script>
+  </body>
 
 </th:block>
 </html>

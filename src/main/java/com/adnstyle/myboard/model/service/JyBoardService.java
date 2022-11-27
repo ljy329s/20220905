@@ -20,7 +20,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class JyBoardService {
 
-
     private final JyBoardRepository jyBoardRepository;
 
     private final JyAttachRepository jyAttachRepository;
@@ -145,11 +144,11 @@ public class JyBoardService {
                 }
             }//end for
             jyAttachService.insertFile((ArrayList) fileList);//게시글 첨부파일등록
-         }
+        }
     }
 
     /**
-     *  게시글 수정하기
+     * 게시글 수정하기
      */
 
     @Transactional
