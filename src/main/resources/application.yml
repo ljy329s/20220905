@@ -35,7 +35,6 @@ spring:
 logging:
   config: classpath:log/logback-spring.xml
 
-
 mybatis:
   type-aliases-package: com.adnstyle.myboard.model.domain
   mapper-locations: mapper/*.xml

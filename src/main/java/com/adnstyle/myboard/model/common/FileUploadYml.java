@@ -1,17 +1,18 @@
 package com.adnstyle.myboard.model.common;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.context.properties.ConstructorBinding;
 
-@Data
-@Component
+@RequiredArgsConstructor
+@Getter
+@ConstructorBinding
 @ConfigurationProperties(prefix = "spring.file-upload")
 public class FileUploadYml {
 
     /**
      * 파일이 저장될 경로
      */
-    private String saveDir;
+    private final String saveDir;
 }
-
