@@ -85,7 +85,7 @@
                 <li>
                   <a th:href="@{/user/downloadFile(fileName = ${attachList.uuid}, uploadPath = ${attachList.uploadPath})}">
                     <span th:text="${attachList.originName}"/></a>
-                  <button type="button" th:value="${attachList.attBno}" class="attBno"
+                  <button type="button" th:value="${attachList.attBno}" class="attBno btn btn-primary"
                           th:attr="data-att=${attachList.attBno}" id="attBno" style="display: none">삭제
                   </button>
 

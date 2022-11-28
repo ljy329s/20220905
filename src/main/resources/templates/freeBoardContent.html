@@ -22,11 +22,13 @@
 
     #upd_btn, #del_btn, #upd_sub {
       background-color: #66b2ff;
+      margin-bottom: 10px;
     }
 
     #main_btn {
       background-color: #ffffff;
       color: #000000;
+      margin-bottom: 10px;
     }
 
     label {
@@ -124,8 +126,6 @@
               <button type="submit" class="btn btn-primary" id="upd_sub" style="display: none">수정완료
               </button>
             </th:block>
-<!--            <button type="button" id="main_btn" class="btn btn-primary"-->
-<!--                    th:onclick="|location.href='@{/user/boardList/{id}/{page}/{type}/{boardType}(id=${board.id}, page=${page}, type=${type}, boardType=${myContent.boardType} search=${search})}'|">-->
             <button type="button" id="main_btn" class="btn btn-primary" th:onclick="|location.href='@{/user/boardList(page=${page},type=${type},search=${search},boardType=${myContent.boardType})}'|">
               목록
             </button>
@@ -481,12 +481,14 @@
       for (let i = 0; i < formU.length; i++) {
         formU[i].readOnly = false;
       }
+      let writer = document.getElementById("writerBox")
+      writer.readOnly = true;
 
       //기존 수정하기 버튼 가리기
       document.getElementById("upd_btn").style.display = "none";
       //수정완료 버튼 보이게 하기
       document.getElementById("upd_sub").style.display = "inline";
-      let mainTitleU = document.getElementById("mainTitle");//게시글읽기->게시글수정으로 변경
+      let mainTitleU = document.getElementById("mainTitle");
       mainTitleU.innerText = "게시글수정";
       //파일추가 보이게 하기
       document.getElementById("onlyAttach").style.display = "inline";

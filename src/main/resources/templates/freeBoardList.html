@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko" xmlns:th="www.http://thymeleaf.org"
+<html lang="ko" xmlns:th="http://thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/default_layout}">
 <head>
@@ -10,6 +10,7 @@
   <style>
     #searchBox {
       margin: 30px;
+      text-align: center;
     }
 
     .searchBar {
@@ -28,6 +29,19 @@
     th {
       text-align: center;
     }
+    .sBtn{
+      background-color: white;
+      border-color: black;
+      width: 80px;
+      color: black;
+    }
+    .sBtn:hover{
+      background-color: #85cdff;
+      border-color: black;
+      width: 80px;
+      color: black;
+    }
+
   </style>
 </head>
 <th:block layout:fragment="content">
@@ -46,9 +60,8 @@
             </select>
             <input type="search" th:name="search" th:value="${search}" class="searchBar seachAria"
                    placeholder="검색할 내용을 입력해 주세요">
-            <input type="text" name="boardType" value="Free_Board">
-<!--            <input type="text" th:value="${boardType}" name="boardType">-->
-            <input type="submit" value="검색" id="sBtn" class="searchBar">
+            <input type="hidden" name="boardType" value="Free_Board">
+            <input type="submit" value="검색" id="sBtn" class="searchBar sBtn">
           </form>
         </div>
       </div>

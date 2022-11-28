@@ -105,9 +105,9 @@ public class JyBoardController {
     @GetMapping("/deleteContent")
     public String myBoardContentDelete(@RequestParam long id, @RequestParam String boardType, RedirectAttributes rttr) {
         jyBoardService.deleteContent(id);
-        rttr.addAttribute("id",id);
-        rttr.addAttribute("boardType",boardType);
-            return "redirect:/user/boardList";
+        rttr.addAttribute("id", id);
+        rttr.addAttribute("boardType", boardType);
+        return "redirect:/user/boardList";
     }
 
     /**
@@ -131,11 +131,9 @@ public class JyBoardController {
      */
     @PostMapping("/insertContent")
     public String myBoardInsertContent(MultipartFile[] uploadFile, JyBoard board, RedirectAttributes rttr) {
-        System.out.println("컨트롤러의 board : "+board);
-        System.out.println("컨트롤러의 uploadFile: "+uploadFile);
-        jyBoardService.insertContent(board, uploadFile);
+        jyBoardService.insertContent(uploadFile, board);
         String boardType = board.getBoardType();
-        rttr.addAttribute("boardType",boardType);
+        rttr.addAttribute("boardType", boardType);
 
         return "redirect:/user/boardList";
     }
@@ -145,11 +143,6 @@ public class JyBoardController {
      * 첨부파일 다운로드
      */
     @GetMapping(value = "/downloadFile", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-//    @ResponseBody
-    /*
-    ResponseEntity는 View를 제공하지 않는 형태로 요청을 처리하고, 직접 결과 데이터 및 http상태코드를 설정하여 응답할수있다.
-    ResponseEntity를 사용하기 위해서는 응답상태코드 , 응답헤더,응답 봄문을 설정해줘야함
-    */
     public ResponseEntity<Resource> downloadFile(String uploadPath, String fileName) {
         Resource resource = new FileSystemResource(uploadPath + "\\" + fileName);
         String resourceName = resource.getFilename();
@@ -173,11 +166,11 @@ public class JyBoardController {
     @PostMapping("/updateContent")
     public String myBoardUpdateContent(JyBoard board, MultipartFile[]
             uploadFile, @RequestParam(value = "attBno", required = false) List<Long> attList, @RequestParam("boardType") String boardType,
-                   @RequestParam(value = "page", defaultValue = "1") int page,
-                       @RequestParam(value = "type", defaultValue = "A") String type,
-                       @RequestParam(value = "search", defaultValue = "") String search, RedirectAttributes rttr) {//HttpServletRequest request
+                                       @RequestParam(value = "page", defaultValue = "1") int page,
+                                       @RequestParam(value = "type", defaultValue = "A") String type,
+                                       @RequestParam(value = "search", defaultValue = "") String search, RedirectAttributes rttr) {//HttpServletRequest request
         List attFileList = new ArrayList();
-        System.out.println("attList" + attList);
+
         if (attList != null) {
             for (Long attBno : attList) {
                 attFileList.add(attBno);
@@ -208,7 +201,7 @@ public class JyBoardController {
     @GetMapping("/answerForm")
     public String writeForm(@RequestParam("id") Long id, @RequestParam("boardType") String boardType, Model model) {
         model.addAttribute("id", id);//그룹아이디가 될것
-        model.addAttribute("boardType",boardType);//그룹아이디가 될것
+        model.addAttribute("boardType", boardType);//그룹아이디가 될것
 
         return "answerForm";
     }
@@ -218,10 +211,10 @@ public class JyBoardController {
      * 답변등록
      */
     @PostMapping("/insertAnswer")
-    public String insertAnswer(MultipartFile[] uploadFile, JyBoard board,RedirectAttributes rttr) {
-        jyBoardService.insertContent(board, uploadFile);
+    public String insertAnswer(MultipartFile[] uploadFile, JyBoard board, RedirectAttributes rttr) {
+        jyBoardService.insertContent(uploadFile, board);
         String boardType = board.getBoardType();
-        rttr.addAttribute("boardType",boardType);
+        rttr.addAttribute("boardType", boardType);
         return "redirect:/user/boardList";
     }
 
@@ -261,7 +254,7 @@ public class JyBoardController {
     @GetMapping("/deleteAnswer")
     public String deleteAnswer(Long id, @RequestParam("boardType") String boardType, RedirectAttributes rttr) {
         jyBoardService.deleteAnswer(id);
-        rttr.addAttribute("boardType",boardType);
+        rttr.addAttribute("boardType", boardType);
         return "redirect:/user/boardList";
     }
 

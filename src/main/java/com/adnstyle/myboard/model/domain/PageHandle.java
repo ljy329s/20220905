@@ -81,8 +81,9 @@ public class PageHandle {
         /**
          * 마지막페이지 공식
          */
+        //endPage가 총페이지보다 크다면 총 페이지가 endPage인걸로
         this.endPage = (int) Math.ceil(page / (double) naviSize) * naviSize;
-        if (this.endPage >= this.totalPage) {//endPage가 총페이지보다 크다면 총 페이지가 endPage인걸로
+        if (this.endPage >= this.totalPage) {
             this.endPage = this.totalPage;
         }
 
@@ -93,7 +94,7 @@ public class PageHandle {
         if (this.page % this.naviSize == 0) {
             this.beginPage -= this.naviSize;
         }
-        //만약 끝페이지가 시작페이지보다 작거나 같다면 1로!.. 왜냐하믄..ㅠㅠㅠ 아까 시작1 끝페이지0나옴ㅠㅠ
+        //만약 끝페이지가 시작페이지보다 작거나 같을시 1으로 지정 페이지가 없을시 시작1 끝페이지0이 나올 수 있다.
         if (this.endPage < this.beginPage) {
             this.endPage = 1;
         }

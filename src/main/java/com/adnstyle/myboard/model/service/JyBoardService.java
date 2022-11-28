@@ -85,7 +85,7 @@ public class JyBoardService {
     }
 
     @Transactional
-    public void insertContent(JyBoard board, MultipartFile[] uploadFile) {
+    public void insertContent(MultipartFile[] uploadFile, JyBoard board) {
 
         long id = 0;//등록한 글번호
 
@@ -114,9 +114,6 @@ public class JyBoardService {
 
             if (uploadPath.exists() == false) {
                 uploadPath.mkdirs();//mkdirs(); 폴더 만드는 메서드
-                System.out.println("폴더생성");
-            } else {
-                System.out.println("이미 폴더가 있습니다");
             }
 
             for (MultipartFile multipartFile : uploadFile) {
@@ -134,7 +131,6 @@ public class JyBoardService {
                 attach.setOriginName(originUploadFileName);
                 attach.setBno(id);
 
-                System.out.println("attatch에 담긴 값 " + attach.toString());
                 fileList.add(attach);
 
                 try {
@@ -162,7 +158,6 @@ public class JyBoardService {
         for (MultipartFile multipartFile : uploadFile) {
 
             originUploadFileName = multipartFile.getOriginalFilename();//파일원본명
-            System.out.println("multipartFile" + multipartFile);
         }
 
         List fileList = new ArrayList();
@@ -183,8 +178,6 @@ public class JyBoardService {
                 originUploadFileName = multipartFile.getOriginalFilename();//파일원본명
                 long size = multipartFile.getSize();//파일사이즈
 
-                System.out.println("uploadFileName " + originUploadFileName + "size" + size);
-
                 //동일한 파일명일때 기존파일 덮어버리는 문제 해결위해 UUID
                 UUID UUid = UUID.randomUUID();
                 changeUploadFileName = UUid.toString() + "-" + originUploadFileName;//랜덤uuid+"-"+원본명
@@ -196,8 +189,6 @@ public class JyBoardService {
                 attach.setOriginName(originUploadFileName);
                 attach.setBno(board.getId());
 
-                System.out.println("attach" + attach);
-
                 fileList.add(attach);
 
                 try {
@@ -206,7 +197,6 @@ public class JyBoardService {
                     throw new RuntimeException(e);
                 }
             }
-            System.out.println("입력한값" + board);
             jyAttachService.insertFile((ArrayList) fileList);
         }
     }
@@ -220,7 +210,6 @@ public class JyBoardService {
             int no = jyAttachService.deleteFiles(attachList);//실제파일 삭제
             if (no > 0) {
                 jyAttachService.deleteAttach(id);
-                System.out.println("게시글 삭제처리후 첨부파일 삭제됨");
             }
         }
     }

@@ -28,14 +28,14 @@
     <div class="card-body">
       <form method="post" id="newMember" action="/join">
         <h1 class="titleCenter">회원가입</h1>
-        <div>
-          <img id="profile_preview" src="">
-        </div>
-        <div class="form-group">
-          <label for="profile">프로필사진</label>
-          <input type="file" accept=".png,.jpg,.jepg" id="profile" class="form-control"
-               onchange="readURL(this)"> <!--미리보기 기능-->
-        </div>
+<!--        <div>-->
+<!--          <img id="profile_preview" src="">-->
+<!--        </div>-->
+<!--        <div class="form-group">-->
+<!--          <label for="profile">프로필사진</label>-->
+<!--          <input type="file" accept=".png,.jpg,.jepg" id="profile" class="form-control"-->
+<!--               onchange="readURL(this)"> &lt;!&ndash;미리보기 기능&ndash;&gt;-->
+<!--        </div>-->
 
         <div class="form-group">
           <label for="userId">* 아이디</label>
@@ -117,96 +117,99 @@
   };
   //건희님 sms_api 휴대폰번호 입력후 인증번호 받기
   //휴대폰 인증번호 전송 클릭
-  // $("#sendMessage").click(function () {
-  //     let userPhone = $("#userPhone").val();
-  //
-  //     $.ajax({//문자 보내는 ajax(문자보내주는 ajax)
-  //         url     : "http://192.168.3.116:8880/sendMessage",
-  //         data    : {"trPhone": userPhone},
-  //         type    : "post",
-  //         success : function (data) {
-  //             if (data.result == "success") {
-  //                 alert("인증번호가 전송되었습니다.")
-  //                 $("#phoneSpan").css('color', 'black');
-  //                 $("#phoneSpan").html('제한시간내에 인증번호를 입력해주세요');
-  //                 $("#checkSmS").attr("disabled", false);
-  //             }
-  //         }, error: function () {
-  //             alert("인증번호 전송 실패 error발생");
-  //         }
-  //     })
-  // });
+  $("#sendMessage").click(function () {
+      let userPhone = $("#userPhone").val();
+
+      $.ajax({//문자 보내는 ajax(문자보내주는 ajax)
+          //url     : "http://192.168.3.116:8880/sendMessage",
+          url : "https://sms-auth.adnstyle.com/sendMessage",
+          data    : {"trPhone": userPhone},
+          type    : "post",
+          success : function (data) {
+              if (data.result == "success") {
+                  alert("인증번호가 전송되었습니다.")
+                  $("#phoneSpan").css('color', 'black');
+                  $("#phoneSpan").html('제한시간내에 인증번호를 입력해주세요');
+                  $("#checkSmS").attr("disabled", false);
+                  $("#sendMessage").html("인증번호 재전송");
+              }
+          }, error: function () {
+              alert("인증번호 전송 실패 error발생");
+          }
+      })
+  });
 
   //건희님 sms_api
-  // $("#checkSmS").click(function () {//건희님 sms_api 인증번호 일치여부 확인
-  //     let ranNumCk = $("#ranNumCk").val();
-  //     let userPhone = $("#userPhone").val();
-  // $.ajax({
-  //     type: "POST",
-  //     url : "http://192.168.3.116:8880/smsCheck/select",
+  $("#checkSmS").click(function () {//건희님 sms_api 인증번호 일치여부 확인
+      let ranNumCk = $("#ranNumCk").val();
+      let userPhone = $("#userPhone").val();
+  $.ajax({
+      type: "POST",
+      url : "https://sms-auth.adnstyle.com/smsCheck/select",
+      data   : {'phone': userPhone, 'checkNumber': ranNumCk},
+      success: function (data) {
+          if (data.result == 'success') {
+              alert('인증되었습니다.');
+              $("#sendMessage").prop("disabled", true);
+              $("#checkSmSValue").val("true");
+              $("#checkSmS").attr("disabled", true);
+            $("#userPhone").prop("readonly",true)
+          } else {
+              alert('불일치');
+          }
+       }
+      })
+      });
+
+
+  // //내 sms_api 휴대폰 인증번호 전송 클릭
+  // $("#sendMessage").click(function () {
+  //   let userPhone = $("#userPhone").val();
   //
-  //     data   : {'phone': userPhone, 'checkNumber': ranNumCk},
-  //     success: function (data) {
-  //         if (data.result == 'success') {
-  //             alert('인증되었습니다.');
-  //             // $(".phoneInput").prop("readonly", true);
-  //             // $(".smsCheck").prop("disabled", true);
-  //             // seconds = 0;
-  //         } else {
-  //             alert('불일치');
-  //         }
-  //      }
-  //     })
-  //     });
-
-  //휴대폰 인증번호 전송 클릭
-  $("#sendMessage").click(function () {
-    let userPhone = $("#userPhone").val();
-
-    $.ajax({//문자 보내는 ajax(문자보내주는 ajax)
-      url     : "http://localhost:9080/sendMessage",
-      data    : {"userPhone": userPhone},
-      type    : "post",
-      success : function (data) {
-        if (data === "success") {
-          alert("인증번호가 전송되었습니다.")
-          $("#phoneSpan").css('color', 'black');
-          $("#phoneSpan").html('제한시간내에 인증번호를 입력해주세요');
-          $("#checkSmS").attr("disabled", false);
-        }
-      }, error: function () {
-        alert("인증번호 전송 실패 error발생");
-      }
-    })
-  });
-
-  // 인증확인 버튼을 클릭했을때
-  // 폰번호와 입력한 번호를 가지고 최근 전송된 인증번호와 비교(jy sms_api)
-  $("#checkSmS").click(function () {
-    let ranNumCk = $("#ranNumCk").val();
-    let userPhone = $("#userPhone").val();
-    $.ajax({
-      url     : "http://localhost:9080/selectRanNum",//내가한것
-      data    : {
-        "ranNumCk" : ranNumCk,
-        "userPhone": userPhone
-      },
-      type    : "post",
-      success : function (data) {
-        if (data === "success") {
-          alert("인증확인되었습니다.")
-          $("#checkSmSValue").val("true");
-          $("#checkSmS").attr("disabled", true);
-        } else if (data === "fail") {
-          alert("인증번호를 다시 확인해주세요");
-        }
-      }, error: function () {
-        alert("인증번호 확인 에러 발생");
-      }
-
-    });
-
-  });
+  //   $.ajax({//문자 보내는 ajax(문자보내주는 ajax)
+  //     url     : "http://localhost:9080/sendMessage",
+  //     data    : {"userPhone": userPhone},
+  //     type    : "post",
+  //     success : function (data) {
+  //       if (data === "success") {
+  //         alert("인증번호가 전송되었습니다.")
+  //         $("#phoneSpan").css('color', 'black');
+  //         $("#phoneSpan").html('제한시간내에 인증번호를 입력해주세요');
+  //         $("#checkSmS").attr("disabled", false);
+  //       }
+  //     }, error: function () {
+  //       alert("인증번호 전송 실패 error발생");
+  //     }
+  //   })
+  // });
+  //
+  // // 인증확인 버튼을 클릭했을때
+  // // 폰번호와 입력한 번호를 가지고 최근 전송된 인증번호와 비교(jy sms_api)
+  // $("#checkSmS").click(function () {
+  //   let ranNumCk = $("#ranNumCk").val();
+  //   let userPhone = $("#userPhone").val();
+  //   $.ajax({
+  //     url     : "http://localhost:9080/selectRanNum",//내가한것
+  //     data    : {
+  //       "ranNumCk" : ranNumCk,
+  //       "userPhone": userPhone
+  //     },
+  //     type    : "post",
+  //     success : function (data) {
+  //       if (data === "success") {
+  //         alert("인증확인되었습니다.")
+  //         $("#checkSmSValue").val("true");
+  //         $("#checkSmS").attr("disabled", true);
+  //       } else if (data === "fail") {
+  //         alert("인증번호를 다시 확인해주세요");
+  //       }
+  //     }, error: function () {
+  //       alert("인증번호 확인 에러 발생");
+  //     }
+  //
+  //   });
+  //
+  // });
 
 
   // 휴대전화번호 검사

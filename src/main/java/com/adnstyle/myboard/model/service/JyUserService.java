@@ -63,6 +63,7 @@ public class JyUserService implements UserDetailsService {
 
     /**
      * 소셜회원가입
+     *
      * @param jyUser
      */
     public void insertNewScUser(JyUser jyUser) {
@@ -72,8 +73,7 @@ public class JyUserService implements UserDetailsService {
     /**
      * 아이디 있는지 확인
      */
-    public String findId(Map<String,String> jyUser) {
-        System.out.println(jyUser+"서비스");
+    public String findId(Map<String, String> jyUser) {
         return jyUserRepository.findId(jyUser);
 
     }

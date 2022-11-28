@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import org.apache.ibatis.type.Alias;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Alias("myBoard")
 @Data
@@ -66,8 +65,5 @@ public class MyBoard extends Base {
      * 그룹번호
      */
     private Long groupBno;
-
-
-    private List<JyAttach> jyAttachList;
 
 }

@@ -23,7 +23,6 @@ public class JyUserController {
      */
     @GetMapping("/joinForm")
     public String newMember() {
-
         return "joinForm";
     }
 
@@ -65,7 +64,6 @@ public class JyUserController {
      */
     @GetMapping("/loginForm")
     public String loginForm() {
-
         return "/auth/loginForm";
     }
 
@@ -88,7 +86,6 @@ public class JyUserController {
      */
     @GetMapping("/failLogin")
     public String failLogin() {
-
         return "auth/failLoginForm";
     }
 
@@ -97,7 +94,6 @@ public class JyUserController {
      */
     @GetMapping("/findIdPw")
     public String findIdPw() {
-
         return "findIdPw";
     }
 
@@ -121,7 +117,6 @@ public class JyUserController {
      */
     @GetMapping("/findPw")
     public String findPw() {
-
         return "findPw";
     }
 
@@ -131,27 +126,6 @@ public class JyUserController {
      */
     @GetMapping("/user/myPage")
     public String myPage() {
-
         return "myPage";
     }
-
-/*
-    //시큐리티연습
-    //@Secured 한개의 권한줄때 사용
-    @Secured("ROLE_USER")//간단하게 권한걸수있다.
-    @GetMapping("/info")
-    public @ResponseBody String info() {
-        return "개인정보:";
-    }
-
-
-    //PreAuthorize메서드는 ROLE_ADMIN이런식으로 적을수 없고 hasRole('ROLE_MANAGER')이런식으로
-    //hasRole부터 시작해서 적어줘야한다. 두개이상의 권한을 줄때 사용
-    @PreAuthorize("hasRole('ROLE_ADMIN')or hasRole('ROLE_MANAGER')")//data메소드가 실행되기 직전에 실행된다.
-    @GetMapping("/data")
-    public @ResponseBody String data() {
-        return "데이터정보:";
-    }
- */
-
 }

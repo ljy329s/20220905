@@ -8,14 +8,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-/**
- * /**
- *  *    provider          varchar(10)                null,
- *  *     provider_id      varchar(255)               null,
- *  *     db에 추가해주기
- *  */
-
-
 @Alias("jyUser")
 @Data
 @NoArgsConstructor
@@ -54,7 +46,7 @@ public class JyUser {
      * 고객생년월일
      */
     //input type date로 넘어온값은 string이라 date로 저장하려니 에러남
-    //데이트타입포맷 꼭 해주장..  vo date, db date로 해줌
+    //데이트타입포맷 꼭 해주기
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date userBirth;
 
@@ -87,14 +79,14 @@ public class JyUser {
     /**
      * 소셜로그인 회원가입 위한 생성자
      */
-    public JyUser(String userName, String userPw, String userEmail, String role, String provider, String providerId, LocalDateTime regDate){
-        this.userName =userName;
-        this.userPw =userPw;
-        this.userEmail =userEmail;
-        this.role=role;
-        this.provider=provider;
-        this.providerId=providerId;
-        this.regDate=regDate;
+    public JyUser(String userName, String userPw, String userEmail, String role, String provider, String providerId, LocalDateTime regDate) {
+        this.userName = userName;
+        this.userPw = userPw;
+        this.userEmail = userEmail;
+        this.role = role;
+        this.provider = provider;
+        this.providerId = providerId;
+        this.regDate = regDate;
     }
 
 

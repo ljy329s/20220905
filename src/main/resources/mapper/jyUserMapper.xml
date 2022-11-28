@@ -22,7 +22,19 @@
     </select>
 
     <select id="selectUser" parameterType="string" resultType="jyUser">
-        SELECT *
+        SELECT DATE_FORMAT(reg_date, '%Y-%m-%d') AS reg_date,
+               user_no,
+               user_id,
+               user_pw,
+               user_name,
+               user_phone,
+               user_email,
+               DATE_FORMAT(user_birth, '%Y-%m-%d') AS user_birth,
+               del_yn,
+               role,
+               end_date,
+               provider,
+               provider_id
         FROM   jy_user
         WHERE  user_id = #{userId}
           AND  del_yn = 'N'

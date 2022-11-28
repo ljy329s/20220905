@@ -11,9 +11,9 @@ public class JyHomeController {
     /**
      * 메인화면이자 로그인 성공시 기본경로
      */
-@GetMapping("/")
-    public String jyHome(){
-    log.debug("메인화면 접속");
-    return "jyHome";
+    @GetMapping("/")
+    public String jyHome() {
+        log.debug("메인화면 접속");
+        return "jyHome";
     }
 }
