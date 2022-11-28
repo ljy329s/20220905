@@ -126,7 +126,8 @@
               <button type="submit" class="btn btn-primary" id="upd_sub" style="display: none">수정완료
               </button>
             </th:block>
-            <button type="button" id="main_btn" class="btn btn-primary" th:onclick="|location.href='@{/user/boardList(page=${page},type=${type},search=${search},boardType=${myContent.boardType})}'|">
+            <button type="button" id="main_btn" class="btn btn-primary"
+                    th:onclick="|location.href='@{/user/boardList(page=${page},type=${type},search=${search},boardType=${myContent.boardType})}'|">
               목록
             </button>
 
@@ -420,7 +421,6 @@
 
             let replyPaging = "<ul class='pagination' style='justify-content: center'>";
 
-
             if (ph.showPrev) {
               replyPaging += "<li class='page-item'>";
               replyPaging += "<button class='page-link' onclick='selectReplyList(" + (ph.beginPage - 1) + ")'> < </button></li>";
@@ -446,7 +446,6 @@
             $("#replyPaging").html(replyPaging);
             //    페이징끝
 
-
           } else {
             alert("댓글조회 실패")
           }
@@ -466,34 +465,32 @@
       str += '<input type="hidden" name="attBno" value=' + attDelBno + '>';
       $('#contentForm').append(str);
 
-      attList.style.display = "none";//클릭한 버튼이 포함된 li 가리기
+      attList.style.display = "none";
     });
 
-    //수정버튼 클릭시 upd_btnE 함수를 실행해라
     $("#upd_btn").click(function () {
       upd_btnE();
     });
 
-    //수정버튼 클릭시 upd_btnE 실행
     function upd_btnE() {
-      //input의 class이름을 가지고 for문을 돌려서 readOnly를 false로(텍스트 수정가능하게)
       let formU = document.getElementsByClassName("form-control");
+
       for (let i = 0; i < formU.length; i++) {
         formU[i].readOnly = false;
       }
+
       let writer = document.getElementById("writerBox")
       writer.readOnly = true;
 
       //기존 수정하기 버튼 가리기
       document.getElementById("upd_btn").style.display = "none";
-      //수정완료 버튼 보이게 하기
+
       document.getElementById("upd_sub").style.display = "inline";
       let mainTitleU = document.getElementById("mainTitle");
       mainTitleU.innerText = "게시글수정";
-      //파일추가 보이게 하기
+
       document.getElementById("onlyAttach").style.display = "inline";
 
-      //첨부파일있을때 삭제버튼 보이게하기
       let attBno = document.getElementsByClassName("attBno")
       for (let i = 0; i < attBno.length; i++) {
         attBno[i].style.display = "inline";

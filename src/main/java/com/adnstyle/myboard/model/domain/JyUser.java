@@ -5,8 +5,8 @@ import lombok.NoArgsConstructor;
 import org.apache.ibatis.type.Alias;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Alias("jyUser")
 @Data
@@ -48,7 +48,7 @@ public class JyUser {
     //input type date로 넘어온값은 string이라 date로 저장하려니 에러남
     //데이트타입포맷 꼭 해주기
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date userBirth;
+    private Date userBirth;//import java.sql.Date 로 해주기 그래야 db와 같은 형식으로 조회됨
 
     /**
      * 탈퇴여부

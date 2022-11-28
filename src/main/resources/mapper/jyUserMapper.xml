@@ -22,8 +22,7 @@
     </select>
 
     <select id="selectUser" parameterType="string" resultType="jyUser">
-        SELECT DATE_FORMAT(reg_date, '%Y-%m-%d') AS reg_date,
-               user_no,
+        SELECT user_no,
                user_id,
                user_pw,
                user_name,
@@ -32,6 +31,7 @@
                DATE_FORMAT(user_birth, '%Y-%m-%d') AS user_birth,
                del_yn,
                role,
+               DATE_FORMAT(reg_date, '%Y-%m-%d %H:%i:%s') AS reg_date,
                end_date,
                provider,
                provider_id
