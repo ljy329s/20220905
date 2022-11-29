@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
@@ -26,15 +27,28 @@ public class JyUserController {
         return "joinForm";
     }
 
+//    /**
+//     * 회원 가입(원본)
+//     */
+//    @PostMapping("/join")
+//    public String insertNewUser(JyUser jyUser) {
+//        jyUserService.insertNewUser(jyUser);
+//
+//        return "/auth/loginForm";//회원가입 완료후 로그인화면으로 이동
+//    }
+
     /**
-     * 회원 가입
+     * 회원 가입 (사진포함)
      */
     @PostMapping("/join")
-    public String insertNewUser(JyUser jyUser) {
-        jyUserService.insertNewUser(jyUser);
+    public String insertNewUser(MultipartFile uploadFile, JyUser jyUser) {
+        System.out.println("uploadFile : "+ uploadFile);
+        System.out.println("jyUser : "+ jyUser);
+        jyUserService.insertNewUser(uploadFile,jyUser);
 
         return "/auth/loginForm";//회원가입 완료후 로그인화면으로 이동
     }
+
 
     /**
      * 아이디 중복체크(회원가입시)

@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.adnstyle.myboard.model.repository.JyUserRepository">
-
+<!-- 회원가입 원본 -->
+<!--    <insert id="insertNewUser" parameterType="jyUser">-->
+<!--        INSERT INTO jy_user-->
+<!--            (user_id, user_pw, user_name, user_phone, user_email, user_birth, role, reg_date)-->
+<!--        VALUES-->
+<!--            (#{userId}, #{userPw}, #{userName}, #{userPhone}, #{userEmail}, #{userBirth}, #{role}, NOW())-->
+<!--    </insert>-->
+<!--    회원가입 이미지 추가 -->
     <insert id="insertNewUser" parameterType="jyUser">
         INSERT INTO jy_user
-            (user_id, user_pw, user_name, user_phone, user_email, user_birth, role, reg_date)
+        (user_id, user_pw, user_name, user_phone, user_email, user_birth, role, reg_date, uploadPath, change_name, origin_name)
         VALUES
-            (#{userId}, #{userPw}, #{userName}, #{userPhone}, #{userEmail}, #{userBirth}, #{role}, NOW())
+            (#{userId}, #{userPw}, #{userName}, #{userPhone}, #{userEmail}, #{userBirth}, #{role}, NOW(), #{uploadPath}, #{changeName}, #{originName})
     </insert>
 
     <select id="checkId" parameterType="string" resultType="int">
@@ -31,10 +38,13 @@
                DATE_FORMAT(user_birth, '%Y-%m-%d') AS user_birth,
                del_yn,
                role,
-               DATE_FORMAT(reg_date, '%Y-%m-%d %H:%i:%s') AS reg_date,
+               reg_date,
                end_date,
                provider,
-               provider_id
+               provider_id,
+               uploadPath,
+               change_name,
+               origin_name
         FROM   jy_user
         WHERE  user_id = #{userId}
           AND  del_yn = 'N'

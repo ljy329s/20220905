@@ -5,8 +5,8 @@ import lombok.NoArgsConstructor;
 import org.apache.ibatis.type.Alias;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Alias("jyUser")
 @Data
@@ -74,7 +74,24 @@ public class JyUser {
      * 소셜로그인시
      */
     private String provider;
+
     private String providerId;
+
+  //프로필 관련
+    /**
+     * 저장경로
+     */
+    private String uploadPath;
+
+    /**
+     * 저장될 파일명
+     */
+    private String changeName;
+
+    /**
+     * 원본 파일명
+     */
+    private String originName;
 
     /**
      * 소셜로그인 회원가입 위한 생성자

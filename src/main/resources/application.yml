@@ -21,6 +21,7 @@ spring:
 
   file-upload:
     save-dir: C:\\upload
+    save-user-dir: C:\\upload_profile
 
   servlet:
     multipart:
@@ -32,20 +33,35 @@ spring:
     prefix: classpath:templates/
     suffix: .html
 
-logging:
-  config: classpath:log/logback-spring.xml
-
 mybatis:
   type-aliases-package: com.adnstyle.myboard.model.domain
   mapper-locations: mapper/*.xml
   configuration:
     map-underscore-to-camel-case: true
 
+logging:
+  config: classpath:log/logback-spring.xml
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  file-upload:
+    save-dir: C:\\upload
+
 server:
   port: 8080
   error:
     whitelabel:
       enabled: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
 
 #spring:
 #  datasource:

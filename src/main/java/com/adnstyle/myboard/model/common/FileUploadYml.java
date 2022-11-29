@@ -12,7 +12,12 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 public class FileUploadYml {
 
     /**
-     * 파일이 저장될 경로
+     * 첨부파일이 저장될 경로
      */
     private final String saveDir;
+
+    /**
+     * 회원 프로필이 저장될 경로
+     */
+    private final String saveUserDir;
 }

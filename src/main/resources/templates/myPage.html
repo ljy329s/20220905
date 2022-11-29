@@ -9,13 +9,38 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>마이페이지</title>
+  <style>
+    .mypageCard{
+      padding: 10px;
+    }
+
+    #profile_view {
+      width: 105px;
+      height: 140px;
+    }
+
+  </style>
 </head>
 <th:block layout:fragment="content">
   <body>
-  <div class="d-flex justify-content-center mt-5">
+  <div class="d-flex justify-content-center mt-5 mypageCard" >
 
     <div class="col-4 card">
       <div class="card-body">
+
+        <div>
+          <img id="profile_view" src="">
+        </div>
+
+        <div class="form-group">
+          <label for="userProfile">유저 프로필</label>
+          <input type="text" th:value='|${session.jyUserSession.uploadPath}\${session.jyUserSession.changeName}|' class="form-control" id="userProfile"
+                 readonly="readonly">
+        </div>
+<!--        <img th:src="@{th:value='\${session.jyUserSession.uploadPath}\}+${session.jyUserSession.changeName}'"/>-->
+        <!--        <img th:src="@{/webapp/file/} + ${이미지파일명()}">-->
+
+
 
         <div class="form-group">
           <label for="userName">이름</label>
@@ -40,24 +65,49 @@
         <div class="form-group">
           <label for="regDate">가입일자</label>
           <input type="text" class="form-control" id="regDate" name="regDate"
-                           th:value="${session.jyUserSession.regDate}" readonly="readonly">
+                 th:value="${session.jyUserSession.regDate}" readonly="readonly">
 
-<!--                 th:value="${session.jyUserSession.regDate}" readonly="readonly">-->
+          <!--                 th:value="${session.jyUserSession.regDate}" readonly="readonly">-->
 
         </div>
-      </div>
 
-<!--      <div class="form-group">-->
-<!--        <button type="button" id="updateMP" class="btn btn-outline-info">수정</button>-->
-<!--        <button type="button" id="updateMPS" class="btn btn-outline-info" style="display: none">수정완료</button>-->
-<!--        <button type="button" id="mpBack" class="btn btn-outline-info" style="display: none"-->
-<!--                onclick="location.href='/myPage'">취소-->
-<!--        </button>-->
-<!--      </div>-->
+      <!--      <div class="form-group">-->
+      <!--        <button type="button" id="updateMP" class="btn btn-outline-info">수정</button>-->
+      <!--        <button type="button" id="updateMPS" class="btn btn-outline-info" style="display: none">수정완료</button>-->
+      <!--        <button type="button" id="mpBack" class="btn btn-outline-info" style="display: none"-->
+      <!--                onclick="location.href='/myPage'">취소-->
+      <!--        </button>-->
+      <!--      </div>-->
     </div>
   </div>
+  </div>
+<!--  <input type="text" th:value='|\${session.jyUserSession.uploadPath}\${session.jyUserSession.changeName}|'-->
+
+
   <script>
-    <!--    수정버튼 누르면 읽기전용을 false로-->
+
+<!--    프로필 사진 보여주기-->
+$(document).ready(function () {
+  let profile = document.getElementById("userProfile").value;
+  console.log("profile1"+profile);
+  profileView(profile);
+});
+
+  function profileView(profile) {
+    if (profile.length!=0) {
+      console.log("profile2"+profile);
+      document.getElementById("profile_view").src=profile;
+
+    } else {
+      document.getElementById("profile_view").src = "";
+
+    }
+  };
+
+
+
+
+
     $("#updateMP").click(function () {
       upd_btnE();
     });
@@ -70,7 +120,6 @@
       for (let i = 0; i < myForm.length; i++) {
         myForm[i].readOnly = false;
       }
-
     }
   </script>
   </body>

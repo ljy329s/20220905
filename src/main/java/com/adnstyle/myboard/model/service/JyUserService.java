@@ -1,6 +1,7 @@
 package com.adnstyle.myboard.model.service;
 
 import com.adnstyle.myboard.auth.PrincipalDetails;
+import com.adnstyle.myboard.model.common.FileUploadYml;
 import com.adnstyle.myboard.model.domain.JyUser;
 import com.adnstyle.myboard.model.repository.JyUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +11,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -20,16 +25,64 @@ public class JyUserService implements UserDetailsService {
     private final JyUserRepository jyUserRepository;
     private final PasswordEncoder passwordEncoder;
 
+    private final FileUploadYml fileUploadYml;
+    private final JyAttachService jyAttachService;
+
+//    /**
+//     * 회원가입(원)
+//     */
+//    @Transactional
+//    public void insertNewUser(JyUser jyUser) {
+//        String pw = jyUser.getUserPw();
+//        jyUser.setUserPw(passwordEncoder.encode(pw));
+//        jyUser.setRole("ROLE_USER");
+//
+//        jyUserRepository.insertNewUser(jyUser);
+//    }
+
     /**
-     * 회원가입
+     * 회원가입 사진추가
      */
     @Transactional
-    public void insertNewUser(JyUser jyUser) {
-        String pw = jyUser.getUserPw();
-        jyUser.setUserPw(passwordEncoder.encode(pw));
-        jyUser.setRole("ROLE_USER");
+    public void insertNewUser(MultipartFile uploadFile, JyUser jyUser) {
 
-        jyUserRepository.insertNewUser(jyUser);
+        String originUploadFileName = "";
+        String changeUploadFileName = "";
+
+        originUploadFileName = uploadFile.getOriginalFilename();
+        if (originUploadFileName.length() > 0) {
+
+            String uploadFolder = fileUploadYml.getSaveUserDir();
+
+            File uploadPath = new File(uploadFolder, jyAttachService.getFolder());//File(상위경로,하위경로?)
+
+            if (uploadPath.exists() == false) {
+                uploadPath.mkdirs();
+            }
+            //동일한 파일명일때 기존파일 덮어버리는 문제 해결위해 UUID
+            UUID uuid = UUID.randomUUID();
+            changeUploadFileName = uuid.toString() + "-" + originUploadFileName;//랜덤uuid+"-"+원본명
+            File saveFile = new File(uploadPath, changeUploadFileName);
+
+            jyUser.setChangeName(changeUploadFileName);
+            jyUser.setUploadPath(String.valueOf(uploadPath));
+            jyUser.setOriginName(originUploadFileName);
+
+            try {
+                uploadFile.transferTo(saveFile);//파일에 저장 try Catch해주기
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            String pw = jyUser.getUserPw();
+            jyUser.setUserPw(passwordEncoder.encode(pw));
+            jyUser.setRole("ROLE_USER");
+
+            jyUserRepository.insertNewUser(jyUser);
+        }else{
+            jyUserRepository.insertNewUser(jyUser);
+        }
+
     }
 
     /**
