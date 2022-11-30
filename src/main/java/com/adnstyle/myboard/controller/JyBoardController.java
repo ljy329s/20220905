@@ -200,12 +200,12 @@ public class JyBoardController {
      */
     @GetMapping("/answerForm")
     public String writeForm(@RequestParam("id") Long id, @RequestParam("boardType") String boardType, Model model) {
+
         model.addAttribute("id", id);//그룹아이디가 될것
         model.addAttribute("boardType", boardType);//그룹아이디가 될것
 
         return "answerForm";
     }
-
 
     /**
      * 답변등록

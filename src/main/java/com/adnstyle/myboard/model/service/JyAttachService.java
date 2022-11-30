@@ -25,8 +25,7 @@ public class JyAttachService {
     private final JyReplyRepository jyReplyRepository;
 
 
-//년/월/일 폴더 생성 메서드
-
+    //년/월/일 폴더 생성 메서드
     public String getFolder() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");//mm은 분 MM은 월!
 
@@ -53,8 +52,7 @@ public class JyAttachService {
         if (attachList == null || attachList.size() == 0) {
             return 0;
         }
-        //첨부파일이 있으면
-        //collection.forEach(변수 -> 반복처리(변수)) //forEach
+        //첨부파일이 있으면 collection.forEach(변수 -> 반복처리(변수)) //forEach
         attachList.forEach(jyAttach -> {
             Path file = Paths.get(jyAttach.getUploadPath() + "\\s_" + jyAttach.getUuid() + "_" + jyAttach.getOriginName());
             try {
@@ -62,7 +60,6 @@ public class JyAttachService {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
         });
         return 1;
     }
@@ -70,7 +67,6 @@ public class JyAttachService {
     @Transactional
     public void deleteAttach(Long id) {
         jyAttachRepository.deleteAll(id);
-
     }
 
     /**

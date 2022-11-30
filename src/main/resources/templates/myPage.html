@@ -10,36 +10,41 @@
 
   <title>마이페이지</title>
   <style>
-    .mypageCard{
+    .mypageCard {
       padding: 10px;
     }
 
-    #profile_view {
-      width: 105px;
-      height: 140px;
+    .profile {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+    }
+
+    #profileBox {
+      text-align: center;
     }
 
   </style>
 </head>
 <th:block layout:fragment="content">
   <body>
-  <div class="d-flex justify-content-center mt-5 mypageCard" >
+  <div class="d-flex justify-content-center mt-5 mypageCard">
 
     <div class="col-4 card">
       <div class="card-body">
 
-        <div>
-          <img id="profile_view" src="">
+        <div id="profileBox">
+          <img id="profile_view" src="" alt="사원프로필" class="profile">
         </div>
 
         <div class="form-group">
           <label for="userProfile">유저 프로필</label>
-          <input type="text" th:value='|${session.jyUserSession.uploadPath}\${session.jyUserSession.changeName}|' class="form-control" id="userProfile"
+          <input type="text" th:value='|${session.jyUserSession.uploadPath}\${session.jyUserSession.changeName}|'
+                 class="form-control" id="userProfile"
                  readonly="readonly">
         </div>
-<!--        <img th:src="@{th:value='\${session.jyUserSession.uploadPath}\}+${session.jyUserSession.changeName}'"/>-->
+        <!--        <img th:src="@{th:value='\${session.jyUserSession.uploadPath}\}+${session.jyUserSession.changeName}'"/>-->
         <!--        <img th:src="@{/webapp/file/} + ${이미지파일명()}">-->
-
 
 
         <div class="form-group">
@@ -71,41 +76,39 @@
 
         </div>
 
-      <!--      <div class="form-group">-->
-      <!--        <button type="button" id="updateMP" class="btn btn-outline-info">수정</button>-->
-      <!--        <button type="button" id="updateMPS" class="btn btn-outline-info" style="display: none">수정완료</button>-->
-      <!--        <button type="button" id="mpBack" class="btn btn-outline-info" style="display: none"-->
-      <!--                onclick="location.href='/myPage'">취소-->
-      <!--        </button>-->
-      <!--      </div>-->
+        <!--      <div class="form-group">-->
+        <!--        <button type="button" id="updateMP" class="btn btn-outline-info">수정</button>-->
+        <!--        <button type="button" id="updateMPS" class="btn btn-outline-info" style="display: none">수정완료</button>-->
+        <!--        <button type="button" id="mpBack" class="btn btn-outline-info" style="display: none"-->
+        <!--                onclick="location.href='/myPage'">취소-->
+        <!--        </button>-->
+        <!--      </div>-->
+
+      </div>
     </div>
   </div>
-  </div>
-<!--  <input type="text" th:value='|\${session.jyUserSession.uploadPath}\${session.jyUserSession.changeName}|'-->
+  <!--  <input type="text" th:value='|\${session.jyUserSession.uploadPath}\${session.jyUserSession.changeName}|'-->
 
 
   <script>
 
-<!--    프로필 사진 보여주기-->
-$(document).ready(function () {
-  let profile = document.getElementById("userProfile").value;
-  console.log("profile1"+profile);
-  profileView(profile);
-});
-
-  function profileView(profile) {
-    if (profile.length!=0) {
-      console.log("profile2"+profile);
-      document.getElementById("profile_view").src=profile;
-
-    } else {
-      document.getElementById("profile_view").src = "";
-
-    }
-  };
-
-
-
+    <!--    프로필 사진 보여주기-->
+    // $(document).ready(function () {
+    //   let profile = document.getElementById("userProfile").value;
+    //   console.log("profile1"+profile);
+    //   profileView(profile);
+    // });
+    //
+    //   function profileView(profile) {
+    //     if (profile.length!=0) {
+    //       console.log("profile2"+profile);
+    //       document.getElementById("profile_view").src=profile;
+    //
+    //     } else {
+    //       document.getElementById("profile_view").src = "";
+    //
+    //     }
+    //   };
 
 
     $("#updateMP").click(function () {
@@ -121,8 +124,35 @@ $(document).ready(function () {
         myForm[i].readOnly = false;
       }
     }
+
+  </script>
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    $(document).ready(function () {
+      const changeName = /*[[${session.jyUserSession.changeName}]]*/;
+      let profileView = document.getElementById("profile_view");
+      console.log("changeName은?" + changeName);
+
+      if (changeName != null) {//changeName이 존재한다면 ajax를 실행해서 이미지를 가져오기
+
+        $.ajax({
+          url     : "/user/myPageProfile",
+          type    : 'POST',
+          dataType: 'text',
+          success : function (data) {
+            alert("고객이미지를 찾아야할텐데ㅜ"+data);
+          }, error: function () {
+            alert("에러발생");
+            encodeURI(data);
+          }
+        });//end ajax
+      } else {
+        alert("고객이미지 미등록");
+        $("#profile_view").attr("src", "/img/sponge1.jpg");
+      }
+    });
+    /*]]>*/
   </script>
   </body>
-
 </th:block>
 </html>

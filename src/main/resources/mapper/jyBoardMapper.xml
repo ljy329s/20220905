@@ -29,7 +29,7 @@
                         WHERE content LIKE CONCAT('%',#{search},'%')
                 </when>
                 <when test='type.equals("TC")'>
-                        WHERE title LIKE CONCAT('%',#{search},'%') OR content CONCAT(LIKE'%',#{search},'%')
+                        WHERE title LIKE CONCAT('%',#{search},'%') OR content LIKE CONCAT('%',#{search},'%')
                 </when>
 
             </choose>
