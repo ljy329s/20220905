@@ -136,7 +136,6 @@ public class JyUserController {
         }
     }
 
-
     /**
      * 비밀번호 찾기
      */
