@@ -7,34 +7,34 @@
   <script src="/js/jquery-3.6.1.min.js"></script>
   <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  
   <title>마이페이지</title>
   <style>
-    .mypageCard {
+    .myPageCard {
       padding: 10px;
     }
-
-    #LoginProfileBox {
+    
+    #ProfileBox {
       text-align: center;
     }
-
+    
     .profile {
       width: 150px;
       height: 150px;
       border-radius: 50%;
     }
-
-
+  
+  
   </style>
 </head>
 <th:block layout:fragment="content">
   <body>
-  <div class="d-flex justify-content-center mt-5 mypageCard">
-
+  <div class="d-flex justify-content-center mt-5 myPageCard">
+    
     <div class="col-4 card">
       <div class="card-body">
-
-        <div id="LoginProfileBox">
+        
+        <div id="ProfileBox">
           <th:block th:if="${session.jyUserSession.changeName != null}">
             <img class="profile"
                  th:src="@{/user/downloadFile(fileName = ${session.jyUserSession.changeName}, uploadPath = ${session.jyUserSession.uploadPath})}"
@@ -44,7 +44,7 @@
             <img class="profile" src="/img/none_profile.png" alt="기본프로필">
           </th:block>
         </div>
-
+        
         <div class="form-group">
           <label for="userName">이름</label>
           <input type="text" class="form-control" id="userName" th:value="${session.jyUserSession.userName}"
@@ -69,11 +69,11 @@
           <label for="regDate">가입일자</label>
           <input type="text" class="form-control" id="regDate" name="regDate"
                  th:value="${session.jyUserSession.regDate}" readonly="readonly">
-
+          
           <!--                 th:value="${session.jyUserSession.regDate}" readonly="readonly">-->
-
+        
         </div>
-
+        
         <!--      <div class="form-group">-->
         <!--        <button type="button" id="updateMP" class="btn btn-outline-info">수정</button>-->
         <!--        <button type="button" id="updateMPS" class="btn btn-outline-info" style="display: none">수정완료</button>-->
@@ -81,19 +81,19 @@
         <!--                onclick="location.href='/myPage'">취소-->
         <!--        </button>-->
         <!--      </div>-->
-
+      
       </div>
     </div>
   </div>
   <!--  <input type="text" th:value='|\${session.jyUserSession.uploadPath}\${session.jyUserSession.changeName}|'-->
-
-
+  
+  
   <script>
-
+    
     $("#updateMP").click(function () {
       upd_btnE();
     });
-
+    
     function upd_btnE() {
       $("#updateMPS").css('display', 'inline');
       $("#mpBack").css('display', 'inline');
@@ -103,7 +103,7 @@
         myForm[i].readOnly = false;
       }
     }
-
+  
   </script>
   </body>
 </th:block>
