@@ -19,10 +19,6 @@ spring:
               - email
               - profile
 
-  file-upload:
-    save-dir: C:\\upload
-    save-user-dir: C:\\upload_profile
-
   servlet:
     multipart:
       max-file-size: 50MB
@@ -50,6 +46,7 @@ spring:
 
   file-upload:
     save-dir: C:\\upload
+    save-user-dir: C:\\upload_profile
 
 server:
   port: 8080

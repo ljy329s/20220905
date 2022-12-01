@@ -49,6 +49,14 @@
   <header>
     <div id="user">
       <ul id="loginInfo">
+        <div id="profileBox">
+          <th:block th:if="${session.jyUserSession.changeName != null}">
+            <img class="profile"  th:src="@{/user/downloadFile(fileName = ${session.jyUserSession.changeName}, uploadPath = ${session.jyUserSession.uploadPath})}" alt="유저프로필">
+          </th:block>
+          <th:block th:unless="${session.jyUserSession.changeName != null}">
+            <img class="profile" src="/img/none_profile.png" alt="기본프로필">
+          </th:block>
+        </div>
         <th:block th:if="${session.jyUserSession != null}">
           <li th:text="${session.jyUserSession.userName} + 님 +' '+안녕하세요"></li>
           <li>

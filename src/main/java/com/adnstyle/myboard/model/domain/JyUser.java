@@ -5,8 +5,8 @@ import lombok.NoArgsConstructor;
 import org.apache.ibatis.type.Alias;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Alias("jyUser")
 @Data

@@ -14,15 +14,16 @@
       padding: 10px;
     }
 
-    #profile {
+    #LoginProfileBox {
+      text-align: center;
+    }
+
+    .profile {
       width: 150px;
       height: 150px;
       border-radius: 50%;
     }
 
-    #profileBox {
-      text-align: center;
-    }
 
   </style>
 </head>
@@ -33,8 +34,15 @@
     <div class="col-4 card">
       <div class="card-body">
 
-        <div id="profileBox">
-          <img id="profile"  th:src="@{/user/downloadFile(fileName = ${session.jyUserSession.changeName}, uploadPath = ${session.jyUserSession.uploadPath})}" alt="유저프로필">
+        <div id="LoginProfileBox">
+          <th:block th:if="${session.jyUserSession.changeName != null}">
+            <img class="profile"
+                 th:src="@{/user/downloadFile(fileName = ${session.jyUserSession.changeName}, uploadPath = ${session.jyUserSession.uploadPath})}"
+                 alt="유저프로필">
+          </th:block>
+          <th:block th:unless="${session.jyUserSession.changeName != null}">
+            <img class="profile" src="/img/none_profile.png" alt="기본프로필">
+          </th:block>
         </div>
 
         <div class="form-group">
@@ -82,25 +90,6 @@
 
   <script>
 
-    <!--    프로필 사진 보여주기-->
-    // $(document).ready(function () {
-    //   let profile = document.getElementById("userProfile").value;
-    //   console.log("profile1"+profile);
-    //   profileView(profile);
-    // });
-    //
-    //   function profileView(profile) {
-    //     if (profile.length!=0) {
-    //       console.log("profile2"+profile);
-    //       document.getElementById("profile_view").src=profile;
-    //
-    //     } else {
-    //       document.getElementById("profile_view").src = "";
-    //
-    //     }
-    //   };
-
-
     $("#updateMP").click(function () {
       upd_btnE();
     });
@@ -116,33 +105,6 @@
     }
 
   </script>
-<!--  <script th:inline="javascript">-->
-<!--    /*<![CDATA[*/-->
-<!--    $(document).ready(function () {-->
-<!--      const changeName = /*[[${session.jyUserSession.changeName}]]*/;-->
-<!--      let profileView = document.getElementById("profile_view");-->
-<!--      console.log("changeName은?" + changeName);-->
-
-<!--      if (changeName != null) {//changeName이 존재한다면 ajax를 실행해서 이미지를 가져오기-->
-
-<!--        $.ajax({-->
-<!--          url     : "/user/myPageProfile",-->
-<!--          type    : 'POST',-->
-<!--          dataType: 'text',-->
-<!--          success : function (data) {-->
-<!--            alert("고객이미지를 찾아야할텐데ㅜ"+data);-->
-<!--          }, error: function () {-->
-<!--            alert("에러발생");-->
-<!--            encodeURI(data);-->
-<!--          }-->
-<!--        });//end ajax-->
-<!--      } else {-->
-<!--        alert("고객이미지 미등록");-->
-<!--        $("#profile_view").attr("src", "/img/sponge1.jpg");-->
-<!--      }-->
-<!--    });-->
-<!--    /*]]>*/-->
-<!--  </script>-->
   </body>
 </th:block>
 </html>

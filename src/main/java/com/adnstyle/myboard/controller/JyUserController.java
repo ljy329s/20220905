@@ -5,21 +5,12 @@ import com.adnstyle.myboard.model.domain.JyUser;
 import com.adnstyle.myboard.model.service.JyUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 
 @SessionAttributes("jyUserSession")
@@ -145,66 +136,13 @@ public class JyUserController {
     }
 
 
-//    /**
-//     * 마이페이지 화면으로 이동
-//     */
-//    @GetMapping("/user/myPage")
-//    public String myPage(@ModelAttribute("jyUserSession") JyUser jyUser) {
-//        log.debug("마이페이지 세션 : " + jyUser);
-//        return "myPage";
-//    }
-
-
-//    /**
-//     * 마이페이지 화면 접속시 바로 이미지 파일뜸
-//     */
-//    @GetMapping("/user/myPage")
-//    public ResponseEntity<Resource> myPage(@ModelAttribute("jyUserSession") JyUser jyUser) {
-//        log.debug("마이페이지 세션 : " + jyUser);
-//        Resource resource = new FileSystemResource(jyUser.getUploadPath() + "\\" + jyUser.getChangeName());
-//
-//        HttpHeaders headers = new HttpHeaders();
-//
-//        Path filePath = null;
-//
-//        try {
-//            filePath = Paths.get(jyUser.getUploadPath() + "\\" + jyUser.getChangeName());
-//            headers.add("Content-Type", Files.probeContentType(filePath));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
-//    }
     /**
-     //     * 마이페이지 화면으로 이동
-     //     */
+     * 마이페이지 화면으로 이동
+     */
     @GetMapping("/user/myPage")
-    public String myPage() {
-        return "myPage";
-    }
-
-    //마이페이지 접속후 실행할 ajax
-    @PostMapping("/user/myPageProfile")
-    @ResponseBody
-    public ResponseEntity<Resource> myPage(@ModelAttribute("jyUserSession") JyUser jyUser) {
+    public String myPage(@ModelAttribute("jyUserSession") JyUser jyUser) {
         log.debug("마이페이지 세션 : " + jyUser);
-        Resource resource = new FileSystemResource(jyUser.getUploadPath() + "\\" + jyUser.getChangeName());
-
-        HttpHeaders headers = new HttpHeaders();
-
-        Path filePath = null;
-
-        try {
-            filePath = Paths.get(jyUser.getUploadPath() + "\\" + jyUser.getChangeName());
-            headers.add("Content-Type", Files.probeContentType(filePath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-//        return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
-        ResponseEntity responseEntity = new ResponseEntity<>(resource, headers, HttpStatus.OK);
-
-        log.info("responseEntity는? "+responseEntity);
-        return responseEntity;
+        return "myPage";
     }
 
 }
