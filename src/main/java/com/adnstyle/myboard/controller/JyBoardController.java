@@ -144,7 +144,8 @@ public class JyBoardController {
      */
     @GetMapping(value = "/downloadFile", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public ResponseEntity<Resource> downloadFile(String uploadPath, String fileName) {
-        Resource resource = new FileSystemResource(uploadPath + "\\" + fileName);
+        
+        Resource resource = new FileSystemResource(uploadPath + "/" + fileName);// mac은 "/" windows는 "\"
         String resourceName = resource.getFilename();
         HttpHeaders headers = new HttpHeaders();
 

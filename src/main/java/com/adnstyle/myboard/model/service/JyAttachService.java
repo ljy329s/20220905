@@ -31,8 +31,10 @@ public class JyAttachService {
 
         Date date = new Date();
 
-        String str = sdf.format(date);//오늘날짜를 지정한 포멧 형식으로 변환
-
+        String st = sdf.format(date);//오늘날짜를 지정한 포멧 형식으로 변환
+        String str = st + "-";
+        System.out.println("str은? " + str);
+        
         //format패턴의 "-"를 os의 구분자로 바꾸겠다 os마다 구분자가 달라서 File.separator 적어줘야함
         return str.replace("-", File.separator);
     }
@@ -40,6 +42,12 @@ public class JyAttachService {
     @Transactional
     public void insertFile(ArrayList fileList) {
         jyAttachRepository.insertFile(fileList);
+    }
+    
+    //단일파일
+    @Transactional
+    public void insertOneFile(JyAttach jyAttach) {
+        jyAttachRepository.insertOneFile(jyAttach);
     }
 
     public List<JyAttach> attachList(long id) {
@@ -84,5 +92,11 @@ public class JyAttachService {
     public void delAttachYn(List<Long> attlist) {
         jyAttachRepository.delAttachYn(attlist);
     }
-
+    
+    /**
+     * 프로필 조회
+     */
+    public JyAttach findProfile(String profileId) {
+        return jyAttachRepository.findProfile(profileId);
+    }
 }

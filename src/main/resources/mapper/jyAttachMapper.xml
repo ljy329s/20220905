@@ -45,4 +45,22 @@
             #{item}
         </foreach>
     </update>
+
+    <insert id="insertOneFile" parameterType="jyAttach">
+        INSERT INTO jy_attach
+            (uuid, uploadPath, originName, fileType, profile_user_id)
+        VALUES (#{uuid},
+                #{uploadPath},
+                #{originName},
+                #{fileType},
+                #{profileUserId}
+                )
+    </insert>
+
+    <select id="findProfile" parameterType="string" resultType="jyAttach">
+        SELECT uuid, uploadPath
+        FROM jy_attach
+        WHERE profile_user_id = #{profileId}
+          AND del_yn = 'N'
+    </select>
 </mapper>

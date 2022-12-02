@@ -45,8 +45,10 @@ spring:
       on-profile: local
 
   file-upload:
-    save-dir: C:\\upload
-    save-user-dir: C:\\upload_profile
+    save-dir: /Users/dalnu/upload/
+    save-user-dir: /Users/dalnu/upload_profile/
+#    save-dir: C:\\upload\
+#    save-user-dir: C:\\upload_profile\
 
 server:
   port: 8080
@@ -59,6 +61,12 @@ spring:
   config:
     activate:
       on-profile: prod
+
+server:
+  port: 8003
+  error:
+    whitelabel:
+      enabled: false
 
 #spring:
 #  datasource:

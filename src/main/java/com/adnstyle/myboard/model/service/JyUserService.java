@@ -2,6 +2,7 @@ package com.adnstyle.myboard.model.service;
 
 import com.adnstyle.myboard.auth.PrincipalDetails;
 import com.adnstyle.myboard.model.common.FileUploadYml;
+import com.adnstyle.myboard.model.domain.JyAttach;
 import com.adnstyle.myboard.model.domain.JyUser;
 import com.adnstyle.myboard.model.repository.JyUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -41,11 +43,11 @@ public class JyUserService implements UserDetailsService {
 //    }
 
     /**
-     * 회원가입 사진추가
+     * 회원가입 + 프로필 사진추가
      */
     @Transactional
     public void insertNewUser(MultipartFile uploadFile, JyUser jyUser) {
-
+        
         String originUploadFileName = "";
         String changeUploadFileName = "";
 
@@ -54,20 +56,29 @@ public class JyUserService implements UserDetailsService {
 
             String uploadFolder = fileUploadYml.getSaveUserDir();
 
-            File uploadPath = new File(uploadFolder, jyAttachService.getFolder());//File(상위경로,하위경로?)
+            File uploadPath = new File(uploadFolder, jyAttachService.getFolder());
 
             if (uploadPath.exists() == false) {
                 uploadPath.mkdirs();
             }
             //동일한 파일명일때 기존파일 덮어버리는 문제 해결위해 UUID
+    
             UUID uuid = UUID.randomUUID();
-            changeUploadFileName = uuid.toString() + "-" + originUploadFileName;//랜덤uuid+"-"+원본명
+            
+            changeUploadFileName = uuid.toString() + "-" + originUploadFileName;//
             File saveFile = new File(uploadPath, changeUploadFileName);
-
-            jyUser.setChangeName(changeUploadFileName);
-            jyUser.setUploadPath(String.valueOf(uploadPath));
-            jyUser.setOriginName(originUploadFileName);
-
+    
+            String pid = jyUser.getUserId();
+            
+            JyAttach attach = new JyAttach();
+            attach.setUuid(changeUploadFileName);
+            attach.setUploadPath(String.valueOf(uploadPath));
+            attach.setOriginName(originUploadFileName);
+            attach.setFileType("Profile");
+            attach.setProfileUserId(pid);
+            
+            attach.setProfileUserId(jyUser.getUserId());
+            jyAttachService.insertOneFile(attach);//db에 저장
             try {
                 uploadFile.transferTo(saveFile);//파일에 저장 try Catch해주기
             } catch (IOException e) {
@@ -77,10 +88,10 @@ public class JyUserService implements UserDetailsService {
             String pw = jyUser.getUserPw();
             jyUser.setUserPw(passwordEncoder.encode(pw));
             jyUser.setRole("ROLE_USER");
-
+            
             jyUserRepository.insertNewUser(jyUser);
         }else{
-            jyUserRepository.insertNewUser(jyUser);
+            jyUserRepository.insertNewUser(jyUser);//프로필사진 미등록시 회원정보로만 회원가입
         }
 
     }

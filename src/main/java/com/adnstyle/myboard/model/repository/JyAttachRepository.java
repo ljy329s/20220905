@@ -34,4 +34,14 @@ public interface JyAttachRepository {
      * 첨부파일 상태값만 바꾸기
      */
     void delAttachYn(List<Long> attlist);
+    
+    /**
+     * 단일파일 업로드(프로필)
+     */
+    void insertOneFile(JyAttach jyAttach);
+    
+    /**
+     * 프로필 조회
+     */
+    JyAttach findProfile(String profileId);
 }

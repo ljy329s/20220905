@@ -14,14 +14,24 @@
       padding: 10px;
     }
     
-    #ProfileBox {
+    #profileBox {
       text-align: center;
+      margin: 10px;
     }
     
     .profile {
       width: 150px;
       height: 150px;
       border-radius: 50%;
+    }
+    
+    #profileBtnBox {
+      margin: 10px;
+      display: none;
+    }
+    
+    .test2 {
+      background: red;
     }
   
   
@@ -30,24 +40,31 @@
 <th:block layout:fragment="content">
   <body>
   <div class="d-flex justify-content-center mt-5 myPageCard">
-    
+    <form action="/user/updateMyPage" method="post">
     <div class="col-4 card">
       <div class="card-body">
-        
-        <div id="ProfileBox">
-          <th:block th:if="${session.jyUserSession.changeName != null}">
-            <img class="profile"
-                 th:src="@{/user/downloadFile(fileName = ${session.jyUserSession.changeName}, uploadPath = ${session.jyUserSession.uploadPath})}"
-                 alt="유저프로필">
+        <div id="profileBox">
+          <th:block th:if="${profile != null}">
+            <th:block th:if="${profile.uuid != null}">
+              <img class="profile"
+                   th:src="@{/user/downloadFile(fileName = ${profile.uuid}, uploadPath = ${profile.uploadPath})}"
+                   onerror="this.src='/img/none_profile.png'" alt="userProfile">
+            </th:block>
           </th:block>
-          <th:block th:unless="${session.jyUserSession.changeName != null}">
-            <img class="profile" src="/img/none_profile.png" alt="기본프로필">
+          <th:block th:if="${profile} == null or ${profile.uuid} == null">
+            <img src='/img/none_profile.png' alt="noneProfile" class="profile">
           </th:block>
-        </div>
+          <div id="profileBtnBox">
+            
+            <input type="file" id="profileUpBtn" class="btn" value="프로필 변경" onchange="readURL(this)"
+                   accept=".png,.jpg,.jepg" name="uploadFile"/>
+            <button type="button" id="profileDelBtn" onclick="profileDelBtn()" class="btn btn-dark">프로필 삭제</button>
+          </div>
+        </div><!-- end profileBox -->
         
         <div class="form-group">
           <label for="userName">이름</label>
-          <input type="text" class="form-control" id="userName" th:value="${session.jyUserSession.userName}"
+          <input type="text" class="form-control myPage" id="userName" th:value="${session.jyUserSession.userName}"
                  readonly="readonly">
         </div>
         <div class="form-group">
@@ -69,23 +86,20 @@
           <label for="regDate">가입일자</label>
           <input type="text" class="form-control" id="regDate" name="regDate"
                  th:value="${session.jyUserSession.regDate}" readonly="readonly">
-          
-          <!--                 th:value="${session.jyUserSession.regDate}" readonly="readonly">-->
-        
         </div>
         
-        <!--      <div class="form-group">-->
-        <!--        <button type="button" id="updateMP" class="btn btn-outline-info">수정</button>-->
-        <!--        <button type="button" id="updateMPS" class="btn btn-outline-info" style="display: none">수정완료</button>-->
-        <!--        <button type="button" id="mpBack" class="btn btn-outline-info" style="display: none"-->
-        <!--                onclick="location.href='/myPage'">취소-->
-        <!--        </button>-->
-        <!--      </div>-->
+        <div class="form-group">
+          <button type="button" id="updateMP" class="btn btn-outline-info">수정</button>
+          <button type="button" id="updateMPS" class="btn btn-outline-info" style="display: none">수정완료</button>
+          <button type="button" id="mpBack" class="btn btn-outline-info" style="display: none"
+                  onclick="location.href='/user/myPage'">취소
+          </button>
+        </div>
       
       </div>
     </div>
+    </form>
   </div>
-  <!--  <input type="text" th:value='|\${session.jyUserSession.uploadPath}\${session.jyUserSession.changeName}|'-->
   
   
   <script>
@@ -98,11 +112,35 @@
       $("#updateMPS").css('display', 'inline');
       $("#mpBack").css('display', 'inline');
       $("#updateMP").css('display', 'none');
+      
+      $("#profileBtnBox").css('display', 'block')
       let myForm = $(".myPage");
       for (let i = 0; i < myForm.length; i++) {
         myForm[i].readOnly = false;
       }
     }
+    
+    function readURL(input) {
+      let profile = document.getElementsByClassName("profile")
+      if (input.files && input.files[0]) {
+        let reader = new FileReader();
+        reader.onload = function (e) {
+          profile[0].src = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+      } else {
+        profile[0].src = '/img/none_profile.png';
+        
+      }
+    };
+    
+    function profileDelBtn() {
+      alert("프로필 삭제 버튼클릭");
+      let profile = document.getElementsByClassName("profile")
+      profile[0].src = '/img/none_profile.png';
+      
+    }
+  
   
   </script>
   </body>

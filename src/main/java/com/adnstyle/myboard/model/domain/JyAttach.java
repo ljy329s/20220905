@@ -30,9 +30,9 @@ public class JyAttach {
     private String originName;
 
     /**
-     * 이미지 파일인지 여부
+     * 어떤 파일인지(디폴드값 'image')
      */
-    private boolean fileType;
+    private String fileType;
 
     /**
      * 게시글 번호
@@ -43,6 +43,11 @@ public class JyAttach {
      * 삭제여부 (디폴드값 'N')
      */
     private String delYn;
+    
+    /**
+     * 프로필 회원 아이디
+     */
+    private String profileUserId;
 }
 
 /**

@@ -1,12 +1,16 @@
 package com.adnstyle.myboard.controller;
 
 import com.adnstyle.myboard.auth.PrincipalDetails;
+import com.adnstyle.myboard.model.domain.JyAttach;
+import com.adnstyle.myboard.model.domain.JyBoard;
 import com.adnstyle.myboard.model.domain.JyUser;
+import com.adnstyle.myboard.model.service.JyAttachService;
 import com.adnstyle.myboard.model.service.JyUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +24,7 @@ import java.util.Map;
 public class JyUserController {
     
     private final JyUserService jyUserService;
+    private final JyAttachService jyAttachService;
     
     /**
      * 회원가입화면으로 이동
@@ -140,9 +145,27 @@ public class JyUserController {
      * 마이페이지 화면으로 이동
      */
     @GetMapping("/user/myPage")
-    public String myPage(@ModelAttribute("jyUserSession") JyUser jyUser) {
+    public String myPage(@ModelAttribute("jyUserSession") JyUser jyUser, Model model) {
         log.debug("마이페이지 세션 : " + jyUser);
-        return "myPage";
+    
+        //여기에서 아이디로 조회해서 changeName, uploadPath구해야함
+        String profileId = jyUser.getUserId();
+    
+        JyAttach profile = jyAttachService.findProfile(profileId);
+        
+        if (profile !=null && profile.getUuid() != null ) {
+           model.addAttribute("profile", profile);
+            return "myPage";
+        }else{
+            return "myPage";
+        }
     }
     
-}
+    @PostMapping("/user/updateMyPage")
+        public String updateMyPage(JyBoard jyBoard, JyAttach jyAttach){
+        System.out.println("user 정보 " + jyBoard);
+        System.out.println("파일정보" + jyAttach);
+        
+        return "myPage";
+        }
+    }
