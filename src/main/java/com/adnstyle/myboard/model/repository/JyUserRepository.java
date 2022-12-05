@@ -20,4 +20,6 @@ public interface JyUserRepository {
     void insertNewScUser(JyUser jyUser);
 
     String findId(Map<String,String> jyUser);
+    
+    void updateUser(JyUser jyUser);
 }

@@ -191,7 +191,6 @@ public class JyBoardController {
             rttr.addAttribute("type", type);
             rttr.addAttribute("boardType", boardType);
             return "redirect:/user/boardList";
-
         }
         return null;
     }
@@ -251,7 +250,6 @@ public class JyBoardController {
     /**
      * 답변삭제
      */
-
     @GetMapping("/deleteAnswer")
     public String deleteAnswer(Long id, @RequestParam("boardType") String boardType, RedirectAttributes rttr) {
         jyBoardService.deleteAnswer(id);

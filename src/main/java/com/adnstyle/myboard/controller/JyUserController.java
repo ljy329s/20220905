@@ -2,7 +2,6 @@ package com.adnstyle.myboard.controller;
 
 import com.adnstyle.myboard.auth.PrincipalDetails;
 import com.adnstyle.myboard.model.domain.JyAttach;
-import com.adnstyle.myboard.model.domain.JyBoard;
 import com.adnstyle.myboard.model.domain.JyUser;
 import com.adnstyle.myboard.model.service.JyAttachService;
 import com.adnstyle.myboard.model.service.JyUserService;
@@ -15,12 +14,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.sql.Date;
 import java.util.Map;
 
 @SessionAttributes("jyUserSession")
-@Controller
 @RequiredArgsConstructor
 @Slf4j
+@Controller
 public class JyUserController {
     
     private final JyUserService jyUserService;
@@ -147,25 +147,39 @@ public class JyUserController {
     @GetMapping("/user/myPage")
     public String myPage(@ModelAttribute("jyUserSession") JyUser jyUser, Model model) {
         log.debug("마이페이지 세션 : " + jyUser);
-    
+        
         //여기에서 아이디로 조회해서 changeName, uploadPath구해야함
         String profileId = jyUser.getUserId();
-    
+        
         JyAttach profile = jyAttachService.findProfile(profileId);
         
-        if (profile !=null && profile.getUuid() != null ) {
-           model.addAttribute("profile", profile);
+        if (profile != null && profile.getUuid() != null) {
+            model.addAttribute("profile", profile);
             return "myPage";
-        }else{
+        } else {
             return "myPage";
         }
     }
     
+    /**
+     * 마이페이지 정보 업데이트 왜 model로는 안받와질까..
+     */
     @PostMapping("/user/updateMyPage")
-        public String updateMyPage(JyBoard jyBoard, JyAttach jyAttach){
-        System.out.println("user 정보 " + jyBoard);
-        System.out.println("파일정보" + jyAttach);
+    public String updateMyPage(MultipartFile uploadFile, @RequestParam("userName")String userName, @RequestParam(value = "userBirth") Date userBirth, @RequestParam("userPhone") String userPhone, @RequestParam(value = "userEmail")String userEmail, @RequestParam("userId") String userId) {
+//        public String updateMyPage(MultipartFile uploadFile, @ModelAttribute JyUser jyUser) {
+        log.debug("uploadFile : " + uploadFile);
+//        log.debug("jyUser : "+ jyUser);
+        log.debug("user 정보 " + userName + ", userBirth" +userBirth +", userPhone : "+userPhone+", userEmail"+userEmail);
+
+        JyUser jyUser = new JyUser();
+        jyUser.setUserName(userName);
+        jyUser.setUserBirth(userBirth);
+        jyUser.setUserPhone(userPhone);
+        jyUser.setUserEmail(userEmail);
+        jyUser.setUserId(userId);
+        log.debug("jyUser"+jyUser);
+        jyUserService.updateMyPage(uploadFile, jyUser);
         
-        return "myPage";
-        }
+        return "redirect:/logout";
     }
+}

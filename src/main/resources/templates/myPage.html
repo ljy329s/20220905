@@ -40,68 +40,66 @@
 <th:block layout:fragment="content">
   <body>
   <div class="d-flex justify-content-center mt-5 myPageCard">
-    <form action="/user/updateMyPage" method="post">
     <div class="col-4 card">
       <div class="card-body">
-        <div id="profileBox">
-          <th:block th:if="${profile != null}">
-            <th:block th:if="${profile.uuid != null}">
-              <img class="profile"
-                   th:src="@{/user/downloadFile(fileName = ${profile.uuid}, uploadPath = ${profile.uploadPath})}"
-                   onerror="this.src='/img/none_profile.png'" alt="userProfile">
+        <form action="/user/updateMyPage" method="POST" enctype="multipart/form-data" onsubmit="return beforeCheck()">
+          <div id="profileBox">
+            <th:block th:if="${profile != null}">
+              <th:block th:if="${profile.uuid != null}">
+                <img class="profile"
+                     th:src="@{/user/downloadFile(fileName = ${profile.uuid}, uploadPath = ${profile.uploadPath})}"
+                     onerror="this.src='/img/none_profile.png'" alt="userProfile">
+              </th:block>
             </th:block>
-          </th:block>
-          <th:block th:if="${profile} == null or ${profile.uuid} == null">
-            <img src='/img/none_profile.png' alt="noneProfile" class="profile">
-          </th:block>
-          <div id="profileBtnBox">
-            
-            <input type="file" id="profileUpBtn" class="btn" value="프로필 변경" onchange="readURL(this)"
-                   accept=".png,.jpg,.jepg" name="uploadFile"/>
-            <button type="button" id="profileDelBtn" onclick="profileDelBtn()" class="btn btn-dark">프로필 삭제</button>
+            <th:block th:if="${profile} == null or ${profile.uuid} == null">
+              <img src='/img/none_profile.png' alt="noneProfile" class="profile">
+            </th:block>
+            <div id="profileBtnBox">
+              <input type="file" id="profileUpBtn" class="btn" value="프로필 변경" onchange="readURL(this)"
+                     accept=".png,.jpg,.jepg" name="uploadFile"/>
+              <button type="button" id="profileDelBtn" onclick="profileDelBtn()" class="btn btn-dark">프로필 삭제</button>
+            </div>
           </div>
-        </div><!-- end profileBox -->
-        
-        <div class="form-group">
-          <label for="userName">이름</label>
-          <input type="text" class="form-control myPage" id="userName" th:value="${session.jyUserSession.userName}"
-                 readonly="readonly">
-        </div>
-        <div class="form-group">
-          <label for="userBirth">생년월일</label>
-          <input type="text" class="form-control myPage" id="userBirth"
-                 th:value="${session.jyUserSession.userBirth}" readonly="readonly">
-        </div>
-        <div class="form-group">
-          <label for="userPhone">휴대폰번호</label>
-          <input type="text" class="form-control myPage" id="userPhone"
-                 th:value="${session.jyUserSession.userPhone}" readonly="readonly">
-        </div>
-        <div class="form-group">
-          <label for="userEmail">이메일</label>
-          <input type="text" class="form-control myPage" id="userEmail"
-                 th:value="${session.jyUserSession.userEmail}" readonly="readonly">
-        </div>
-        <div class="form-group">
-          <label for="regDate">가입일자</label>
-          <input type="text" class="form-control" id="regDate" name="regDate"
-                 th:value="${session.jyUserSession.regDate}" readonly="readonly">
-        </div>
-        
-        <div class="form-group">
-          <button type="button" id="updateMP" class="btn btn-outline-info">수정</button>
-          <button type="button" id="updateMPS" class="btn btn-outline-info" style="display: none">수정완료</button>
-          <button type="button" id="mpBack" class="btn btn-outline-info" style="display: none"
-                  onclick="location.href='/user/myPage'">취소
-          </button>
-        </div>
-      
+          
+          <div class="form-group">
+            <label for="userName">이름</label>
+            <input type="text" class="form-control myPage" id="userName" th:value="${session.jyUserSession.userName}"
+                   readonly="readonly" name="userName" required>
+          </div>
+          <div class="form-group">
+            <label for="userBirth">생년월일</label>
+            <input type="date" class="form-control myPage" id="userBirth"
+                   th:value="${session.jyUserSession.userBirth}" readonly="readonly" name="userBirth" required>
+          </div>
+          <div class="form-group">
+            <label for="userPhone">휴대폰번호</label>
+            <input type="text" class="form-control myPage" id="userPhone"
+                   th:value="${session.jyUserSession.userPhone}" readonly="readonly" name="userPhone" required>
+          </div>
+          <div class="form-group">
+            <label for="userEmail">이메일</label>
+            <input type="text" class="form-control myPage" id="userEmail"
+                   th:value="${session.jyUserSession.userEmail}" readonly="readonly" name="userEmail" required>
+          </div>
+          <div class="form-group">
+            <label for="regDate">가입일자</label>
+            <input type="text" class="form-control" id="regDate"
+                   th:value="${session.jyUserSession.regDate}" readonly="readonly">
+          </div>
+          <input type="hidden" th:value="${session.jyUserSession.userId}" name="userId">
+          
+          <div class="form-group">
+            <button type="button" id="updateMP" class="btn btn-outline-info">수정</button>
+            <button type="submit" id="updateMPS" class="btn btn-outline-info" style="display: none">수정완료</button>
+            <button type="button" id="mpBack" class="btn btn-outline-info" style="display: none"
+                    onclick="location.href='/user/myPage'">취소
+            </button>
+          </div>
+        </form>
       </div>
     </div>
-    </form>
   </div>
-  
-  
+  </div>
   <script>
     
     $("#updateMP").click(function () {
@@ -130,7 +128,6 @@
         reader.readAsDataURL(input.files[0]);
       } else {
         profile[0].src = '/img/none_profile.png';
-        
       }
     };
     
@@ -138,10 +135,17 @@
       alert("프로필 삭제 버튼클릭");
       let profile = document.getElementsByClassName("profile")
       profile[0].src = '/img/none_profile.png';
-      
     }
-  
-  
+    
+    function beforeCheck() {
+      if (!confirm("수정하시겠습니까? 다시 로그인 하셔야합니다.")) {
+        alert("취소되었습니다.");
+        return false;
+      } else {
+        alert("수정되었습니다. 다시 로그인 해주세요~");
+        return true;
+      }
+    }
   </script>
   </body>
 </th:block>

@@ -23,10 +23,10 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class JyUserService implements UserDetailsService {
-
+    
     private final JyUserRepository jyUserRepository;
     private final PasswordEncoder passwordEncoder;
-
+    
     private final FileUploadYml fileUploadYml;
     private final JyAttachService jyAttachService;
 
@@ -41,7 +41,7 @@ public class JyUserService implements UserDetailsService {
 //
 //        jyUserRepository.insertNewUser(jyUser);
 //    }
-
+    
     /**
      * 회원가입 + 프로필 사진추가
      */
@@ -50,24 +50,24 @@ public class JyUserService implements UserDetailsService {
         
         String originUploadFileName = "";
         String changeUploadFileName = "";
-
+        
         originUploadFileName = uploadFile.getOriginalFilename();
         if (originUploadFileName.length() > 0) {
-
+            
             String uploadFolder = fileUploadYml.getSaveUserDir();
-
+            
             File uploadPath = new File(uploadFolder, jyAttachService.getFolder());
-
+            
             if (uploadPath.exists() == false) {
                 uploadPath.mkdirs();
             }
             //동일한 파일명일때 기존파일 덮어버리는 문제 해결위해 UUID
-    
+            
             UUID uuid = UUID.randomUUID();
             
             changeUploadFileName = uuid.toString() + "-" + originUploadFileName;//
             File saveFile = new File(uploadPath, changeUploadFileName);
-    
+            
             String pid = jyUser.getUserId();
             
             JyAttach attach = new JyAttach();
@@ -84,18 +84,18 @@ public class JyUserService implements UserDetailsService {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
+            
             String pw = jyUser.getUserPw();
             jyUser.setUserPw(passwordEncoder.encode(pw));
             jyUser.setRole("ROLE_USER");
             
             jyUserRepository.insertNewUser(jyUser);
-        }else{
+        } else {
             jyUserRepository.insertNewUser(jyUser);//프로필사진 미등록시 회원정보로만 회원가입
         }
-
+        
     }
-
+    
     /**
      * 아이디 중복 확인
      */
@@ -103,7 +103,7 @@ public class JyUserService implements UserDetailsService {
         int no = jyUserRepository.checkId(userId);
         return no;
     }
-
+    
     /**
      * 이메일 중복확인
      */
@@ -111,7 +111,7 @@ public class JyUserService implements UserDetailsService {
         int no = jyUserRepository.checkEmail(userEmail);
         return no;
     }
-
+    
     /**
      * 로그인
      */
@@ -124,7 +124,7 @@ public class JyUserService implements UserDetailsService {
         }
         return null;
     }
-
+    
     /**
      * 소셜회원가입
      *
@@ -133,13 +133,27 @@ public class JyUserService implements UserDetailsService {
     public void insertNewScUser(JyUser jyUser) {
         jyUserRepository.insertNewScUser(jyUser);
     }
-
+    
     /**
      * 아이디 있는지 확인
      */
     public String findId(Map<String, String> jyUser) {
         return jyUserRepository.findId(jyUser);
-
+        
+    }
+    
+    /**
+     * 마이페이지 수정
+     */
+    @Transactional
+    public void updateMyPage(MultipartFile uploadFile, JyUser jyUser) {
+        //1. 유저정보를 업데이트
+        jyUserRepository.updateUser(jyUser);
+        //2. 파일 정보 attach테이블에 아이디로 넣어주기
+        String userId = jyUser.getUserId();
+        if(!uploadFile.isEmpty()){//프로필사진이 존재할때 동작
+            jyAttachService.updateUserProfile(uploadFile,userId);
+        }
+        
     }
 }
-

@@ -73,4 +73,13 @@
           AND  user_email = #{userEmail}
     </select>
 
+<!--    회원정보 수정(마이페이지)-->
+    <update id="updateUser" parameterType="jyUser">
+        UPDATE jy_user
+        SET   user_name = #{userName},
+               user_birth = #{userBirth},
+               user_phone = #{userPhone},
+               user_email = #{userEmail}
+        WHERE  user_id = #{userId}
+    </update>
 </mapper>

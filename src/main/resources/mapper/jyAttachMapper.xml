@@ -57,10 +57,26 @@
                 )
     </insert>
 
+<!--    프로필정보 조회-->
     <select id="findProfile" parameterType="string" resultType="jyAttach">
         SELECT uuid, uploadPath
         FROM jy_attach
         WHERE profile_user_id = #{profileId}
           AND del_yn = 'N'
     </select>
+
+<!--    프로필 삭제 처리하기-->
+    <update id="delProfile" parameterType="string">
+        UPDATE jy_attach
+        SET del_yn ='Y'
+        WHERE profile_user_id = #{userId}
+    </update>
+
+<!--    프로필 존재하는지 확인-->
+    <select id="selectCountProfile" parameterType="string" resultType="_int">
+        SELECT uuid
+        FROM jy_attach
+        WHERE profile_user_id = #{userId}
+    </select>
+
 </mapper>

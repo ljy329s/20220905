@@ -44,4 +44,14 @@ public interface JyAttachRepository {
      * 프로필 조회
      */
     JyAttach findProfile(String profileId);
+    
+    /**
+     * 기존 프로필 상태 n으로 변경
+     */
+    void delProfile(String userId);
+    
+    /**
+     * 기존에 프로필 이미지 등록되어있는지 확인
+     */
+    int selectCountProfile(String userId);
 }
