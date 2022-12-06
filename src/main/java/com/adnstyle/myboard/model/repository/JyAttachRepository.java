@@ -46,7 +46,7 @@ public interface JyAttachRepository {
     JyAttach findProfile(String profileId);
     
     /**
-     * 기존 프로필 상태 n으로 변경
+     * 기존 프로필 상태 Y으로 변경
      */
     void delProfile(String userId);
     

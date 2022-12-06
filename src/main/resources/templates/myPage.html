@@ -57,7 +57,7 @@
             <div id="profileBtnBox">
               <input type="file" id="profileUpBtn" class="btn" value="프로필 변경" onchange="readURL(this)"
                      accept=".png,.jpg,.jepg" name="uploadFile"/>
-              <button type="button" id="profileDelBtn" onclick="profileDelBtn()" class="btn btn-dark">프로필 삭제</button>
+<!--              <button type="button" id="profileDelBtn" onclick="profileDelBtn()" class="btn btn-dark">프로필 삭제</button>-->
             </div>
           </div>
           
@@ -131,11 +131,11 @@
       }
     };
     
-    function profileDelBtn() {
-      alert("프로필 삭제 버튼클릭");
-      let profile = document.getElementsByClassName("profile")
-      profile[0].src = '/img/none_profile.png';
-    }
+    // function profileDelBtn() {
+    //   alert("프로필 삭제 버튼클릭");
+    //   let profile = document.getElementsByClassName("profile");
+    //   profile[0].src = '/img/none_profile.png';
+    // }
     
     function beforeCheck() {
       if (!confirm("수정하시겠습니까? 다시 로그인 하셔야합니다.")) {

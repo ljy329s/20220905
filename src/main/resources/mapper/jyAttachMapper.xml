@@ -74,9 +74,10 @@
 
 <!--    프로필 존재하는지 확인-->
     <select id="selectCountProfile" parameterType="string" resultType="_int">
-        SELECT uuid
+        SELECT count(uuid)
         FROM jy_attach
         WHERE profile_user_id = #{userId}
+        AND del_yn='N'
     </select>
 
 </mapper>
